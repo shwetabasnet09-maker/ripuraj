@@ -3,7 +3,7 @@ import React from 'react'
 const TrustBadges = () => {
   return (
     <section className="bg-amber-50 py-16 px-4">
-      <div className="wrapper text-center">
+      <div className="wrapper text-center text-black">
         {/* Available At Badge */}
         <div className="inline-block bg-white px-6 py-2 rounded-full text-[18px] font-medium mb-6 text-bold ">
           Available At

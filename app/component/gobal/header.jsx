@@ -11,7 +11,7 @@ export default function Header() {
         {/* Logo Section */}
         <div className="flex-shrink-0">
           <img
-            src="/images/logo.png"   // ✅ put logo inside /public/images
+            src="/logo.png"   // ✅ put logo inside /public/images
             alt="RIPURAJ"
             className="h-16 w-auto object-contain"
           />

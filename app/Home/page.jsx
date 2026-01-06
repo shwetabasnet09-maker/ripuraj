@@ -9,7 +9,7 @@ import Banner from '../component/home/banner'
 import Testimonial from '../component/home/Testimonial'
 import Faq from '../component/home/Faq'
 import TrustSection from '../component/home/TrustSection'
-import TrustBadges from '../component/home/TrustBadges'
+import TrustBadges from '../component/gobal/TrustBadges'
 
 const Home = () => {
   return (
@@ -24,7 +24,7 @@ const Home = () => {
         <Testimonial/>
         <Faq/>
         <TrustSection/>
-        <TrustBadges/>
+        
         
     </div>
   )

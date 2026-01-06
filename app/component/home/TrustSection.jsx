@@ -72,7 +72,7 @@ export default function TrustSection() {
 
               {/* Bottom Section */}
               <div className="h-[40%] bg-gradient-to-b from-[#0F4C5C] to-[#0A3C4A] flex items-center justify-center px-6">
-                <h3 className="bg-gradient-to-b from-[#1D5D40] to-[#3ABA7F] text-white text-center font-semibold text-[18px] leading-snug py-6 px-3 rounded-[10px] w-[85%]">
+                <h3 className="bg-gradient-to-b from-[#1D5D40] to-[#3ABA7F] text-white text-center font-bold text-[18px] leading-snug py-6 px-3 rounded-[10px] w-[95%]">
                   {item.title}
                 </h3>
               </div>

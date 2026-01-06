@@ -1,11 +1,13 @@
 import React from 'react';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import Image from 'next/image';
+import TrustBadges from './TrustBadges';
 
 export default function Footer() {
   return (
     <footer className="bg-[#2d5a6b] text-white">
       {/* Main Footer Content */}
+      <TrustBadges/>
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info Section */}
