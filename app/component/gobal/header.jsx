@@ -1,5 +1,6 @@
 import React from "react";
 import { ShoppingBag, User, Truck } from "lucide-react";
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -8,10 +9,10 @@ export default function Header() {
       {/* Main Rounded Container */}
       <div className="wrapper mx-auto bg-white rounded-2xl shadow-sm px-6 py-3 flex items-center justify-between">
         
-        {/* Logo Section */}
+        {/* Logo div */}
         <div className="flex-shrink-0">
           <img
-            src="/logo.png"   // ✅ put logo inside /public/images
+            src="/logo.png"   
             alt="RIPURAJ"
             className="h-16 w-auto object-contain"
           />
@@ -30,7 +31,7 @@ export default function Header() {
           ].map((item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase().replace(" ", "-")}`}
+              href={`${item.toLowerCase().replace(" ", "-")}`}
               className="text-[#335B6E] hover:text-black font-medium text-[15px] transition-colors"
             >
               {item}
@@ -47,17 +48,33 @@ export default function Header() {
           </button>
 
           {/* Icons */}
-          <div className="flex items-center space-x-4 text-[#335B6E]">
-            <button className="hover:opacity-70 transition-opacity">
-              <Truck className="w-6 h-6 stroke-[1.5]" />
-            </button>
-            <button className="hover:opacity-70 transition-opacity">
-              <ShoppingBag className="w-6 h-6 stroke-[1.5]" />
-            </button>
-            <button className="hover:opacity-70 transition-opacity">
-              <User className="w-6 h-6 stroke-[1.5]" />
-            </button>
-          </div>
+         <div className="flex items-center space-x-4 text-[#335B6E]">
+
+      <Link
+        href="/orders"
+        className="hover:opacity-70 transition-opacity"
+        aria-label="Orders"
+      >
+        <Truck className="w-6 h-6 stroke-[1.5]" />
+      </Link>
+
+      <Link
+        href="/cart"
+        className="hover:opacity-70 transition-opacity"
+        aria-label="Cart"
+      >
+        <ShoppingBag className="w-6 h-6 stroke-[1.5]" />
+      </Link>
+
+      <Link
+        href="/account"
+        className="hover:opacity-70 transition-opacity"
+        aria-label="Account"
+      >
+        <User className="w-6 h-6 stroke-[1.5]" />
+      </Link>
+
+    </div>
 
         </div>
       </div>

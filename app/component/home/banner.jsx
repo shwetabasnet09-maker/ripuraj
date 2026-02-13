@@ -3,7 +3,7 @@ import React from 'react'
 const Banner = () => {
   return (
     <div>
-      <section
+      <div
       className="h-[430px] bg-[url('/banner.png')] bg-cover bg-center flex items-center"
     >
       <div className="wrapper text-white flex justify-between  ">
@@ -21,7 +21,7 @@ const Banner = () => {
         </button>
       </div>
       </div>
-    </section>  
+    </div>  
     </div>
   )
 }

@@ -11,7 +11,7 @@ const Factories = () => {
         {/* 30% Image | 70% Content */}
         <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] gap-10 items-center">
 
-          {/* Image Section */}
+          {/* Image div */}
           <div className="relative w-full h-[420px] rounded-3xl overflow-hidden shadow-2xl">
             <Image
               src="/Mahashakti.jpg"
@@ -22,7 +22,7 @@ const Factories = () => {
             />
           </div>
 
-          {/* Content Section */}
+          {/* Content div */}
           <div className="space-y-6">
             <h1 className="text-4xl lg:text-[35px] font-bold text-[#306177]">
               From Farm to Factories

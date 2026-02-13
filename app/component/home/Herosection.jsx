@@ -1,6 +1,6 @@
-const HeroSection = () => {
+const Herodiv = () => {
   return (
-    <section
+    <div
       className="h-[786px] bg-[url('/HeroBanner.png')] bg-cover bg-center flex items-center rounded-b-[30px]"
     >
       <div className="wrapper text-white flex justify-between pt-[120px] ">
@@ -19,8 +19,8 @@ const HeroSection = () => {
         </button>
       </div>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default HeroSection;
+export default Herodiv;

@@ -45,7 +45,7 @@ const Shop = () => {
 
   return (
     <div className="w-full wrapper px-4 py-20">
-      {/* Header Section */}
+      {/* Header div */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
         <div>
           <p className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-2">

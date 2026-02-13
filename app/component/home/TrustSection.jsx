@@ -1,4 +1,4 @@
-export default function TrustSection() {
+export default function Trustdiv() {
   const features = [
     {
       id: 1,
@@ -44,7 +44,7 @@ export default function TrustSection() {
   ];
 
   return (
-    <section className="py-20 bg-white px-4">
+    <div className="py-20 bg-white px-4">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
@@ -65,12 +65,12 @@ export default function TrustSection() {
               key={item.id}
               className="h-[340px] bg-white rounded-xl overflow-hidden shadow-sm border"
             >
-              {/* Top Section */}
+              {/* Top div */}
               <div className="h-[60%] flex items-center justify-center">
                 {item.icon}
               </div>
 
-              {/* Bottom Section */}
+              {/* Bottom div */}
               <div className="h-[40%] bg-gradient-to-b from-[#0F4C5C] to-[#0A3C4A] flex items-center justify-center px-6">
                 <h3 className="bg-gradient-to-b from-[#1D5D40] to-[#3ABA7F] text-white text-center font-bold text-[18px] leading-snug py-6 px-3 rounded-[10px] w-[95%]">
                   {item.title}
@@ -81,6 +81,6 @@ export default function TrustSection() {
         </div>
 
       </div>
-    </section>
+    </div>
   );
 }

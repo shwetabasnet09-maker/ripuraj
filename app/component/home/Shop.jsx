@@ -45,7 +45,7 @@ const Shop = () => {
 
   return (
     <div className="w-full  mx-auto px-4 py-20">
-      {/* Header Section */}
+      {/* Header div */}
       <div className="flex flex-col sm:flex-row justify-between items-end mb-10 wrapper">
         <div>
           <p className="text-sm font-bold text-gray-800 uppercase tracking-tighter mb-1">
@@ -125,7 +125,7 @@ const ProductCard = ({ product }) => {
         </div>
       </div>
 
-      {/* Content Section */}
+      {/* Content div */}
       <div className="px-3 pb-4">
         <h3 className="text-[#3A6B7E] font-medium text-[15px] leading-tight mb-3 line-clamp-2 min-h-[40px]">
           {product.name}

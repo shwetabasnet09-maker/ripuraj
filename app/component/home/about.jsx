@@ -6,7 +6,7 @@ const About = () => {
   return (
     <div className='bg-[#FFF2D9] py-20'>
       <div className='wrapper mx-auto flex items-center gap-10'>
-        {/* Text Section */}
+        {/* Text div */}
         <div className='flex-1 justify-between'>
           <h3 className='text-[20px]'>WELCOME TO RIPURAJ AGRO</h3>
           <h2 className='text-[#306177] text-[35px] font-bold'>Over 46+ Years of Cultivating Quality and Excellence</h2>
@@ -21,7 +21,7 @@ const About = () => {
           </Link>
         </div>
 
-        {/* Image Section */}
+        {/* Image div */}
         <div className='flex-1 relative w-[271px] h-[280px]'>
           <Image
             src="/path-to-your-image.jpg" // Add your image path here

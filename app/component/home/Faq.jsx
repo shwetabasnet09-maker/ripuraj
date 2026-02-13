@@ -6,7 +6,7 @@ import { ChevronDown } from 'lucide-react';
 export default function Faq() {
   const [openIndex, setOpenIndex] = useState(null);
 
-  const sections = [
+  const divs = [
     { title: "We share goodness", content: "Our commitment to sharing goodness..." },
     { title: "We deliver each grain of rice", content: "Quality control is at the heart..." },
     { title: "We try to foster a culture of transparency", content: "Transparency isn't just a buzzword..." },
@@ -15,7 +15,7 @@ export default function Faq() {
     { title: "We are determined", content: "Our determination drives us..." }
   ];
 
-  const toggleSection = (index) => {
+  const togglediv = (index) => {
     // This logic strictly allows only one index at a time
     setOpenIndex(prev => (prev === index ? null : index));
   };
@@ -32,17 +32,17 @@ export default function Faq() {
 
         {/* Added items-start to prevent the 'neighbor' div from stretching */}
         <div className="grid md:grid-cols-2 gap-4 items-start">
-          {sections.map((section, index) => (
+          {divs.map((div, index) => (
             <div
               key={index}
               className="bg-white rounded-2xl overflow-hidden shadow-lg h-fit"
             >
               <button
-                onClick={() => toggleSection(index)}
+                onClick={() => togglediv(index)}
                 className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
               >
                 <span className="text-[#306177] font-medium text-[20px] pr-4">
-                  {section.title}
+                  {div.title}
                 </span>
                 <ChevronDown
                   className={`text-[#306177] transition-transform duration-300 ${
@@ -62,7 +62,7 @@ export default function Faq() {
               >
                 <div className="overflow-hidden">
                   <div className="px-6 pb-5 text-[#306177] leading-relaxed">
-                    {section.content}
+                    {div.content}
                   </div>
                 </div>
               </div>

@@ -11,8 +11,8 @@ const Bannermain = ({ title, subTitle, backgroundImg }) => {
   const pathnames = location.split("/").filter((x) => x);
 
   return (
-    <section
-      className="relative w-full h-[450px] md:h-[500px] lg:h-[550px] bg-cover bg-center rounded-2xl"
+    <div
+      className="relative w-full h-[450px] md:h-[457px]  bg-black bg-cover bg-center rounded-b-[40px]"
       style={{ backgroundImage: `url(${backgroundImg})` }}
     >
       {/* Strong Dark Overlay */}
@@ -67,7 +67,7 @@ const Bannermain = ({ title, subTitle, backgroundImg }) => {
           </ol>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
