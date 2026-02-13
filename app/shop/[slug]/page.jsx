@@ -167,7 +167,7 @@
 
 import React, { useState, use } from "react";
 import Image from "next/image";
-import { products } from "@/app/data/page";
+import { products } from "@/app/data/date";
 import { notFound } from "next/navigation";
 // Import Lucide icons
 import { Star, Minus, Plus, X, ChevronLeft, ChevronRight } from "lucide-react";

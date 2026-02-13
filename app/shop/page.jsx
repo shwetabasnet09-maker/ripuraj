@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "../data/page";
+import { products } from "../data/date";
 import Bannermain from "../component/gobal/Banner";
 
 

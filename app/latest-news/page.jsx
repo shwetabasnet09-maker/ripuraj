@@ -1,6 +1,6 @@
 import Bannermain from "../component/gobal/Banner";
 import NewsCard from "../component/latestnew.jsx/NewsCard";
-import { newsData } from "../data/page";
+import { newsData } from "../data/date";
 
 
 

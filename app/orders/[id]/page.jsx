@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Package, ArrowLeft } from "lucide-react";
-import { orders } from "@/app/data/page";
+import { orders } from "@/app/data/date";
 
 
 const OrderDetailsPage = ({ params }) => {

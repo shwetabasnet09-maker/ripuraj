@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Truck, Package, ChevronRight } from "lucide-react";
-import { orders } from "../data/page";
+import { orders } from "../data/date";
 
 const OrdersPage = () => {
   const getStatusStyles = (status) => {
