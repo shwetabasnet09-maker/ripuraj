@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 const Factories = () => {
   return (
@@ -53,9 +54,9 @@ const Factories = () => {
 
             {/* Button */}
             <div className="pt-4">
-              <button className="bg-[#306177] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#234A5F] transition-all duration-300 shadow-lg">
+              <Link className="bg-[#306177] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#234A5F] transition-all duration-300 shadow-lg" href="/about">
                 ABOUT US
-              </button>
+              </Link>
             </div>
           </div>
 

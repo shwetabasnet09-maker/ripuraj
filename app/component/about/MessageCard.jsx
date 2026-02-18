@@ -38,12 +38,12 @@ const MessageCard = () => {
           </div>
 
           {/* RIGHT IMAGE */}
-          <div className="flex-shrink-0 bg-gray-200 rounded-2xl p-4">
+          <div className="flex-shrink-0  rounded-2xl p-4">
             <Image
-              src="/md.jpg"   // put image in public folder
+              src="/md.png"   
               alt="Managing Director"
-              width={260}
-              height={340}
+              width={300}
+              height={600}
               className="rounded-xl object-cover"
             />
           </div>

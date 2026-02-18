@@ -1,17 +1,41 @@
 @import "tailwindcss";
 
+
+
+@import "tailwindcss";
+
+
 @font-face {
   font-family: "Objective";
   src: url("/fonts/Objective-Regular.otf") format("opentype");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
+
+@font-face {
+  font-family: "Objective";
+  src: url("/fonts/Objective-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
+@font-face {
+  font-family: "Objective";
+  src: url("/fonts/Objective-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
 body {
   margin: 0;
   padding: 0;
-}
-
-body {
   font-family: "Objective", sans-serif;
 }
 

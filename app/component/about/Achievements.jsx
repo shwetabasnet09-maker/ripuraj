@@ -6,19 +6,19 @@ const achievements = [
         title: "India’s First Steam Jeera Rice",
         description:
             "Ripuraj Agro Pvt Ltd is the first in India to introduce Steam Jeera Rice in convenient 1 kg and 5 kg packages. This innovation underscores our dedication to quality and consumer satisfaction.",
-        image: "/achieve-1.jpg",
+        image: "/achievements1.png",
     },
     {
         title: "Redefining Non-Basmati Rice",
         description:
             "We have transformed the non-Basmati rice market by introducing branded products, setting new quality standards and earning consumer trust across India.",
-        image: "/achieve-2.jpg",
+        image: "/achievements2.png",
     },
     {
         title: "Committed to Quality, Scaling to 1000 MT",
         description:
             "From an initial production capacity of 120 MT/day, Ripuraj Agro Pvt Ltd now proudly produces 1000 MT/day, reflecting our commitment to meeting the growing demand for our premium rice.",
-        image: "/achieve-3.jpg",
+        image: "/achievements3.png",
     },
 ];
 

@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Image from "next/image";
+import Link from "next/link";
 
 const products = [
   {
@@ -36,7 +37,7 @@ const products = [
     id: 5,
     name: "Ripuraj Zayka Long Grain Basmati Rice",
     weight: "5Kg - 20Kg",
-    image: "/mahashakti.jpg",
+    image: "/Zayeka.png",
   },
 ];
 
@@ -57,12 +58,12 @@ const Shop = () => {
         </div>
 
         <div className="flex items-center gap-6 mt-6 sm:mt-0">
-          <button className="bg-[#3A6B7E] text-white px-5 py-2.5 rounded-md font-bold text-sm flex items-center gap-2 hover:bg-[#2D5B70] transition-colors uppercase">
+          <Link className="bg-[#3A6B7E] text-white px-5 py-2.5 rounded-md font-bold text-sm flex items-center gap-2 hover:bg-[#2D5B70] transition-colors uppercase" href="/products">
             VIEW ALL PRODUCT
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <path d="M7 17l10-10M17 17V7H7" />
             </svg>
-          </button>
+          </Link>
 
           <div className="flex items-center gap-4">
             <button
@@ -119,18 +120,51 @@ const Shop = () => {
   );
 };
 
+// const ProductCard = ({ product }) => {
+//   return (
+//     <div className="group cursor-pointer">
+//       <div className=" rounded-sm flex items-center justify-center aspect-[4/5] mb-4 overflow-hidden p-6 transition-secondary">
+//          <div className="relative w-full h-full transform group-hover:scale-105 transition-transform duration-500">
+//            <Image
+//               src={product.image}
+//               alt={product.name}
+//               fill
+//               className="object-contain" 
+//             />
+//          </div>
+//       </div>
+
+//       <div className="space-y-1">
+//         <h3 className="text-[#3A6B7E] font-bold text-lg leading-snug hover:underline">
+//           {product.name}
+//         </h3>
+//         <p className="text-gray-600 font-medium text-sm">
+//           {product.weight}
+//         </p>
+//       </div>
+//     </div>
+//   );
+// };
+
 const ProductCard = ({ product }) => {
   return (
     <div className="group cursor-pointer">
-      <div className="bg-[#F8F9FA] rounded-sm flex items-center justify-center aspect-[4/5] mb-4 overflow-hidden p-6 transition-secondary">
-         <div className="relative w-full h-full transform group-hover:scale-105 transition-transform duration-500">
-           <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              className="object-contain" 
-            />
-         </div>
+      
+      {/* Fixed Frame */}
+      <div className="rounded-sm aspect-[4/5] mb-4 overflow-hidden p-6 bg-white flex items-center justify-center">
+        
+        {/* Image wrapper (NOT full width/height) */}
+        <div className="relative w-[80%] h-[80%] flex items-center justify-center">
+          
+          <Image
+            src={product.image}
+            alt={product.name}
+            width={400}
+            height={500}
+            className="object-contain transition-transform duration-500 ease-out group-hover:scale-110"
+          />
+
+        </div>
       </div>
 
       <div className="space-y-1">

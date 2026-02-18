@@ -4,7 +4,7 @@ import { CheckCircle } from "lucide-react";
 const WhatWeDo = () => {
   return (
     <div className="w-full bg-white py-16 px-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="wrapper">
         
         {/* Heading */}
         <h2 className="text-center text-3xl md:text-4xl font-semibold text-gray-800 mb-6">
@@ -40,9 +40,9 @@ const WhatWeDo = () => {
         </div>
 
         {/* Image */}
-        <div className="w-full rounded-2xl overflow-hidden shadow-md">
+        <div className="w-full rounded-2xl overflow-hidden ">
           <Image
-            src="/what-we-do.jpg"   // put image in public folder
+            src="/what-we-do.png"  
             alt="Rice processing plant"
             width={1400}
             height={700}

@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Image from "next/image";
+import Link from "next/link";
 
 const products = [
   {
@@ -57,12 +58,12 @@ const Shop = () => {
         </div>
 
         <div className="flex items-center gap-4 mt-6 sm:mt-0">
-          <button className="bg-[#3A6B7E] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-transform active:scale-95">
+          <Link className="bg-[#3A6B7E] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 transition-transform active:scale-95" href="/shop">
             SHOP NOW
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M7 17l9.2-9.2M17 17V7H7" />
             </svg>
-          </button>
+          </Link>
 
           <div className="flex items-center gap-3">
             <button

@@ -6,12 +6,12 @@ const WhyChooseUs = () => {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: "url('/quality-rice-bg.jpg')",
+          backgroundImage: "url('/quality-rice-bg.png')",
         }}
       />
 
-      {/* LEFT DARK OVERLAY (key part) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0b2d3a]/95 via-[#0b2d3a]/80 to-transparent" />
+      {/* Dark Overlay */}
+      <div className="" />
 
       {/* Content */}
       <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex items-center">

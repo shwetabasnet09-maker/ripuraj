@@ -7,7 +7,7 @@ const ProductsPage = () => {
   return (
     <>
       <Bannermain
-        backgroundImg="/banner-products.jpg"
+        backgroundImg="/aboutbanner.png"
         title="Our Products"
       />
 

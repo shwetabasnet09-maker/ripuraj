@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const Banner = () => {
@@ -12,13 +13,13 @@ const Banner = () => {
           Looking to buy in bulk?
         </h2>
 
-        <p className="mt-4 text-[17x]  ">
+        <p className="mt-4 text-[17x] mb-6  ">
          Our wholesale team is available and will assist you during the process.
         </p>
 
-        <button className="mt-6 bg-white px-6 py-3 rounded-md text-[19px] font-medium text-[#306177] ">
+        <Link className="mt-2 bg-white px-6 py-3 rounded-md text-[19px] font-medium text-[#306177] " href="/contact">
           GET IN TOUCH
-        </button>
+        </Link>
       </div>
       </div>
     </div>  

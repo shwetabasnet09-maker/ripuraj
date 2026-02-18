@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const RipurajHero = () => {
   return (
@@ -16,9 +17,9 @@ const RipurajHero = () => {
                 WELCOME TO RIPURAJ AGRO
               </p>
 
-              <h1 className="mt-3 text-[44px] font-extrabold leading-[1.15] text-[#2C5F7F]">
+              <h1 className="mt-3 text-[35px] font-extrabold leading-[1.15] text-[#2C5F7F]">
                 Over 46+ Years of Cultivating
-                <br />
+                
                 Quality and Excellence
               </h1>
 
@@ -54,30 +55,30 @@ const RipurajHero = () => {
                     <p className="font-bold text-[#2C5F7F]">
                       Zero hand touch production
                     </p>
-                    <p className="text-sm text-[#555]">
+                    <p className="text-sm text-[#555] mb-10">
                       We use pure gangetic basin water in production
                     </p>
                   </div>
                 </div>
               </div>
 
-              <button className="mt-10 rounded-xl bg-[#2C5F7F] px-10 py-3.5 font-semibold text-white">
+              <Link href="/shop" className=" rounded-xl bg-[#2C5F7F] px-10 py-3.5 font-semibold text-white ">
                 SHOP NOW
-              </button>
+              </Link>
             </div>
           </div>
 
           {/* RIGHT – 45% */}
           <div className="col-span-12 lg:col-span-5 flex items-stretch">
             <div className="ml-0 lg:-ml-10 w-full mt-6">
-              <div className="h-[95%] rounded-[22px] bg-white p-3 shadow-2xl">
-                <div className="relative h-full overflow-hidden rounded-[18px]">
+              <div className="h-[95%] rounded-[22px]  p-3 ">
+                <div className="relative h-full  ">
                   <Image
-                    src="/rice-products.jpg"
+                    src="/aboutus.png"
                     alt="Ripuraj Rice Products"
                     fill
                     priority
-                    className="object-cover"
+                    className="object-cover rounded-[18px]"
                   />
                 </div>
               </div>

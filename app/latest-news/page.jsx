@@ -9,7 +9,7 @@ const LatestNewsPage = () => {
   return (
     <main>
       <Bannermain
-        backgroundImg="/banner-news.jpg"
+        backgroundImg="/aboutbanner.png"
         title="Latest News"
       />
 

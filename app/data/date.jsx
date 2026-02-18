@@ -4,7 +4,7 @@ export const products = [
     name: "Ripuraj Sonashakti Premium Jeera Parboiled Rice",
     price: 1197,
     weights: ["5KG", "10KG", "20KG"],
-    image: "/products/sonashakti-jeera.png",
+    image: "/Mahashakti.jpg",
     rating: 5,
     description:
       "Ripuraj Rice offers premium, handpicked grains that ensure exceptional taste and quality. Our commitment to sustainable farming and rigorous quality checks guarantees every bag of Ripuraj Rice is perfect for your meals.",
@@ -14,7 +14,7 @@ export const products = [
     name: "Ripuraj Mahashakti Jeera Rice",
     price: 1099,
     weights: ["5KG", "10KG", "20KG"],
-    image: "/products/mahashakti-jeera.png",
+    image: "/Mahashakti.jpg",
     rating: 4,
     description: "Redefining non-basmati rice with superior quality standards.",
   },

@@ -12,23 +12,23 @@ const Bannermain = ({ title, subTitle, backgroundImg }) => {
 
   return (
     <div
-      className="relative w-full h-[450px] md:h-[457px]  bg-black bg-cover bg-center rounded-b-[40px]"
+      className="relative w-full h-[450px] md:h-[457px]   bg-cover bg-center "
       style={{ backgroundImage: `url(${backgroundImg})` }}
     >
       {/* Strong Dark Overlay */}
       <div className="absolute inset-0 "></div>
 
       {/* Content */}
-      <div className="relative z-10 flex justify-center items-center h-full text-center px-4">
-        <div className="rounded-lg w-full max-w-6xl mt-20">
+      <div className="relative z-10 flex justify-center items-center h-full  px-4">
+        <div className=" w-full wrapper mt-20">
           <h1 className="text-[32px] sm:text-[42px] md:text-[52px] lg:text-[60px] font-primary font-regular text-white leading-tight mb-4">
             {title}
           </h1>
 
-          <ol className="flex flex-wrap justify-center text-base sm:text-lg">
+          <ol className="flex flex-wrap text-base sm:text-lg">
             <li>
               <Link
-                className="text-white text-[15px] sm:text-[16.5px] md:text-[17.5px] opensans font-medium"
+                className="text-white text-[15px] sm:text-[16.5px] md:text-[17.5px]  font-medium"
                 href="/"
               >
                 Home
@@ -46,7 +46,7 @@ const Bannermain = ({ title, subTitle, backgroundImg }) => {
               return (
                 <li key={href} className="flex items-center">
                   <span className="text-white mx-3 sm:mx-4 text-[15px] sm:text-[17px]">
-                    /
+                    ||
                   </span>
 
                   {last ? (

@@ -10,7 +10,7 @@ import Achievements from '../component/about/Achievements'
 const page = () => {
   return (
     <div>
-       <Bannermain backgroundImg=" " title="About Us" />
+       <Bannermain backgroundImg="/aboutbanner.png" title="About Us" />
        <Welcomediv/>
        <WhatWeDo/>
        <WhyChooseUs/>
