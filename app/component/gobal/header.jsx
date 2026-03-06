@@ -151,7 +151,7 @@ export default function Header() {
                 <ShoppingBag className="w-6 h-6 stroke-[1.5]" />
               </Link>
 
-              <Link href="/account">
+              <Link href="/login">
                 <User className="w-6 h-6 stroke-[1.5]" />
               </Link>
             </div>
