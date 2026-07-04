@@ -1,3 +1,25 @@
+// export const products = [
+//   {
+//     slug: "ripuraj-sonashakti-premium-jeera-parboiled-rice",
+//     name: "Ripuraj Sonashakti Premium Jeera Parboiled Rice",
+//     price: 1197,
+//     weights: ["5KG", "10KG", "20KG"],
+//     image: "/Mahashakti.jpg",
+//     rating: 5,
+//     description:
+//       "Ripuraj Rice offers premium, handpicked grains that ensure exceptional taste and quality. Our commitment to sustainable farming and rigorous quality checks guarantees every bag of Ripuraj Rice is perfect for your meals.",
+//   },
+//   {
+//     slug: "ripuraj-mahashakti-jeera-rice",
+//     name: "Ripuraj Mahashakti Jeera Rice",
+//     price: 1099,
+//     weights: ["5KG", "10KG", "20KG"],
+//     image: "/Mahashakti.jpg",
+//     rating: 4,
+//     description: "Redefining non-basmati rice with superior quality standards.",
+//   },
+// ];
+
 export const products = [
   {
     slug: "ripuraj-sonashakti-premium-jeera-parboiled-rice",
@@ -6,9 +28,26 @@ export const products = [
     weights: ["5KG", "10KG", "20KG"],
     image: "/Mahashakti.jpg",
     rating: 5,
+
     description:
-      "Ripuraj Rice offers premium, handpicked grains that ensure exceptional taste and quality. Our commitment to sustainable farming and rigorous quality checks guarantees every bag of Ripuraj Rice is perfect for your meals.",
+      "Enjoy the unique aroma and rich flavor of Sonashakti Jeera Rice. Each grain is selected for its quality, making it ideal for flavorful meals.",
+
+    features: [
+      {
+        title: "100% Guaranteed Organic Product",
+        text: "Use of organic paddy."
+      },
+      {
+        title: "Zero Hand Touch Production",
+        text: "Fully automated hygienic processing."
+      },
+      {
+        title: "Premium Grain Quality",
+        text: "Carefully selected grains for best taste."
+      }
+    ]
   },
+
   {
     slug: "ripuraj-mahashakti-jeera-rice",
     name: "Ripuraj Mahashakti Jeera Rice",
@@ -16,8 +55,21 @@ export const products = [
     weights: ["5KG", "10KG", "20KG"],
     image: "/Mahashakti.jpg",
     rating: 4,
-    description: "Redefining non-basmati rice with superior quality standards.",
-  },
+
+    description:
+      "Mahashakti Jeera Rice delivers superior taste and consistency for everyday meals.",
+
+    features: [
+      {
+        title: "High Quality Rice",
+        text: "Selected grains from trusted farms."
+      },
+      {
+        title: "Rich Aroma",
+        text: "Enhances flavor of traditional dishes."
+      }
+    ]
+  }
 ];
 
 export const newsData = [
@@ -26,7 +78,7 @@ export const newsData = [
     slug: "ripuraj-launches-premium-jeera-rice",
     title: "Ripuraj Launches Premium Jeera Rice",
     date: "July 12, 2025",
-    image: "/news-1.jpg",
+    image: "/achievements1.png",
     description:
       "Ripuraj introduces its latest premium jeera rice with enhanced aroma and quality.",
     content:
@@ -37,7 +89,7 @@ export const newsData = [
     slug: "ripuraj-expands-distribution-network",
     title: "Ripuraj Expands Distribution Network",
     date: "June 25, 2025",
-    image: "/news-2.jpg",
+    image: "/achievements1.png",
     description:
       "Ripuraj strengthens its supply chain across major regions.",
     content:

@@ -1,110 +1,44 @@
-// import React from "react";
-// import { ShoppingBag, User, Truck } from "lucide-react";
-// import Link from "next/link";
-
-// export default function Header() {
-//   return (
-//     <header className="absolute top-0 left-0 w-full z-50 py-10 bg-transparent">
-      
-//       {/* Main Rounded Container */}
-//       <div className="wrapper mx-auto bg-white rounded-2xl shadow-sm px-6 py-3 flex items-center justify-between">
-        
-//         {/* Logo div */}
-//         <div className="flex-shrink-0">
-//           <img
-//             src="/logo.png"   
-//             alt="RIPURAJ"
-//             className="h-16 w-auto object-contain"
-//           />
-//         </div>
-
-//         {/* Navigation Menu */}
-//         <nav className="hidden lg:flex items-center space-x-7">
-//           {[
-//             "Home",
-//             "About us",
-//             "Shop",
-//             "Product",
-//             "Event",
-//             "Winner List",
-//             "Contact Us",
-//           ].map((item) => (
-//             <a
-//               key={item}
-//               href={`${item.toLowerCase().replace(" ", "-")}`}
-//               className="text-[#335B6E] hover:text-black font-medium text-[15px] transition-colors"
-//             >
-//               {item}
-//             </a>
-//           ))}
-//         </nav>
-
-//         {/* Right Side Actions */}
-//         <div className="flex items-center space-x-5">
-          
-//           {/* Cashback Button */}
-//           <button className="bg-[#335B6E] hover:bg-[#264554] text-white px-5 py-2.5 rounded-md font-semibold text-sm tracking-wide transition-colors">
-//             CASHBACK
-//           </button>
-
-//           {/* Icons */}
-//          <div className="flex items-center space-x-4 text-[#335B6E]">
-
-//       <Link
-//         href="/orders"
-//         className="hover:opacity-70 transition-opacity"
-//         aria-label="Orders"
-//       >
-//         <Truck className="w-6 h-6 stroke-[1.5]" />
-//       </Link>
-
-//       <Link
-//         href="/cart"
-//         className="hover:opacity-70 transition-opacity"
-//         aria-label="Cart"
-//       >
-//         <ShoppingBag className="w-6 h-6 stroke-[1.5]" />
-//       </Link>
-
-//       <Link
-//         href="/account"
-//         className="hover:opacity-70 transition-opacity"
-//         aria-label="Account"
-//       >
-//         <User className="w-6 h-6 stroke-[1.5]" />
-//       </Link>
-
-//     </div>
-
-//         </div>
-//       </div>
-//     </header>
-//   );
-// }
-
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ShoppingBag, User, Truck, Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navItems = [
     { name: "Home", link: "/" },
     { name: "About us", link: "/about-us" },
     { name: "Shop", link: "/shop" },
     { name: "Product", link: "/product" },
-    { name: "Event", link: "/event" },
+    { name: "Event", link: "/latest-news" },
     { name: "Winner List", link: "/winner-list" },
+    { name: "Cashback", link: "/cashback" },
     { name: "Contact Us", link: "/contact-us" },
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 py-6 bg-transparent">
-      <div className="wrapper bg-white rounded-2xl shadow-sm px-4 md:px-6 py-3">
+    <header
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+        isSticky
+          ? "bg-white shadow-md py-3"
+          : "bg-transparent py-6"
+      }`}
+    >
+      <div className="wrapper px-4 md:px-6">
         
         {/* Top Row */}
         <div className="flex items-center justify-between">
@@ -121,12 +55,22 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-7">
+          <nav
+            className={`hidden lg:flex items-center space-x-7 rounded-full px-6 py-3 transition-all duration-300 ${
+              isSticky
+                ? "bg-white border border-[#EDEDED]"
+                : "border border-[#ffffff40] backdrop-blur-md"
+            }`}
+          >
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.link}
-                className="text-[#335B6E] hover:text-black font-medium text-[15px] transition-colors"
+                className={`text-[15px] transition-colors ${
+                  isSticky
+                    ? "text-[#335B6E] hover:text-black"
+                    : "text-white hover:text-[#F6F0DE]"
+                }`}
               >
                 {item.name}
               </Link>
@@ -136,13 +80,12 @@ export default function Header() {
           {/* Right Side */}
           <div className="flex items-center space-x-4">
             
-            {/* Cashback Button */}
-            <button className="hidden sm:block bg-[#335B6E] hover:bg-[#264554] text-white px-4 md:px-5 py-2 rounded-md font-semibold text-sm transition-colors">
-              CASHBACK
-            </button>
-
-            {/* Icons (hidden on small mobile) */}
-            <div className="hidden md:flex items-center space-x-4 text-[#335B6E]">
+            {/* Icons */}
+            <div
+              className={`hidden md:flex items-center space-x-4 transition-colors ${
+                isSticky ? "text-[#335B6E]" : "text-white"
+              }`}
+            >
               <Link href="/orders">
                 <Truck className="w-6 h-6 stroke-[1.5]" />
               </Link>
@@ -158,7 +101,9 @@ export default function Header() {
 
             {/* Hamburger */}
             <button
-              className="lg:hidden text-[#335B6E]"
+              className={`lg:hidden ${
+                isSticky ? "text-[#335B6E]" : "text-white"
+              }`}
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -168,7 +113,7 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="lg:hidden mt-4 border-t pt-4 space-y-4">
+          <div className="lg:hidden mt-4 bg-white rounded-2xl shadow-lg p-5 space-y-4">
             
             {navItems.map((item) => (
               <Link
@@ -186,15 +131,17 @@ export default function Header() {
               <Link href="/orders">
                 <Truck className="w-6 h-6 stroke-[1.5]" />
               </Link>
+
               <Link href="/cart">
                 <ShoppingBag className="w-6 h-6 stroke-[1.5]" />
               </Link>
+
               <Link href="/account">
                 <User className="w-6 h-6 stroke-[1.5]" />
               </Link>
             </div>
 
-            {/* Cashback Button Mobile */}
+            {/* Cashback Button */}
             <button className="w-full bg-[#335B6E] text-white py-2 rounded-md font-semibold text-sm">
               CASHBACK
             </button>

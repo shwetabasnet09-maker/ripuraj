@@ -7,59 +7,77 @@ import Link from "next/link";
 
 const Factories = () => {
   return (
-    <div className="bg-[#F5E6D3] py-20 px-4 sm:px-6 lg:px-8">
-      <div className="wrapper">
-        {/* 30% Image | 70% Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-[30%_70%] gap-10 items-center">
+    <div className="bg-white py-16 px-4 relative overflow-hidden">
+      
+      {/* RIGHT SIDE ICON ONLY */}
+      <div className="absolute bottom-0 right-0 opacity-70 pointer-events-none hidden lg:block">
+        <Image
+          src="/framer.svg"
+          alt="decor"
+          width={180}
+          height={180}
+          className="w-40 h-40"
+        />
+      </div>
 
-          {/* Image div */}
-          <div className="relative w-full h-[420px] rounded-3xl overflow-hidden shadow-2xl">
+      <div className="wrapper relative z-10">
+        <div className="relative grid grid-cols-1 lg:grid-cols-2 rounded-3xl">
+          
+          {/* LEFT IMAGE */}
+          <div className="relative h-[300px] lg:h-auto overflow-hidden rounded-t-3xl lg:rounded-l-3xl lg:rounded-tr-none">
             <Image
-              src="/Mahashakti.jpg"
-              alt="Aerial view of grain processing factory"
+              src="/Farm.png"
+              alt="Factory"
               fill
               className="object-cover"
               priority
             />
           </div>
 
-          {/* Content div */}
-          <div className="space-y-6">
-            <h1 className="text-4xl lg:text-[35px] font-bold text-[#306177]">
-              From Farm to Factories
-            </h1>
+          {/* RIGHT CONTENT */}
+          <div className="bg-[#F5E6D3] p-8 lg:p-12 flex flex-col justify-center rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none">
+            
+            <h2 className="text-[35px] font-bold text-black leading-tight">
+              From Farm to{" "}
+              <span className="text-[#306177]">Factories</span>
+            </h2>
 
-            <p className="text-base lg:text-[17px] leading-relaxed text-[#4B4B4B]">
-              Transporting grains from the fields to the factories is an essential part
-              of our process. Ensuring that the grains remain safe and maintain their
-              quality during transport is our top priority. Each grain is securely
-              packed in woven bags and covered with protective tarps, safeguarding them
-              from weather conditions and potential damage.
+            <p className="mt-4 leading-relaxed text-[15px] text-[#444]">
+              Transporting grains from the fields to the factories is an
+              essential part of our process. Ensuring that the grains remain
+              safe and maintain their quality during transport is our top
+              priority. Each grain is securely packed in woven bags and covered
+              with protective tarps, safeguarding them from weather conditions
+              and potential damage.
             </p>
 
-            {/* Features */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+            {/* FEATURES */}
+            <div className="grid grid-cols-2 gap-y-4 gap-x-6 mt-6">
               {[
-                "Premium Grain Choice",
-                "Streamlined Production Methods",
-                "Expert Field Guidance",
-                "Top-Quality Produce Selection",
+                "Premium Grain",
+                "Streamlined Production",
+                "Expert Field",
+                "Top-Quality Produce",
               ].map((item, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <CheckCircle className="w-6 h-6 text-[#306177] mt-1" />
-                  <span className="text-[#306177] font-semibold">{item}</span>
+                <div key={index} className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-[#306177]" />
+                  <span className="text-[#070707] font-medium text-sm">
+                    {item}
+                  </span>
                 </div>
               ))}
             </div>
 
-            {/* Button */}
-            <div className="pt-4">
-              <Link className="bg-[#306177] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#234A5F] transition-all duration-300 shadow-lg" href="/about">
-                ABOUT US
+            {/* BUTTON */}
+            <div className="mt-8">
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-2 bg-white text-[#306177] px-6 py-3 rounded-full font-semibold shadow hover:shadow-md transition"
+              >
+                SHOP NOW →
               </Link>
             </div>
           </div>
-
         </div>
       </div>
     </div>

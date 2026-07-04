@@ -17,12 +17,17 @@ const Home = () => {
   return (
     <div className=''>
         <Herodiv/>
-        <ProductCarousel/>
         <About/>
+        <ProductCarousel/>
+        <Factories/>
         <RipurajProductsSwiper/>
         <Video/>
-        <Factories/>
-        <Banner/>
+        
+        
+        
+        
+        
+        
         <Testimonial/>
         <Faq/>
         <Trustdiv/>

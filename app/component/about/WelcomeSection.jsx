@@ -1,88 +1,64 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { CheckCircle2, Handshake } from "lucide-react";
 
 const RipurajHero = () => {
   return (
-    <div className="w-full bg-white py-20">
+    <div className="w-full bg-[#F6F0DE] py-20">
       <div className="mx-auto max-w-7xl px-4">
 
-        <div className="grid grid-cols-12 gap-0 items-stretch">
+        <div className="overflow-hidden rounded-[42px] grid grid-cols-12 items-stretch">
 
-          {/* LEFT – 55% */}
-          <div className="col-span-12 lg:col-span-7">
-            <div className="h-full rounded-[48px] bg-[#F7EACB] px-16 py-16">
+          {/* LEFT */}
+          <div className="col-span-12 lg:col-span-7 bg-[#2F657C] px-8 md:px-14 py-14 text-white relative">
 
-              <p className="text-sm font-semibold tracking-wide text-black">
-                WELCOME TO RIPURAJ AGRO
-              </p>
+            {/* Top Badge */}
+            <div className="inline-block rounded-full bg-[#F6E7C8] px-2 py-1 text-[15px]  text-black">
+              WELCOME TO RIPURAJ AGRO
+            </div>
 
-              <h1 className="mt-3 text-[35px] font-extrabold leading-[1.15] text-[#2C5F7F]">
-                Over 46+ Years of Cultivating
-                
-                Quality and Excellence
-              </h1>
+            {/* Heading */}
+            <h2 className="mt-5 text-[30px]  leading-[1.1] font-extrabold">
+              Over 46+ Years of Cultivating
+              <br />
+              Quality and Excellence
+            </h2>
 
-              <p className="mt-6 max-w-[520px] text-[15px] leading-7 text-[#444]">
-                Rice is the heart of a delicious meal for billions across the globe.
-                Ripuraj Agro Pvt Ltd has been dedicated to rice and paddy production.
-                Our passion has marked our journey for supporting local farmers in Bihar
-                and pioneering organic agriculture practices. Our commitment to quality
-                and sustainability has made us a trusted name in Bihar and beyond.
-              </p>
+            {/* Description */}
+            <p className="mt-6 max-w-[560px] text-[15px]  text-[#E8EEF2]">
+              Rice is the heart of a delicious meal for billions across the globe.
+              Ripuraj Agro Pvt Ltd has been dedicated to rice and paddy production.
+              Our passion has marked our journey for supporting local farmers in Bihar
+              and pioneering organic agriculture practices. Our commitment to quality
+              and sustainability has made us a trusted name in Bihar and beyond.
+            </p>
 
-              {/* Features */}
-              <div className="mt-8 space-y-6">
-                <div className="flex gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
-                    ✔
-                  </div>
-                  <div>
-                    <p className="font-bold text-[#2C5F7F]">
-                      100% Guaranteed Organic Product
-                    </p>
-                    <p className="text-sm text-[#555]">
-                      Use of Organic paddy
-                    </p>
-                  </div>
-                </div>
+           
 
-                <div className="flex gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
-                    ✔
-                  </div>
-                  <div>
-                    <p className="font-bold text-[#2C5F7F]">
-                      Zero hand touch production
-                    </p>
-                    <p className="text-sm text-[#555] mb-10">
-                      We use pure gangetic basin water in production
-                    </p>
-                  </div>
-                </div>
-              </div>
+            
 
-              <Link href="/shop" className=" rounded-xl bg-[#2C5F7F] px-10 py-3.5 font-semibold text-white ">
-                SHOP NOW
-              </Link>
+            {/* Bottom Illustration Icon */}
+            <div className="absolute bottom-0 left-4 opacity-30">
+              <Image
+                src="/Farmer .png"
+                alt="Farmer Illustration"
+                width={140}
+                height={140}
+                className="object-contain"
+              />
             </div>
           </div>
 
-          {/* RIGHT – 45% */}
-          <div className="col-span-12 lg:col-span-5 flex items-stretch">
-            <div className="ml-0 lg:-ml-10 w-full mt-6">
-              <div className="h-[95%] rounded-[22px]  p-3 ">
-                <div className="relative h-full  ">
-                  <Image
-                    src="/aboutus.png"
-                    alt="Ripuraj Rice Products"
-                    fill
-                    priority
-                    className="object-cover rounded-[18px]"
-                  />
-                </div>
-              </div>
-            </div>
+          {/* RIGHT */}
+          <div className="col-span-12 lg:col-span-5 relative min-h-[500px]">
+            <Image
+              src="/aboutus.png"
+              alt="Ripuraj Rice Products"
+              fill
+              priority
+              className="object-cover"
+            />
           </div>
 
         </div>

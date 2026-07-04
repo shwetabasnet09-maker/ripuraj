@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -11,33 +12,31 @@ import Link from "next/link";
 const products = [
   {
     id: 1,
+    slug: "ripuraj-sonashakti-premium-jeera-parboiled-rice",
     name: "Ripuraj Sonashakti Premium Jeera Parboiled Rice",
     weight: "5Kg - 20Kg",
-    image: "/Mahashakti.jpg", 
+    image: "/Sonashakti.png",
   },
   {
     id: 2,
+    slug: "ripuraj-mahashakti-jeera-rice",
     name: "Ripuraj Mahashakti Jeera Rice",
     weight: "5Kg - 20Kg",
-    image: "/Mahashakti.jpg",
+    image: "/Mahashakti.png",
   },
   {
     id: 3,
+    slug: "ripuraj-shaktijeera-premium-parboiled-rice",
     name: "Ripuraj Shaktijeera Premium Parboiled Rice",
     weight: "5Kg - 20Kg",
-    image: "/Mahashakti.jpg",
+    image: "/Shaktijeera.png",
   },
   {
     id: 4,
+    slug: "ripuraj-zayka-long-grain-basmati-rice",
     name: "Ripuraj Zayka Long Grain Basmati Rice",
     weight: "5Kg - 20Kg",
-    image: "/Mahashakti.jpg",
-  },
-  {
-    id: 5,
-    name: "Ripuraj Zayka Long Grain Basmati Rice",
-    weight: "5Kg - 20Kg",
-    image: "/Zayeka.png",
+    image: "/Zayeka1.png",
   },
 ];
 
@@ -45,137 +44,105 @@ const Shop = () => {
   const swiperRef = useRef(null);
 
   return (
-    <div className="w-full wrapper px-4 py-20">
-      {/* Header div */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-        <div>
-          <p className="text-xs font-bold text-gray-900 uppercase tracking-widest mb-2">
-            PRODUCT
-          </p>
-          <h2 className="text-3xl sm:text-4xl text-[#3A6B7E] font-semibold">
-            Ripuraj Finest Products
-          </h2>
-        </div>
+    <div className="w-full bg-[url('/ProductSectionBG.png')] bg-cover bg-center bg-no-repeat py-20">
+      
+      <div className="wrapper px-4">
 
-        <div className="flex items-center gap-6 mt-6 sm:mt-0">
-          <Link className="bg-[#3A6B7E] text-white px-5 py-2.5 rounded-md font-bold text-sm flex items-center gap-2 hover:bg-[#2D5B70] transition-colors uppercase" href="/products">
-            VIEW ALL PRODUCT
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 17l10-10M17 17V7H7" />
-            </svg>
-          </Link>
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
+          
+          <div>
+            <p className="text-white text-sm font-semibold tracking-[3px] uppercase mb-2">
+              PRODUCT
+            </p>
+            <h2 className="text-white text-3xl sm:text-4xl font-bold">
+              Ripuraj Finest Products
+            </h2>
+          </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => swiperRef.current?.slidePrev()}
-              className="text-gray-600 hover:text-black transition-colors"
+          <div className="flex items-center gap-5 mt-6 sm:mt-0">
+            
+            <Link
+              href="/products"
+              className="bg-white text-[#3A6B7E] px-6 py-3 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-[#2D5B70] hover:text-white transition"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              VIEW ALL PRODUCT
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                <path d="M7 17l10-10M17 17V7H7" />
               </svg>
-            </button>
-            <button
-              onClick={() => swiperRef.current?.slideNext()}
-              className="text-gray-600 hover:text-black transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+            </Link>
+
+            {/* Arrows */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => swiperRef.current?.slidePrev()}
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white"
+              >
+                ‹
+              </button>
+              <button
+                onClick={() => swiperRef.current?.slideNext()}
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white"
+              >
+                ›
+              </button>
+            </div>
+
           </div>
         </div>
-      </div>
 
-      {/* Swiper Carousel */}
-      <Swiper
-        modules={[Navigation, Pagination]}
-        spaceBetween={24}
-        slidesPerView={1}
-        pagination={{
-          type: 'progressbar',
-          el: '.custom-pagination-scrollbar',
-        }}
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-        }}
-        breakpoints={{
-          640: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
-          1280: { slidesPerView: 4 },
-        }}
-        className="pb-12"
-      >
-        {products.map((product) => (
-          <SwiperSlide key={product.id}>
-            <ProductCard product={product} />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+        {/* Swiper */}
+        <Swiper
+          modules={[Navigation, Pagination]}
+          spaceBetween={24}
+          slidesPerView={1}
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          breakpoints={{
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+            1280: { slidesPerView: 4 },
+          }}
+        >
+          {products.map((product) => (
+            <SwiperSlide key={product.id}>
+              <ProductCard product={product} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
 
-      {/* Custom Progress Bar (matching the bottom line in the image) */}
-      <div className="relative w-full h-[2px] bg-gray-200 mt-4">
-        <div className="custom-pagination-scrollbar absolute top-0 left-0 h-full  transition-all duration-300" ></div>
       </div>
     </div>
   );
 };
 
-// const ProductCard = ({ product }) => {
-//   return (
-//     <div className="group cursor-pointer">
-//       <div className=" rounded-sm flex items-center justify-center aspect-[4/5] mb-4 overflow-hidden p-6 transition-secondary">
-//          <div className="relative w-full h-full transform group-hover:scale-105 transition-transform duration-500">
-//            <Image
-//               src={product.image}
-//               alt={product.name}
-//               fill
-//               className="object-contain" 
-//             />
-//          </div>
-//       </div>
-
-//       <div className="space-y-1">
-//         <h3 className="text-[#3A6B7E] font-bold text-lg leading-snug hover:underline">
-//           {product.name}
-//         </h3>
-//         <p className="text-gray-600 font-medium text-sm">
-//           {product.weight}
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
-
 const ProductCard = ({ product }) => {
   return (
-    <div className="group cursor-pointer">
-      
-      {/* Fixed Frame */}
-      <div className="rounded-sm aspect-[4/5] mb-4 overflow-hidden p-6 bg-white flex items-center justify-center">
-        
-        {/* Image wrapper (NOT full width/height) */}
-        <div className="relative w-[80%] h-[80%] flex items-center justify-center">
-          
+    <Link href={`/product/${product.slug}`}>
+      <div className="cursor-pointer">
+
+        {/* Card */}
+        <div className=" h-[300px] ">
           <Image
             src={product.image}
             alt={product.name}
-            width={400}
-            height={500}
-            className="object-contain transition-transform duration-500 ease-out group-hover:scale-110"
+            width={220}
+            height={260}
+            className="object-contain rounded-lg"
           />
-
         </div>
-      </div>
 
-      <div className="space-y-1">
-        <h3 className="text-[#3A6B7E] font-bold text-lg leading-snug hover:underline">
-          {product.name}
-        </h3>
-        <p className="text-gray-600 font-medium text-sm">
-          {product.weight}
-        </p>
+        {/* Text */}
+        <div className="mt-4 ">
+          <h3 className="text-white font-semibold text-[17px] leading-snug">
+            {product.name}
+          </h3>
+          <p className="text-white/80 text-[15px] mt-1">
+            {product.weight}
+          </p>
+        </div>
+
       </div>
-    </div>
+    </Link>
   );
 };
 

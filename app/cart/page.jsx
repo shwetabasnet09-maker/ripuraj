@@ -5,6 +5,7 @@
 import React, { useEffect, useState } from "react";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function CartPage() {
   const router = useRouter();
@@ -70,10 +71,10 @@ export default function CartPage() {
         prev.map((item) =>
           item.id === id
             ? {
-                ...item,
-                quantity: newQty,
-                total_price: parseFloat(item.product_price) * newQty,
-              }
+              ...item,
+              quantity: newQty,
+              total_price: parseFloat(item.product_price) * newQty,
+            }
             : item
         )
       );
@@ -185,7 +186,7 @@ export default function CartPage() {
   return (
     <div className="bg-gray-50 min-h-screen py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-8">Shopping Cart</h1>
+        <h2 className="text-3xl font-extrabold text-gray-900 mb-8">Shopping Cart</h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* ---------------- ITEM LIST ---------------- */}
@@ -195,7 +196,7 @@ export default function CartPage() {
               const itemQty = item.quantity || 0;
               const itemTotal = parseFloat(item.total_price || itemPrice * itemQty);
               const itemName = item.product_name || "Product";
-              const itemImage = item.image || "/placeholder.png";
+              const itemImage = item.image 
 
               return (
                 <div
@@ -203,7 +204,14 @@ export default function CartPage() {
                   className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-center"
                 >
                   <div className="bg-gray-100 p-2 rounded-lg">
-                    <img src={itemImage} alt={itemName} className="w-24 h-24 object-contain" />
+                    <Image
+                      src={itemImage}
+                      alt={itemName}
+                      width={96}
+                      height={96}
+                      className="w-24 h-24 object-contain"
+                      unoptimized
+                    />
                   </div>
 
                   <div className="flex-1">

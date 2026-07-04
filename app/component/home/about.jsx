@@ -1,52 +1,83 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
 
-const About = () => {
+
+"use client";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+export default function About() {
+  const [about, setAbout] = useState(null);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/api/homepage/about-section/")
+      .then((res) => res.json())
+      .then((data) => setAbout(data));
+  }, []);
+
+  if (!about) return null;
+
   return (
-    <div className='bg-[#FFF2D9] py-12 md:py-20 px-6'>
-      {/* Wrapper with max-width and flex layout */}
-      <div className='max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10 lg:gap-16'>
-        
-        {/* Text div - 65% Width on Desktop */}
-        <div className='w-full lg:w-[55%]'>
-          <h3 className='text-[18px] md:text-[20px] font-medium tracking-wide text-gray-800'>
-            WELCOME TO RIPURAJ AGRO
-          </h3>
-          <h2 className='text-[#306177] text-[28px] md:text-[45px] font-bold leading-tight mt-2'>
-            Over 46+ Years of Cultivating <br className="hidden md:block" /> Quality and Excellence
-          </h2>
-          <p className='text-[16px] md:text-[17px] mt-6 text-gray-700 leading-relaxed'>
-            Rice is the heart of a delicious meal for billions across the globe. 
-             Ripuraj Agro Pvt Ltd, has been dedicated to rice and paddy production. 
-            Our passion has marked our journey for Supporting local farmers in Bihar 
-            and pioneering organic agriculture practices. Our commitment to quality 
-            and sustainability has made us a trusted name in Bihar and beyond.
-          </p>
-          <Link
-            className="inline-block mt-8 py-3 px-8 rounded-[5px] bg-[#306177] text-white text-[18px] font-semibold hover:bg-[#254d5f] transition-all"
-            href="/about"
-          >
-            ABOUT US
-          </Link>
-        </div>
+    // <section className="bg-[#F5EDD8] py-12 md:py-20 px-6 overflow-hidden">
+    <section
+  className="py-12 md:py-20  overflow-hidden bg-cover bg-center"
+  style={{ backgroundImage: "url('/background_about.png')" }}
+>
+  
+      <div className="wrapper">
 
-        {/* Image div - 35% Width on Desktop */}
-        <div className='w-full lg:w-[35%]'>
-          <div className='relative w-full aspect-[4/5] md:aspect-square lg:aspect-[0.8/1]'>
-            <Image
-              src="/about.png" 
-              alt="Ripuraj Agro Products"
-              fill
-              className="object-cover rounded-[30px]"
-              priority
-            />
+        {/* Top text row */}
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 mb-10">
+          {/* Left: headings */}
+          <div className="lg:w-1/2">
+            <span className="inline-block bg-[#2D5F6B] text-[#FFF2D9] text-[12px] font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+              {about.label ?? "Welcome to Ripuraj Agro"}
+            </span>
+            <h2 className="text-[#1a1a1a] text-[35px] font-bold leading-tight">
+              {about.title_big}
+            </h2>
+           
+          </div>
+
+          {/* Right: description */}
+          <div className="lg:w-1/2 flex items-center">
+            <p className="text-gray-700 text-base md:text-[15px] leading-relaxed">
+              {about.description}
+            </p>
           </div>
         </div>
 
-      </div>
-    </div>
-  );
-};
+        {/* Background image card with overlay content */}
+        <div className="relative w-full rounded-3xl overflow-hidden min-h-[420px] md:min-h-[500px]">
+          {/* Background image */}
+          <Image
+            src={about.image}
+            alt={about.title_big}
+            fill
+            unoptimized
+            className="object-cover"
+            priority
+          />
 
-export default About;
+          {/* Optional dark overlay for readability */}
+          <div className="absolute inset-0 bg-black/10" />
+
+          {/* Product badge / overlay content — bottom right */}
+          {about.product_image && (
+            <div className="absolute bottom-6 right-6 md:bottom-10 md:right-10">
+              <div className="relative w-28 h-36 md:w-36 md:h-44 drop-shadow-2xl">
+                <Image
+                  src={about.product_image}
+                  alt="Product"
+                  fill
+                  unoptimized
+                  className="object-contain"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+      </div>
+    </section>
+  );
+}

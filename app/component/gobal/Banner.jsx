@@ -21,7 +21,7 @@ const Bannermain = ({ title, subTitle, backgroundImg }) => {
       {/* Content */}
       <div className="relative z-10 flex justify-center items-center h-full  px-4">
         <div className=" w-full wrapper mt-20">
-          <h1 className="text-[32px] sm:text-[42px] md:text-[52px] lg:text-[60px] font-primary font-regular text-white leading-tight mb-4">
+          <h1 className="text-[45px] sm:text-[35px] md:text-[45px] lg:text-[45px] font-primary font-bold text-white leading-tight mb-4">
             {title}
           </h1>
 

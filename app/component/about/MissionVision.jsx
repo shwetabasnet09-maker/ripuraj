@@ -2,15 +2,20 @@ import { Target, Eye } from "lucide-react";
 
 const MissionVision = () => {
   return (
-    <div className="bg-[#fff4dc] py-16 px-4">
+    <div
+  className="py-16 px-4 bg-cover bg-center bg-no-repeat"
+  style={{
+    backgroundImage: "url('/ProductSectionBG.png')",
+  }}
+>
       <div className="max-w-7xl mx-auto">
         
         {/* Heading */}
-        <h2 className="text-center text-3xl md:text-4xl font-semibold text-[#2f5f73] mb-3">
+        <h2 className="text-center text-3xl md:text-4xl font-semibold text-[white] mb-3">
           Our Mission & Vision
         </h2>
 
-        <p className="text-center max-w-3xl mx-auto text-gray-600 text-sm md:text-base mb-16">
+        <p className="text-center max-w-3xl mx-auto text-white text-sm md:text-base mb-16">
           To produce safe, pure, and high-quality rice using modern technology
           and responsible sourcing, ensuring consistent taste and customer
           satisfaction.
@@ -20,18 +25,18 @@ const MissionVision = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
 
           {/* Vision */}
-          <div className="relative bg-[#2f5f73] text-white rounded-2xl px-8 pt-16 pb-10 shadow-lg">
+          <div className="relative bg-[white] text-[#2f5f73] rounded-2xl px-8 pt-16 pb-10 shadow-lg">
             
             {/* Icon */}
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white w-16 h-16 rounded-full flex items-center justify-center shadow-md">
-              <Eye className="text-[#2f5f73] w-7 h-7" />
+            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white w-20 h-20 rounded-full flex items-center justify-center shadow-md">
+              <Eye className="text-[#2f5f73] w-15 h-15" />
             </div>
 
             <h3 className="text-center text-2xl font-semibold mb-4">
               Vision
             </h3>
 
-            <p className="text-sm leading-relaxed text-gray-100 text-center">
+            <p className="text-sm leading-relaxed text-black text-center">
               We aspire to be an organization that continuously invests in
               manufacturing capabilities to enhance automation, infrastructure,
               and facilities, ensuring we consistently meet our high standards
@@ -47,18 +52,18 @@ const MissionVision = () => {
           </div>
 
           {/* Mission */}
-          <div className="relative bg-[#2f5f73] text-white rounded-2xl px-8 pt-16 pb-10 shadow-lg">
+          <div className="relative bg-[white] text-[#2f5f73] rounded-2xl px-8 pt-16 pb-10 shadow-lg">
             
             {/* Icon */}
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white w-16 h-16 rounded-full flex items-center justify-center shadow-md">
-              <Target className="text-[#2f5f73] w-7 h-7" />
+            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white w-20 h-20 rounded-full flex items-center justify-center shadow-md">
+              <Target className="text-[#2f5f73] w-15 h-15" />
             </div>
 
             <h3 className="text-center text-2xl font-semibold mb-4">
               Mission
             </h3>
 
-            <p className="text-sm leading-relaxed text-gray-100 text-center">
+            <p className="text-sm leading-relaxed text-black text-center">
               We aim to ensure stable and sustainable rice production with
               minimal environmental impact and adaptation to climate change.
               Our goal is to enhance the nutrition and health of both rice
