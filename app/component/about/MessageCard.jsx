@@ -2,20 +2,21 @@ import Image from "next/image";
 
 const MessageCard = () => {
   return (
-    <section className="py-16 px-4 bg-white">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative py-16 px-4 bg-white overflow-hidden">
+  
+      <div className="max-w-7xl mx-auto relative z-10">
         
         {/* Main Wrapper */}
         <div className="bg-[#efe4cf] rounded-[30px] overflow-hidden flex flex-col lg:flex-row">
           
           {/* LEFT CONTENT */}
           <div className="flex-1 p-8 md:p-14">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">
+            <h2 className="text-[35px]  font-bold mb-2   leading-tight">
               <span className="text-black">Leadership & </span>
               <span className="text-[#3b6780]">Legacy</span>
             </h2>
 
-            <div className="space-y-6 text-[#2b2b2b]  text-[15px] leading-relaxed">
+            <div className="space-y-0 text-[#000000] text-[15px] leading-relaxed">
               <p>
                 Mr. Rameshwar Prasad Gupta is a seasoned businessman with nearly
                 three decades of hands-on experience in building and scaling
@@ -38,7 +39,7 @@ const MessageCard = () => {
               </p>
 
               <p>
-                Currently, Mr. Gupta plays a key role in shaping the company’s
+                Currently, Mr. Gupta plays a key role in shaping the company's
                 direction. He is actively involved in major policy decisions and
                 oversees overall operations, ensuring smooth functioning and
                 consistent quality.
@@ -47,21 +48,20 @@ const MessageCard = () => {
           </div>
 
           {/* RIGHT IMAGE SECTION */}
-           <div className="lg:w-[30%] relative flex flex-col justify-end bg-[#e9edf0]">
+          <div className="lg:w-[45%] relative flex flex-col justify-end bg-[#e9edf0]">
             
             {/* IMAGE */}
-            <div className="w-full h-[380px] lg:h-[450px] overflow-hidden">
+            <div className="relative w-full h-95 lg:h-112.5">
               <Image
-                src="/md.png"
+                src="/Message from MD.webp"
                 alt="Managing Director"
-                width={500}
-                height={600}
-                className="w-full h-full object-cover object-top"
+                fill
+                className="object-cover object-top"
               />
             </div>
 
             {/* BOTTOM NAME BAR */}
-            <div className="bg-[#2f6178] px-6 py-4 text-white">
+            <div className="bg-[#306177] px-6 py-4 text-[#FFF2D9]">
               <h3 className="text-lg lg:text-xl font-bold uppercase leading-snug">
                 MR. RAMESHWAR PRASAD GUPTA
               </h3>

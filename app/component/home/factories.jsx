@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const Factories = () => {
   return (
-    <div className="bg-white py-16 px-4 relative overflow-hidden">
+    <div className="bg-[white] py-16 px-4 relative overflow-hidden">
       
       {/* RIGHT SIDE ICON ONLY */}
       <div className="absolute bottom-0 right-0 opacity-70 pointer-events-none hidden lg:block">
@@ -35,7 +35,7 @@ const Factories = () => {
           </div>
 
           {/* RIGHT CONTENT */}
-          <div className="bg-[#F5E6D3] p-8 lg:p-12 flex flex-col justify-center rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none">
+          <div className="bg-[#FFF8E2] p-8 lg:p-12 flex flex-col justify-center rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none">
             
             <h2 className="text-[35px] font-bold text-black leading-tight">
               From Farm to{" "}

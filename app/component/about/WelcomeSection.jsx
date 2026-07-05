@@ -14,19 +14,17 @@ const RipurajHero = () => {
           <div className="col-span-12 lg:col-span-7 bg-[#2F657C] px-8 md:px-14 py-14 text-white relative">
 
             {/* Top Badge */}
-            <div className="inline-block rounded-full bg-[#F6E7C8] px-2 py-1 text-[15px]  text-black">
+            <div className="inline-block rounded-full bg-[#F6E7C8] font-medium px-2 py-1 text-[15px]  text-black">
               WELCOME TO RIPURAJ AGRO
             </div>
 
             {/* Heading */}
-            <h2 className="mt-5 text-[30px]  leading-[1.1] font-extrabold">
-              Over 46+ Years of Cultivating
-              <br />
-              Quality and Excellence
+            <h2 className="mt-4 text-[35px]  leading-[1.1] font-extrabold">
+              Over 46+ Years of Cultivating Quality and Excellence
             </h2>
 
             {/* Description */}
-            <p className="mt-6 max-w-[560px] text-[15px]  text-[#E8EEF2]">
+            <p className="mt- max-w-140 text-[15px]  text-[#E8EEF2]">
               Rice is the heart of a delicious meal for billions across the globe.
               Ripuraj Agro Pvt Ltd has been dedicated to rice and paddy production.
               Our passion has marked our journey for supporting local farmers in Bihar

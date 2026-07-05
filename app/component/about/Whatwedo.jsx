@@ -3,15 +3,15 @@ import Image from "next/image";
 const features = [
   {
     title: "Biodynamic Food",
-    image: "/icons/biodynamic.png",
+    image: "/Biodynamic Food.svg",
   },
   {
     title: "Organic Gardening",
-    image: "/icons/gardening.png",
+    image: "/Organic Gardening.svg",
   },
   {
     title: "Organic Food Certification",
-    image: "/icons/certification.png",
+    image: "/Organic Food Certification.svg",
   },
 ];
 
@@ -19,18 +19,18 @@ const WhatWeDo = () => {
   return (
     <section className="w-full bg-[#fafafa] py-14 overflow-hidden relative">
       {/* Side Decorations */}
-      <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 opacity-60">
+      <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 opacity-80">
         <Image
-          src="/paisley-left.png"
+          src="/Left Pic.svg"
           alt="Decoration"
           width={90}
           height={180}
         />
       </div>
 
-      <div className="hidden lg:block absolute right-0 top-16 opacity-60">
+      <div className="hidden lg:block absolute right-0 top-16 opacity-80">
         <Image
-          src="/paisley-right.png"
+          src="/Right Pic.svg"
           alt="Decoration"
           width={90}
           height={180}
@@ -47,12 +47,8 @@ const WhatWeDo = () => {
         </h2>
 
         {/* Description */}
-        <p className="max-w-5xl mx-auto text-center text-gray-700 leading-relaxed mb-10 text-sm md:text-[15px]">
-          At Ripuraj Agro Pvt. Ltd., we specialize in the production,
-          milling, refinement, and delivery of high-quality rice across
-          various segments of society and multiple states. Our premium
-          basmati and non-basmati rice varieties offer the perfect blend
-          of taste, nutrient content, and texture.
+        <p className="max-w-full mx-auto text-center text-gray-700 leading-relaxed mb-10 text-sm md:text-[15px]">
+        At Ripuraj Agro Pvt. Ltd., we specialize in the production, milling, refinement, and delivery of high-quality rice across various segments of society and multiple states. Our premium basmati and non-basmati rice varieties offer the perfect blend of taste, nutrient content, and texture. For Forty-Six years, we have consistently delivered top-quality rice. Our commitment to excellence is evident in the purity of our intentions and the superior quality of our products, making us renowned across many states. This journey of delivering the best rice continues, as we strive to meet and exceed the expectations of our valued customers.
         </p>
 
         {/* Main Layout */}

@@ -45,12 +45,9 @@ const Shop = () => {
 
   return (
     <div className="w-full bg-[url('/ProductSectionBG.png')] bg-cover bg-center bg-no-repeat py-20">
-      
       <div className="wrapper px-4">
-
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
-          
           <div>
             <p className="text-white text-sm font-semibold tracking-[3px] uppercase mb-2">
               PRODUCT
@@ -61,7 +58,6 @@ const Shop = () => {
           </div>
 
           <div className="flex items-center gap-5 mt-6 sm:mt-0">
-            
             <Link
               href="/products"
               className="bg-white text-[#3A6B7E] px-6 py-3 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-[#2D5B70] hover:text-white transition"
@@ -76,18 +72,17 @@ const Shop = () => {
             <div className="flex gap-3">
               <button
                 onClick={() => swiperRef.current?.slidePrev()}
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white"
+                className="w-8 h-8 flex items-center justify-center text-white text-xl hover:opacity-70 transition"
               >
                 ‹
               </button>
               <button
                 onClick={() => swiperRef.current?.slideNext()}
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white"
+                className="w-8 h-8 flex items-center justify-center text-white text-xl hover:opacity-70 transition"
               >
                 ›
               </button>
             </div>
-
           </div>
         </div>
 
@@ -109,7 +104,6 @@ const Shop = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-
       </div>
     </div>
   );
@@ -118,29 +112,26 @@ const Shop = () => {
 const ProductCard = ({ product }) => {
   return (
     <Link href={`/product/${product.slug}`}>
-      <div className="cursor-pointer">
-
+      <div className="cursor-pointer group">
         {/* Card */}
-        <div className=" h-[300px] ">
+        <div className="relative h-[300px] bg-[#EDEEF0] rounded-2xl overflow-hidden transition-transform duration-300 group-hover:-translate-y-1">
           <Image
             src={product.image}
             alt={product.name}
-            width={220}
-            height={260}
-            className="object-contain rounded-lg"
+            fill
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-110 mix-blend-multiply"
           />
         </div>
 
         {/* Text */}
-        <div className="mt-4 ">
-          <h3 className="text-white font-semibold text-[17px] leading-snug">
+        <div className="mt-4">
+          <h3 className="text-white font-bold text-[17px] leading-snug">
             {product.name}
           </h3>
-          <p className="text-white/80 text-[15px] mt-1">
+          <p className="text-white/80 text-[15px] font-medium mt-1">
             {product.weight}
           </p>
         </div>
-
       </div>
     </Link>
   );

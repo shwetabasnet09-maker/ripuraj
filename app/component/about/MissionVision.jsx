@@ -1,13 +1,13 @@
-import { Target, Eye } from "lucide-react";
+import Image from "next/image";
 
 const MissionVision = () => {
   return (
     <div
-  className="py-16 px-4 bg-cover bg-center bg-no-repeat"
-  style={{
-    backgroundImage: "url('/ProductSectionBG.png')",
-  }}
->
+      className="py-16 px-4 bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: "url('/ProductSectionBG.png')",
+      }}
+    >
       <div className="max-w-7xl mx-auto">
         
         {/* Heading */}
@@ -29,7 +29,13 @@ const MissionVision = () => {
             
             {/* Icon */}
             <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white w-20 h-20 rounded-full flex items-center justify-center shadow-md">
-              <Eye className="text-[#2f5f73] w-15 h-15" />
+              <Image
+                src="/target.svg"
+                alt="Vision icon"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
             </div>
 
             <h3 className="text-center text-2xl font-semibold mb-4">
@@ -56,7 +62,13 @@ const MissionVision = () => {
             
             {/* Icon */}
             <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white w-20 h-20 rounded-full flex items-center justify-center shadow-md">
-              <Target className="text-[#2f5f73] w-15 h-15" />
+              <Image
+                src="/Binocular.svg"
+                alt="Mission icon"
+                width={40}
+                height={40}
+                className="object-contain"
+              />
             </div>
 
             <h3 className="text-center text-2xl font-semibold mb-4">

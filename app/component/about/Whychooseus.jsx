@@ -1,6 +1,6 @@
 const WhyChooseUs = () => {
   return (
-    <div className="relative w-full h-[420px] md:h-[480px] lg:h-[520px] overflow-hidden">
+    <div className="relative w-full h-105 md:h-120 lg:h-130 overflow-hidden">
       
       {/* Background Image */}
       <div
@@ -21,7 +21,7 @@ const WhyChooseUs = () => {
             Why Choose Us
           </p>
 
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight mb-5">
+          <h2 className="text-[35px]  font-bold leading-tight mb-3">
             Quality You Can Trust
           </h2>
 

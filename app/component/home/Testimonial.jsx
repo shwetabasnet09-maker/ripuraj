@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React from "react";
@@ -23,7 +21,7 @@ export default function Testimonial() {
       {/* LEFT BOTTOM ICON */}
       <div className="absolute bottom-0 left-0 z-10">
         <Image
-          src="/leftimg.png" // put your left icon image
+          src="/leftimg.png"
           alt="left icon"
           width={120}
           height={120}
@@ -32,46 +30,41 @@ export default function Testimonial() {
       </div>
 
       {/* RIGHT BOTTOM ICON */}
-      {/* <div className="absolute bottom-0 right-0 z-10">
-        <Image
-          src="/rightimg.png" // put your right icon image
-          alt="right icon"
-          width={100}
-          height={100}
-          className="object-contain"
-        />
-      </div> */}
-      {/* RIGHT BOTTOM ICON */}
       <div className="absolute bottom-0 right-0 z-10">
         <Image
-          src="/rightimg.png" 
+          src="/rightimg.png"
           alt="right icon"
           width={80}
           height={80}
           className="object-contain"
         />
       </div>
+
       <div className="wrapper mx-auto relative z-20">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-5">
           <div>
-            <h3 className="text-[18px] uppercase tracking-wide text-gray-500 font-semibold">
+            <h3 className="text-[16px] uppercase tracking-wide text-[#000000] font-medium">
               Testimonial
             </h3>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#2D5B70] leading-tight mt-2">
+            <h2 className="text-[35px] font-bold text-[#2D5B70] leading-tight mt-1 tracking-[-0.05em]">
               Hear from those who trust our brand
             </h2>
           </div>
 
           {/* Navigation */}
           <div className="flex items-center gap-3">
-            <button className="prev-btn w-11 h-11 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#2D5B70] hover:text-white transition">
-              ←
+            <button className="prev-btn w-9 h-9 rounded-full border border-[#2D5B70]/40 flex items-center justify-center text-[#2D5B70] hover:bg-[#2D5B70] hover:text-white transition">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
             </button>
 
-            <button className="next-btn w-11 h-11 rounded-full border border-gray-300 flex items-center justify-center hover:bg-[#2D5B70] hover:text-white transition">
-              →
+            <button className="next-btn w-9 h-9 rounded-full border border-[#2D5B70]/40 flex items-center justify-center text-[#2D5B70] hover:bg-[#2D5B70] hover:text-white transition">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
             </button>
           </div>
         </div>
@@ -86,12 +79,8 @@ export default function Testimonial() {
           spaceBetween={24}
           slidesPerView={1}
           breakpoints={{
-            640: {
-              slidesPerView: 2,
-            },
-            1024: {
-              slidesPerView: 3,
-            },
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
           }}
         >
           {videos.map((video) => (
@@ -107,11 +96,11 @@ export default function Testimonial() {
 
 const VideoCard = ({ video }) => {
   return (
-    <div className="rounded-2xl overflow-hidden bg-[#E9E9E9]">
+    <div className="rounded-2xl overflow-hidden bg-[#E9E9E9] h-[250px] lg:h-[280px]">
       <iframe
         src={`https://www.youtube.com/embed/${video.youtubeId}`}
         title={video.title}
-        className="w-full h-[250px] lg:h-[280px]"
+        className="w-full h-full"
         allowFullScreen
       />
     </div>
