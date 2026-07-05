@@ -52,7 +52,8 @@ export default function ShopPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/products/");
+        // const res = await fetch("http://127.0.0.1:8000/api/products/");
+        const res = await fetch( `${process.env.NEXT_PUBLIC_API_URL}/api/products/`);
         const data = await res.json();
         setProducts(data);
       } catch (err) {
