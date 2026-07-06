@@ -29,6 +29,7 @@ const Factories = () => {
               src="/Farm.png"
               alt="Factory"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
               priority
             />

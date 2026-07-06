@@ -9,7 +9,7 @@ const page = () => {
   return (
     <div>
         <Bannermain
-        backgroundImg="/aboutbanner.png"
+        backgroundImg="/About%20Banner.webp"
         title="Contact Us"
       />
       <ContactSection/>

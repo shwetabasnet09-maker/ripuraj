@@ -22,7 +22,7 @@ export default function ProductHighlight() {
 
         {/* RIGHT CONTENT */}
         <div>
-          <h2 className="text-[38px] lg:text-[46px] font-bold text-[#3a6372] leading-tight max-w-xl">
+          <h2 className="text-[30px] lg:text-[30px] font-bold text-[#3a6372] leading-tight max-w-xl">
             Ripuraj Sonashakti Premium Jeera Parboiled Rice
           </h2>
 

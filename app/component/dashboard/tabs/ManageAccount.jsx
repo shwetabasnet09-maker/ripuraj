@@ -60,6 +60,8 @@
 
 import { useEffect, useState } from "react";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 export default function ManageAccount() {
   const [profile, setProfile] = useState({
     phone: "",
@@ -78,7 +80,7 @@ export default function ManageAccount() {
     async function fetchProfile() {
       try {
         const res = await fetch(
-          "http://127.0.0.1:8000/api/accounts/profile/",
+          `${API_BASE_URL}/api/accounts/profile/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -118,7 +120,7 @@ export default function ManageAccount() {
 
     try {
       const res = await fetch(
-        "http://127.0.0.1:8000/api/accounts/profile/",
+        `${API_BASE_URL}/api/accounts/profile/`,
         {
           method: "PATCH",
           headers: {

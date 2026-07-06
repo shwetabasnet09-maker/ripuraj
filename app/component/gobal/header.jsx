@@ -25,8 +25,7 @@ export default function Header() {
     { name: "Shop", link: "/shop" },
     { name: "Product", link: "/product" },
     { name: "Event", link: "/latest-news" },
-    { name: "Winner List", link: "/winner-list" },
-    { name: "Cashback", link: "/cashback" },
+    { name: "Csr", link: "/csr" },
     { name: "Contact Us", link: "/contact-us" },
   ];
 

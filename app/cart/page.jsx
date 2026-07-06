@@ -7,6 +7,8 @@ import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 export default function CartPage() {
   const router = useRouter();
   const [cartItems, setCartItems] = useState([]);
@@ -23,7 +25,7 @@ export default function CartPage() {
       }
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/api/cart/", {
+        const res = await fetch(`${API_BASE_URL}/api/cart/`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -56,7 +58,7 @@ export default function CartPage() {
     if (!token) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/cart/${id}/`, {
+      const res = await fetch(`${API_BASE_URL}/api/cart/${id}/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +91,7 @@ export default function CartPage() {
     if (!token) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/cart/${id}/`, {
+      const res = await fetch(`${API_BASE_URL}/api/cart/${id}/`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -127,7 +129,7 @@ export default function CartPage() {
       };
 
       const res = await fetch(
-        "http://127.0.0.1:8000/api/orders/checkout/",
+        `${API_BASE_URL}/api/orders/checkout/`,
         {
           method: "POST",
           headers: {

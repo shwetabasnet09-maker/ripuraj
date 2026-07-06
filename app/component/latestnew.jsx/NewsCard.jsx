@@ -1,30 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const NewsCard = ({ slug, image, title, date, description }) => {
+const NewsCard = ({ slug, image, title }) => {
   return (
     <Link href={`/latest-news/${slug}`}>
-      <div className="bg-white rounded-xl shadow-md overflow-hidden group cursor-pointer">
+      <div className="group cursor-pointer">
         {/* Image */}
-        <div className="relative h-56 overflow-hidden">
+        <div className="relative h-64 bg-[#2f5f73] rounded-[21px] overflow-hidden">
           <Image
             src={image}
             alt={title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </div>
 
-        {/* Content */}
-        <div className="p-5">
-          <p className="text-sm text-gray-400">{date}</p>
-          <h3 className="font-semibold text-gray-800 mt-2">
-            {title}
-          </h3>
-          <p className="text-gray-600 text-sm mt-2">
-            {description}
-          </p>
-        </div>
+        {/* Title */}
+        <p className="text-center text-[#2f5f73] font-medium text-[20px]  mt-4">
+          {title}
+        </p>
       </div>
     </Link>
   );

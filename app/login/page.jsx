@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"; 
 import { useRouter } from "next/navigation";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 
 export default function AuthPage() {
   
@@ -41,7 +43,7 @@ export default function AuthPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/accounts/register/", {
+      const res = await fetch(`${API_BASE_URL}/api/accounts/register/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -76,7 +78,7 @@ export default function AuthPage() {
 
     try {
       const res = await fetch(
-        "http://127.0.0.1:8000/api/accounts/verify-email/",
+        `${API_BASE_URL}/api/accounts/verify-email/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -110,7 +112,7 @@ export default function AuthPage() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/accounts/login/", {
+      const res = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

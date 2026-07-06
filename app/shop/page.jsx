@@ -45,6 +45,8 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Bannermain from "../component/gobal/Banner";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -52,8 +54,7 @@ export default function ShopPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // const res = await fetch("http://127.0.0.1:8000/api/products/");
-        const res = await fetch( `${process.env.NEXT_PUBLIC_API_URL}/api/products/`);
+        const res = await fetch(`${API_BASE_URL}/api/products/`);
         const data = await res.json();
         setProducts(data);
       } catch (err) {
@@ -73,7 +74,7 @@ export default function ShopPage() {
 
   return (
     <>
-      <Bannermain backgroundImg="/aboutbanner.png" title="Shop" />
+      <Bannermain backgroundImg="/About%20Banner.webp" title="Shop" />
 
       <div className="py-16 px-4 bg-[#f5f5f5] relative overflow-hidden">
         
