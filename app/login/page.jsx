@@ -134,7 +134,7 @@ export default function AuthPage() {
 
       alert("Login successful ✅");
 
-      router.push("/"); // redirect
+      router.push("/dashboard"); // redirect
     } catch (err) {
       alert("Something went wrong during login");
     } finally {
