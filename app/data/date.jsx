@@ -69,6 +69,60 @@ export const products = [
         text: "Enhances flavor of traditional dishes."
       }
     ]
+  },
+
+  {
+    slug: "ripuraj-shaktijeera-premium-parboiled-rice",
+    name: "Ripuraj Shaktijeera Premium Parboiled Rice",
+    price: 1149,
+    weights: ["5KG", "10KG", "20KG"],
+    image: "/Shaktijeera.png",
+    rating: 5,
+
+    description:
+      "Shaktijeera Premium Parboiled Rice is grown from the natural resources of the Gangetic basin, delivering a rich taste and firm texture in every grain.",
+
+    features: [
+      {
+        title: "100% Guaranteed Organic Product",
+        text: "Grown from natural Gangetic basin resources."
+      },
+      {
+        title: "Zero Hand Touch Production",
+        text: "Fully automated hygienic processing."
+      },
+      {
+        title: "Premium Grain Quality",
+        text: "Firm texture, ideal for daily meals."
+      }
+    ]
+  },
+
+  {
+    slug: "ripuraj-zayka-long-grain-basmati-rice",
+    name: "Ripuraj Zayka Long Grain Basmati Rice",
+    price: 1299,
+    weights: ["5KG", "10KG", "20KG"],
+    image: "/Zayeka1.png",
+    rating: 5,
+
+    description:
+      "Ripuraj Zayka is a long grain Basmati rice known for its distinct aroma, extra length, and fluffy texture after cooking — perfect for biryani and pulao.",
+
+    features: [
+      {
+        title: "Extra Long Grain",
+        text: "Grains elongate further on cooking."
+      },
+      {
+        title: "Naturally Aromatic",
+        text: "Signature Basmati fragrance in every bite."
+      },
+      {
+        title: "Aged for Perfection",
+        text: "Aged to enhance texture and aroma."
+      }
+    ]
   }
 ];
 

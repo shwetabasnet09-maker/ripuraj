@@ -4,10 +4,12 @@ import React, { useState, useEffect } from "react";
 import { ShoppingBag, User, Truck, Menu, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,22 +21,34 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Pages WITHOUT a full-bleed hero background image behind the header.
+  // On these, always show a solid header + alternate logo, instead of
+  // the transparent-over-image style used elsewhere.
+  const noHeroBackground =
+    pathname?.startsWith("/shop/") || // internal product detail pages
+    pathname === "/login" ||
+    pathname === "/cart" ||
+    pathname?.startsWith("/orders") ||
+    pathname?.startsWith("/dashboard");
+
+  // Combine scroll-based sticky state with the route-based override —
+  // either condition makes the header render "solid".
+  const solid = isSticky || noHeroBackground;
+
   const navItems = [
     { name: "Home", link: "/" },
     { name: "About us", link: "/about-us" },
     { name: "Shop", link: "/shop" },
     { name: "Product", link: "/product" },
     { name: "Event", link: "/latest-news" },
-    { name: "Csr", link: "/csr" },
+    { name: "Sustainability", link: "/sustainability" },
     { name: "Contact Us", link: "/contact-us" },
   ];
 
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isSticky
-          ? "bg-white shadow-md py-3"
-          : "bg-transparent py-6"
+        solid ? "bg-white shadow-md py-3" : "bg-transparent py-6"
       }`}
     >
       <div className="wrapper px-4 md:px-6">
@@ -56,7 +70,7 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav
             className={`hidden lg:flex items-center space-x-7 rounded-full px-6 py-3 transition-all duration-300 ${
-              isSticky
+              solid
                 ? "bg-white border border-[#EDEDED]"
                 : "border border-[#ffffff40] backdrop-blur-md"
             }`}
@@ -66,7 +80,7 @@ export default function Header() {
                 key={item.name}
                 href={item.link}
                 className={`text-[15px] transition-colors ${
-                  isSticky
+                  solid
                     ? "text-[#335B6E] hover:text-black"
                     : "text-white hover:text-[#F6F0DE]"
                 }`}
@@ -82,7 +96,7 @@ export default function Header() {
             {/* Icons */}
             <div
               className={`hidden md:flex items-center space-x-4 transition-colors ${
-                isSticky ? "text-[#335B6E]" : "text-white"
+                solid ? "text-[#335B6E]" : "text-white"
               }`}
             >
               <Link href="/orders">
@@ -101,7 +115,7 @@ export default function Header() {
             {/* Hamburger */}
             <button
               className={`lg:hidden ${
-                isSticky ? "text-[#335B6E]" : "text-white"
+                solid ? "text-[#335B6E]" : "text-white"
               }`}
               onClick={() => setIsOpen(!isOpen)}
             >

@@ -22,11 +22,24 @@ const Herodiv = () => {
     fetchHero();
   }, []);
 
-  if (!hero) return <p className="text-center py-20">Loading...</p>;
+  if (!hero) {
+    return (
+      <div className="h-[786px] bg-neutral-900 flex items-center">
+        <div className="wrapper text-white flex justify-between pt-[120px]">
+          <div className="w-[48%] space-y-4">
+            <div className="h-12 w-3/4 bg-white/10 rounded-md animate-pulse" />
+            <div className="h-5 w-full bg-white/10 rounded-md animate-pulse" />
+            <div className="h-5 w-4/5 bg-white/10 rounded-md animate-pulse" />
+            <div className="h-12 w-40 bg-white/10 rounded-md mt-6 animate-pulse" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
-      className="h-[786px] bg-cover bg-center flex items-center "
+      className="h-[786px] bg-cover bg-center bg-neutral-900 flex items-center"
       style={{
         backgroundImage: `url(${API_BASE_URL}${hero.image})`,
       }}
@@ -35,7 +48,9 @@ const Herodiv = () => {
         <div className="w-[48%]">
           <h1 className="text-[45px] font-bold">{hero.title}</h1>
 
-          <p className="mt-4 text-[20px]">{hero.description}</p>
+          <p className="mt-4 text-[20px]">
+            {hero.description}
+          </p>
 
           {hero.button_link && (
             <Link

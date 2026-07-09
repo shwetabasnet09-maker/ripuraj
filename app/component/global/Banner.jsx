@@ -9,7 +9,7 @@ const Bannermain = ({ title, subTitle, backgroundImg }) => {
 
   return (
     <div
-      className="relative w-full h-112.5 md:h-114.25   bg-cover bg-center "
+      className="relative w-full h-[450px] md:h-[457px]   bg-cover bg-center "
       style={{ backgroundImage: `url(${backgroundImg})` }}
     >
       {/* Strong Dark Overlay */}

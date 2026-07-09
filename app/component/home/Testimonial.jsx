@@ -101,6 +101,7 @@ const VideoCard = ({ video }) => {
         src={`https://www.youtube.com/embed/${video.youtubeId}`}
         title={video.title}
         className="w-full h-full"
+        loading="lazy"
         allowFullScreen
       />
     </div>

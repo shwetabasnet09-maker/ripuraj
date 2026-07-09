@@ -9,7 +9,7 @@ import Banner from '../component/home/banner'
 import Testimonial from '../component/home/Testimonial'
 import Faq from '../component/home/Faq'
 
-import TrustBadges from '../component/gobal/TrustBadges'
+import TrustBadges from '../component/global/TrustBadges'
 import Herodiv from '../component/home/Herosection'
 import Trustdiv from '../component/home/TrustSection'
 

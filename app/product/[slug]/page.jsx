@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { Check, ChevronRight } from "lucide-react";
 import { useParams } from "next/navigation";
-import { products } from "@/app/data/date";
+import { products } from "../../data/date";
 import Link from "next/link";
-import Bannermain from "@/app/component/gobal/Banner";
+import Bannermain from "../../component/global/Banner";
 
 export default function ProductHighlight() {
   const params = useParams();

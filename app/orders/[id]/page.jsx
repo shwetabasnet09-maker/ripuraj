@@ -1,22 +1,21 @@
 import Link from "next/link";
 import { Package, ArrowLeft } from "lucide-react";
-import { orders } from "@/app/data/date";
+import { orders } from "../../data/date";
 
-
-const OrderDetailsPage = ({ params }) => {
-  const { id } = params;
+const OrderDetailsPage = async ({ params }) => {
+  const { id } = await params;
   const order = orders.find((o) => o.id === id);
 
   if (!order) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center pt-24">
         <p className="text-slate-500">Order not found</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] px-4 py-12">
+    <div className="min-h-screen bg-[#F8FAFC] px-4 pt-24 md:pt-28 pb-12">
       <div className="max-w-3xl mx-auto">
 
         <Link

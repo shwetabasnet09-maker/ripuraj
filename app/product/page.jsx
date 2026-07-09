@@ -1,75 +1,13 @@
-// import Bannermain from "../component/gobal/Banner";
-// import ProductCard from "../component/product/ProductCard";
-
-// const ProductsPage = () => {
-//   const products = [
-//     {
-//       slug: "ripuraj-sonashakti-premium-jeera-parboiled-rice",
-//       name: "Ripuraj Sonashakti Premium Jeera Parboiled Rice",
-//       weight: "5Kg - 20Kg",
-//       price: 1197,
-//       image: "/Mahashakti.jpg",
-//     },
-//     {
-//       slug: "ripuraj-sonashakti-premium-jeera-parboiled-rice",
-//       name: "Ripuraj Sonashakti Premium Jeera Parboiled Rice",
-//       weight: "5Kg - 20Kg",
-//       price: 1197,
-//       image: "/Mahashakti.jpg",
-//     },
-//   ];
-
-//   return (
-//     <>
-//       <Bannermain
-//         backgroundImg="/aboutbanner.png"
-//         title="Our Products"
-//       />
-
-//       <div className="py-16">
-//         <div className="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-
-//           {products.map((product, index) => (
-//             <ProductCard
-//               key={index}
-//               product={product}
-//             />
-//           ))}
-
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default ProductsPage;
-
-import Bannermain from "../component/gobal/Banner";
+import Bannermain from "../component/global/Banner";
 import ProductCard from "../component/product/ProductCard";
 import Image from "next/image";
+import { products } from "../data/date";
 
 const ProductsPage = () => {
-  const products = [
-    {
-      slug: "ripuraj-sonashakti-premium-jeera-parboiled-rice",
-      name: "Ripuraj Sonashakti Premium Jeera Parboiled Rice",
-      weight: "5Kg - 20Kg",
-      price: 1197,
-      image: "/Mahashakti.jpg",
-    },
-    {
-      slug: "ripuraj-sonashakti-premium-jeera-parboiled-rice",
-      name: "Ripuraj Sonashakti Premium Jeera Parboiled Rice",
-      weight: "5Kg - 20Kg",
-      price: 1197,
-      image: "/Mahashakti.jpg",
-    },
-  ];
-
   return (
     <>
       <Bannermain
-        backgroundImg="/About%20Banner.webp"
+        backgroundImg="/aboutbanner.png"
         title="Our Products"
       />
 
@@ -111,10 +49,13 @@ const ProductsPage = () => {
           {/* Product Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
-            {products.map((product, index) => (
+            {products.map((product) => (
               <ProductCard
-                key={index}
-                product={product}
+                key={product.slug}
+                product={{
+                  ...product,
+                  weight: product.weights?.join(" - ") || "5Kg - 20Kg",
+                }}
               />
             ))}
 

@@ -7,7 +7,7 @@ const ProductCard = ({ product }) => {
   return (
     <Link href={`/product/${product.slug}`}>
       <div className="group cursor-pointer">
-        <div className="relative h-[318px] bg-[#EDEEF0] flex items-center justify-center overflow-hidden">
+        <div className="relative h-64 bg-[#EDEEF0] flex items-center justify-center overflow-hidden">
           <Image
             src={product.image}
             alt={product.name}
