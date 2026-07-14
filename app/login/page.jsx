@@ -35,6 +35,26 @@ export default function AuthPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Pulls a human-readable error message out of whatever shape the
+  // backend returns (DRF errors can come as .detail, .error, .message,
+  // .non_field_errors, or a field-specific object).
+  const extractErrorMessage = (data) => {
+    if (!data) return "Something went wrong. Please try again.";
+    if (typeof data === "string") return data;
+    if (data.detail) return data.detail;
+    if (data.error) return data.error;
+    if (data.message) return data.message;
+    if (Array.isArray(data.non_field_errors)) {
+      return data.non_field_errors.join(" ");
+    }
+    // Field-level errors, e.g. { email: ["This field is required."] }
+    const firstKey = Object.keys(data)[0];
+    if (firstKey && Array.isArray(data[firstKey])) {
+      return `${firstKey}: ${data[firstKey].join(" ")}`;
+    }
+    return JSON.stringify(data);
+  };
+
   // ---------------- REGISTER ----------------
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -54,16 +74,18 @@ export default function AuthPage() {
       });
 
       const data = await res.json();
+      console.log("Register response:", res.status, data);
 
       if (!res.ok) {
-        alert(JSON.stringify(data));
+        alert(extractErrorMessage(data));
         return;
       }
 
       alert("OTP sent!");
       setOtpSent(true);
     } catch (err) {
-      alert("Something went wrong");
+      console.error("Register request failed:", err);
+      alert("Could not reach the server. Check your connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -75,22 +97,20 @@ export default function AuthPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `${API_BASE_URL}/api/accounts/verify-email/`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: formData.email,
-            otp: formData.otp,
-          }),
-        }
-      );
+      const res = await fetch(`${API_BASE_URL}/api/accounts/verify-email/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          otp: formData.otp,
+        }),
+      });
 
       const data = await res.json();
+      console.log("Verify response:", res.status, data);
 
       if (!res.ok) {
-        alert(JSON.stringify(data));
+        alert(extractErrorMessage(data));
         return;
       }
 
@@ -98,7 +118,8 @@ export default function AuthPage() {
       setActiveTab("login");
       setOtpSent(false);
     } catch (err) {
-      alert("Verification failed");
+      console.error("Verify request failed:", err);
+      alert("Could not reach the server. Check your connection and try again.");
     } finally {
       setLoading(false);
     }
@@ -120,9 +141,10 @@ export default function AuthPage() {
       });
 
       const data = await res.json();
+      console.log("Login response:", res.status, data);
 
       if (!res.ok) {
-        alert(data.detail || "Login failed");
+        alert(extractErrorMessage(data));
         return;
       }
 
@@ -132,7 +154,8 @@ export default function AuthPage() {
       alert("Login successful ✅");
       router.push("/");
     } catch (err) {
-      alert("Something went wrong during login");
+      console.error("Login request failed:", err);
+      alert("Could not reach the server. Check your connection and try again.");
     } finally {
       setLoading(false);
     }

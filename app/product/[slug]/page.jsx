@@ -26,7 +26,7 @@ export default function ProductHighlight() {
   return (
     <>
       {/* Breadcrumb */}
-        <Bannermain backgroundImg="/aboutbanner.png" title="" />
+        <Bannermain backgroundImg="/About%20Banner.webp" title="" />
       
 
       {/* Main Section */}
@@ -57,12 +57,12 @@ export default function ProductHighlight() {
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
 
           {/* LEFT IMAGE */}
-          <div className="rounded-[40px] flex items-center justify-center p-16 relative">
+          <div className="relative bg-[#EDEDED] rounded-[40px] h-[564px] sm:h-[580px] lg:h-[580px] flex items-center justify-center overflow-hidden">
             <Image
               src={product.image}
               alt={product.name}
-              width={360}
-              height={520}
+              width={564}
+              height={580}
               className="w-full h-auto object-contain"
               priority
             />
@@ -70,20 +70,20 @@ export default function ProductHighlight() {
 
           {/* RIGHT CONTENT */}
           <div>
-            <h2 className="text-[38px] lg:text-[46px] font-bold text-[#3a6372] leading-tight max-w-xl">
+            <h2 className="text-[35px] lg:text-[35px] font-bold text-[#3a6372]  leading-tight max-w-xl">
               {product.name}
             </h2>
 
-            <p className="text-gray-600 mt-6 text-lg max-w-xl leading-relaxed">
+            <p className="text-gray-600 mt-1 text-lg max-w-xl leading-relaxed">
               {product.description}
             </p>
 
-            <h3 className="mt-10 text-xl font-bold text-[#3a6372]">
+            <h3 className="mt-2 text-xl font-bold text-[#3a6372]">
               Packaging Size Available Online
             </h3>
 
             {/* FEATURES */}
-            <div className="mt-6 space-y-6">
+            <div className="mt-2 space-y-6">
               {product.features.map((feature, index) => (
                 <div
                   key={index}
@@ -111,7 +111,7 @@ export default function ProductHighlight() {
             {/* BUTTON */}
             <Link
               href="/shop"
-              className="mt-12 inline-block bg-[#3a6372] hover:bg-[#2f515d] text-white px-10 py-4 rounded-md font-semibold text-lg transition"
+              className="mt-5 inline-block bg-[#3a6372] hover:bg-[#2f515d] text-white px-10 py-4 rounded-md font-semibold text-lg transition"
             >
               SHOP NOW
             </Link>

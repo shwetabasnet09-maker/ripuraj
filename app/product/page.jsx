@@ -7,7 +7,7 @@ const ProductsPage = () => {
   return (
     <>
       <Bannermain
-        backgroundImg="/aboutbanner.png"
+        backgroundImg="/About%20Banner.webp"
         title="Our Products"
       />
 

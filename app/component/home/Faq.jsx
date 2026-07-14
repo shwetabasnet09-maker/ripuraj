@@ -134,7 +134,7 @@ export default function Faq() {
       <div className="wrapper max-w-7xl mx-auto relative z-10">
         {/* Heading */}
         <div className="text-center mb-12">
-          <h2 className="text-[34px] md:text-[38px] font-bold text-[#F5E6D3] mb-4">
+          <h2 className="text-[25px] md:text-[38px] font-bold text-[#F5E6D3] mb-4">
             Why are we different ?
           </h2>
 

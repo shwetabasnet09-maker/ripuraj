@@ -10,27 +10,27 @@ export default function TrustBadges() {
   ];
 
   return (
-    <div className="relative pt-16 pb-24 px-6 text-center">
-      <h2 className="text-[35px]  font-bold text-black">
+    <div className="relative pt-10 lg:pt-16 pb-14 lg:pb-24 px-5 lg:px-6 text-center">
+      <h2 className="text-[24px] leading-snug lg:text-[35px] lg:leading-normal font-bold text-black">
         Trusted by Global Brands &{" "}
         <span className="text-[#2d5a6b]">Local Businesses Alike</span>
       </h2>
 
-      <p className="text-gray-800 max-w-2xl mx-auto mt-4 text-[17px] leading-relaxed">
+      <p className="text-gray-800 max-w-2xl mx-auto mt-3 lg:mt-4 text-sm lg:text-[17px] leading-relaxed">
         From growing brands to established names, businesses trust us for
         consistent quality, reliable service, and results that truly make a
         difference.
       </p>
 
-      <div className="mt-8 flex justify-center">
-        <span className="bg-[#2d5a6b] text-white text-sm font-medium px-5 py-2 rounded-full">
+      <div className="mt-6 lg:mt-8 flex justify-center">
+        <span className="bg-[#2d5a6b] text-white text-xs lg:text-sm font-medium px-4 lg:px-5 py-1.5 lg:py-2 rounded-full">
           Available At
         </span>
       </div>
 
-      <div className="mt-10 flex flex-wrap items-center justify-center gap-x-14 gap-y-6">
+      <div className="mt-8 lg:mt-10 flex flex-wrap items-center justify-center gap-x-6 lg:gap-x-14 gap-y-5 lg:gap-y-6">
         {brands.map((brand) => (
-          <div key={brand.name} className="h-10 flex items-center">
+          <div key={brand.name} className="h-6 lg:h-10 flex items-center">
             <Image
               src={brand.src}
               alt={brand.name}

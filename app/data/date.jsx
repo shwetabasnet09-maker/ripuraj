@@ -180,3 +180,90 @@ export const orders = [
     delivery: "Standard Shipping",
   },
 ];
+
+export const events = [
+  {
+    slug: "dubai-event",
+    title: "Dubai Event",
+    coverImage: "/events/dubai-event.jpg",
+    description:
+      "Ripuraj Agro's team came together in Dubai to celebrate our growth and connect with valued partners, marking another milestone in our journey toward global reach.",
+    gallery: [
+      "/events/dubai-event.jpg",
+      "/events/dubai-event-2.jpg",
+      "/events/dubai-event-3.jpg",
+    ],
+  },
+  {
+    slug: "raxaul-event",
+    title: "Raxaul Event",
+    coverImage: "/events/raxaul-event.jpg",
+    description:
+      "A special ceremony at our Raxaul facility, honouring the roots of Ripuraj Agro and the community that has supported our journey since the beginning.",
+    gallery: [
+      "/events/raxaul-event.jpg",
+      "/events/raxaul-event-2.jpg",
+      "/events/raxaul-event-3.jpg",
+    ],
+  },
+  {
+    slug: "guwahati-event",
+    title: "Guwahati Event",
+    coverImage: "/events/guwahati-event.jpg",
+    description:
+      "Ripuraj Agro welcomed partners and distributors to our Guwahati event, strengthening relationships across the North East region.",
+    gallery: [
+      "/events/guwahati-event.jpg",
+      "/events/guwahati-event-2.jpg",
+      "/events/guwahati-event-3.jpg",
+    ],
+  },
+  {
+    slug: "visakhapatnam-event",
+    title: "Visakhapatnam Event",
+    coverImage: "/events/visakhapatnam-event.jpg",
+    description:
+      "A vibrant showcase of Ripuraj's premium rice range in Visakhapatnam, bringing our products closer to new markets along the eastern coast.",
+    gallery: [
+      "/events/visakhapatnam-event.jpg",
+      "/events/visakhapatnam-event-2.jpg",
+      "/events/visakhapatnam-event-3.jpg",
+    ],
+  },
+  {
+    slug: "sonashakti-rockstar-silchar",
+    title: "Sonashakti Rockstar Event (Silchar)",
+    coverImage: "/events/rockstar-silchar.jpg",
+    description:
+      "Celebrating our top-performing distributors and retail partners in Silchar as part of the Sonashakti Rockstar recognition series.",
+    gallery: [
+      "/events/rockstar-silchar.jpg",
+      "/events/rockstar-silchar-2.jpg",
+      "/events/rockstar-silchar-3.jpg",
+    ],
+  },
+  {
+    slug: "sonashakti-rockstar-purnia",
+    title: "Sonashakti Rockstar Event (Purnia)",
+    coverImage: "/events/rockstar-purnia.jpg",
+    description:
+      "Recognising outstanding contributions from our Purnia partners, honoured on stage as Sonashakti Rockstars for their dedication and results.",
+    gallery: [
+      "/events/rockstar-purnia.jpg",
+      "/events/rockstar-purnia-2.jpg",
+      "/events/rockstar-purnia-3.jpg",
+    ],
+  },
+  {
+    slug: "ripuraj-synergy-summit-singapore-2025",
+    title: "Ripuraj Synergy Summit Singapore (2025)",
+    coverImage: "/events/synergy-summit-singapore.jpg",
+    description:
+      "Global leaders and partners gathered in Singapore for the Ripuraj Synergy Summit 2025, a landmark event celebrating international collaboration and shared vision.",
+    gallery: [
+      "/events/synergy-summit-singapore.jpg",
+      "/events/synergy-summit-singapore-2.jpg",
+      "/events/synergy-summit-singapore-3.jpg",
+    ],
+  },
+];

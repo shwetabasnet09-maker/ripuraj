@@ -81,7 +81,7 @@ const WhatWeDo = () => {
           {/* Right Image */}
           <div className="rounded-[24px] overflow-hidden shadow-md">
             <Image
-              src="/what-we-do.png"
+              src="/About Us section.webp"
               alt="Rice processing plant"
               width={1400}
               height={750}

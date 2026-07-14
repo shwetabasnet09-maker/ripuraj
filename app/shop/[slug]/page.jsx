@@ -14,6 +14,8 @@ import {
   ChevronRight,
   Check,
 } from "lucide-react";
+import { authFetch } from "../../utils/authFetch";
+import { cachedFetchJson } from "../../utils/cachedFetch";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
@@ -22,7 +24,7 @@ const API_BASE_URL =
 // enters the viewport. No extra dependencies needed.
 function Reveal({ children, className = "", delay = 0 }) {
   const ref = React.useRef(null);
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
 
   React.useEffect(() => {
     const node = ref.current;
@@ -55,6 +57,27 @@ function Reveal({ children, className = "", delay = 0 }) {
   );
 }
 
+// Skeleton shown while the product loads — same rough layout/height as
+// the real page, so there's no jarring flash once data arrives.
+function ProductSkeleton() {
+  return (
+    <div className="w-full bg-white pt-24 md:pt-28 pb-20 animate-pulse">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+          <div className="aspect-square bg-gray-100 rounded-sm" />
+          <div className="space-y-4 pt-1">
+            <div className="h-8 w-3/4 bg-gray-100 rounded" />
+            <div className="h-4 w-1/3 bg-gray-100 rounded" />
+            <div className="h-6 w-1/4 bg-gray-100 rounded" />
+            <div className="h-10 w-full bg-gray-100 rounded" />
+            <div className="h-12 w-full bg-gray-100 rounded" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ProductDetail({ params }) {
   const { slug } = React.use(params);
   const router = useRouter();
@@ -62,6 +85,8 @@ export default function ProductDetail({ params }) {
   const [product, setProduct] = useState(null);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notFoundState, setNotFoundState] = useState(false);
+  const [fetchError, setFetchError] = useState(null);
   const [buttonLoading, setButtonLoading] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
   const [selectedWeight, setSelectedWeight] = useState(null);
@@ -69,74 +94,120 @@ export default function ProductDetail({ params }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Auto-play the image gallery — advances to the next image every 3.5s.
+  // Pauses automatically while the zoom modal is open.
+  useEffect(() => {
+    if (images.length <= 1 || isModalOpen) return;
+
+    const interval = setInterval(() => {
+      setSelectedImageIndex((prev) => (prev + 1) % images.length);
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [images.length, isModalOpen]);
+
   const [activeTab, setActiveTab] = useState("details");
   const [recommended, setRecommended] = useState([]);
   const [scrollProgress, setScrollProgress] = useState(0);
   const scrollRef = React.useRef(null);
 
+  // Always land at the top of the page when opening a product detail
+  // page — prevents landing scrolled down at a lower section (e.g. the
+  // recommended products carousel) when navigating here from another page.
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
+
+  useEffect(() => {
+    let cancelled = false;
+
     async function fetchProduct() {
       try {
         setLoading(true);
+        setFetchError(null);
 
-        const res = await fetch(`${API_BASE_URL}/api/products/${slug}/`, {
-          cache: "no-store",
-        });
-
-        if (!res.ok) {
-          setProduct("not-found");
-          return;
-        }
-
-        const data = await res.json();
-
-        setProduct(data);
-
-        const secondaryImages = (data.images?.map((img) => img.image) || []).filter(
-          Boolean
+        const { data, fromCache, refresh } = await cachedFetchJson(
+          `${API_BASE_URL}/api/products/${slug}/`
         );
 
-        // main_image (id 1) is the cover shown on the shop listing page only.
-        // This internal detail page should never show it — only secondary
-        // images. But if a product has no secondary images at all, fall
-        // back to main_image so the page never ends up with an empty gallery.
-        setImages(
-          secondaryImages.length > 0
-            ? secondaryImages
-            : [data.main_image].filter(Boolean)
-        );
-        setSelectedImageIndex(0);
+        if (cancelled) return;
 
-        if (data.weights && data.weights.length > 0) {
-          setSelectedWeight(data.weights[0]);
+        applyProductData(data);
+
+        // Cached data shown instantly — stop the loading state now.
+        if (fromCache) setLoading(false);
+
+        if (refresh) {
+          refresh
+            .then((freshData) => {
+              if (!cancelled) applyProductData(freshData);
+            })
+            .catch(() => {
+              // keep showing cached data if the background refresh fails
+            });
         }
 
-        setQuantity(1);
-
-        // Fetch recommended products (all products excluding this one)
+        // Recommended products — same caching treatment.
         try {
-          const recRes = await fetch(`${API_BASE_URL}/api/products/`, {
-            cache: "no-store",
-          });
-          if (recRes.ok) {
-            const recData = await recRes.json();
-            const filtered = (Array.isArray(recData) ? recData : []).filter(
-              (p) => p.slug !== slug
-            );
-            setRecommended(filtered);
+          const recResult = await cachedFetchJson(`${API_BASE_URL}/api/products/`);
+          const filterOutSelf = (list) =>
+            (Array.isArray(list) ? list : []).filter((p) => p.slug !== slug);
+
+          if (!cancelled) setRecommended(filterOutSelf(recResult.data));
+
+          if (recResult.refresh) {
+            recResult.refresh
+              .then((freshRec) => {
+                if (!cancelled) setRecommended(filterOutSelf(freshRec));
+              })
+              .catch(() => {});
           }
         } catch (recError) {
           console.error("Error fetching recommended products:", recError);
         }
       } catch (error) {
-        console.error(error);
-        setProduct("not-found");
+        console.error("Error fetching product:", error);
+        if (error.message?.includes("404")) {
+          setNotFoundState(true);
+        } else {
+          setFetchError(
+            error.name === "TimeoutError" || error.name === "AbortError"
+              ? "The server took too long to respond."
+              : error.message || "Failed to reach the backend server"
+          );
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
 
-    if (slug) fetchProduct();
+    function applyProductData(data) {
+      setProduct(data);
+
+      const secondaryImages = (
+        data.images?.map((img) => img.image) || []
+      ).filter(Boolean);
+
+      setImages(
+        secondaryImages.length > 0
+          ? secondaryImages
+          : [data.main_image].filter(Boolean)
+      );
+      setSelectedImageIndex(0);
+
+      if (data.weights && data.weights.length > 0) {
+        setSelectedWeight((prev) => prev || data.weights[0]);
+      }
+    }
+
+    if (slug) {
+      setQuantity(1);
+      fetchProduct();
+    }
+
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
 
   const handleAction = async (type) => {
@@ -151,11 +222,10 @@ export default function ProductDetail({ params }) {
         return;
       }
 
-      const res = await fetch(`${API_BASE_URL}/api/cart/add/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/cart/add/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           product_id: product.id,
@@ -192,17 +262,39 @@ export default function ProductDetail({ params }) {
   };
 
   if (loading) {
+    return <ProductSkeleton />;
+  }
+
+  if (notFoundState) {
+    return notFound();
+  }
+
+  if (fetchError || !product) {
     return (
-      <div className="flex justify-center items-center min-h-[60vh]">
-        <div className="h-12 w-12 rounded-full border-t-2 border-b-2 border-[#2e6378] animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center pt-24 px-4">
+        <div className="max-w-md text-center">
+          <h1 className="text-xl font-bold text-red-600 mb-3">
+            Couldn't load this product
+          </h1>
+          <p className="text-gray-600 text-sm">
+            {fetchError ||
+              "The server didn't return any product data. This usually means the backend is temporarily unreachable."}
+          </p>
+          <p className="text-gray-400 text-xs mt-4">
+            API: {API_BASE_URL}/api/products/{slug}/
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-6 bg-[#2e6378] hover:bg-[#234d5d] text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
     );
   }
 
-  if (product === "not-found" || !product) return notFound();
-
   const currentUnitPrice = Number(selectedWeight?.price || product.price || 0);
-
   const totalPrice = currentUnitPrice * quantity;
 
   const benefits = [
@@ -288,7 +380,7 @@ export default function ProductDetail({ params }) {
                   fill
                   unoptimized
                   priority
-                  className="object-contain p-6 sm:p-10 animate-fade-image group-hover:scale-105 transition-transform duration-500 ease-out"
+                  className="object-contain p-0 sm:p-0 animate-fade-image group-hover:scale-105 transition-transform duration-500 ease-out"
                 />
               )}
 
@@ -306,7 +398,7 @@ export default function ProductDetail({ params }) {
                 <button
                   key={i}
                   onClick={() => setSelectedImageIndex(i)}
-                  className={`relative min-w-[85px] h-[85px] sm:min-w-[110px] sm:h-[110px] rounded-xl sm:rounded-2xl overflow-hidden border-2 bg-[#f7edd6] transition-all duration-300 hover:scale-105 hover:shadow-md ${
+                  className={`relative min-w-[85px] h-[85px] sm:min-w-[110px] sm:h-[110px] rounded-xl sm:rounded-2xl overflow-hidden  bg-[#f7edd6] transition-all duration-300 hover:scale-105 hover:shadow-md ${
                     selectedImageIndex === i
                       ? "border-[#2e6378] scale-105"
                       : "border-transparent"
@@ -504,80 +596,6 @@ export default function ProductDetail({ params }) {
         </div>
       </div>
 
-      {/* ================= PRODUCT SPOTLIGHT ================= */}
-      <Reveal className="max-w-7xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          {/* IMAGE */}
-          <div className="relative bg-[#EDEDED] rounded-2xl overflow-hidden h-[380px] sm:h-[440px] flex items-center justify-center">
-            <div className="relative w-[70%] h-[85%]">
-              {images[0] && (
-                <Image
-                  src={images[0]}
-                  alt={product.name}
-                  fill
-                  unoptimized
-                  className="object-contain drop-shadow-xl"
-                />
-              )}
-            </div>
-          </div>
-
-          {/* CONTENT */}
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#2f5f73] leading-snug">
-              {product.name}
-            </h2>
-
-            <p className="text-gray-600 text-[15px] leading-relaxed mt-4 max-w-md">
-              {product.description ||
-                `Enjoy the unique aroma and rich flavor of ${product.name}. Each grain is selected for its quality, making it ideal for flavorful meals. Perfect for traditional dishes or daily dining.`}
-            </p>
-
-            <h3 className="text-[#2f5f73] font-bold text-lg mt-8 mb-4">
-              Packaging Size Available Online
-            </h3>
-
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex-shrink-0">
-                  <Check size={18} className="text-[#2f5f73]" strokeWidth={3} />
-                </div>
-                <div>
-                  <p className="text-[#2f5f73] font-semibold text-[15px]">
-                    100% Guaranteed Organic Product
-                  </p>
-                  <p className="text-gray-500 text-sm mt-0.5">
-                    Use of Organic paddy
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5 flex-shrink-0">
-                  <Check size={18} className="text-[#2f5f73]" strokeWidth={3} />
-                </div>
-                <div>
-                  <p className="text-[#2f5f73] font-semibold text-[15px]">
-                    Zero hand touch production
-                  </p>
-                  <p className="text-gray-500 text-sm mt-0.5">
-                    We Use pure gang-tic basin water in production
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={() => handleAction("cart")}
-              disabled={buttonLoading}
-              className="inline-block mt-8 bg-[#2e6378] hover:bg-[#234d5d] text-white font-semibold px-8 py-3 rounded-md transition-all hover:shadow-lg hover:-translate-y-0.5 active:scale-95"
-            >
-              SHOP NOW
-            </button>
-          </div>
-        </div>
-      </Reveal>
-
       {/* ================= BOTTOM TABS SECTION ================= */}
       <div className="w-full bg-[#2e6378] mt-10">
         <Reveal className="max-w-7xl mx-auto px-4 py-8">
@@ -650,7 +668,6 @@ export default function ProductDetail({ params }) {
                   Nutritional facts
                 </h2>
 
-                {/* NUTRIENT TABLE CARD */}
                 <div className="bg-white rounded-2xl p-6 sm:p-8">
                   <h3 className="font-bold text-[#1e1e1e] text-base mb-4">
                     Per 100g cooked serving
@@ -763,7 +780,6 @@ export default function ProductDetail({ params }) {
                   </p>
                 </div>
 
-                {/* MICRONUTRIENTS CARD */}
                 <div className="bg-white rounded-2xl p-6 sm:p-8 mt-6">
                   <h3 className="font-bold text-[#1e1e1e] text-base mb-5">
                     Micronutrients (per 100g cooked)

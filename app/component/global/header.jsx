@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { ShoppingBag, User, Truck, Menu, X } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { ShoppingBag, User, Truck, Menu, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -9,7 +9,10 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
+  const [csrDropdownOpen, setCsrDropdownOpen] = useState(false);
+  const [mobileCsrOpen, setMobileCsrOpen] = useState(false);
   const pathname = usePathname();
+  const dropdownTimeoutRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,27 +38,29 @@ export default function Header() {
   // either condition makes the header render "solid".
   const solid = isSticky || noHeroBackground;
 
-  const navItems = [
-    { name: "Home", link: "/" },
-    { name: "About us", link: "/about-us" },
-    { name: "Shop", link: "/shop" },
-    { name: "Product", link: "/product" },
-    { name: "Event", link: "/latest-news" },
-    { name: "Sustainability", link: "/sustainability" },
-    { name: "Contact Us", link: "/contact-us" },
-  ];
+  const navItems = [{ name: "Home", link: "/" }, { name: "About us", link: "/about-us" }, { name: "Shop", link: "/shop" }, { name: "Product", link: "/product" }, { name: "Event", dropdown: [{ name: "CSR Activity", link: "/csr" }, { name: "Latest News", link: "/latest-news" }, { name: "Event", link: "/event" },] }, { name: "Sustainability", link: "/sustainability" }, { name: "Contact Us", link: "/contact-us" },];
+
+  const handleDropdownEnter = () => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setCsrDropdownOpen(true);
+  };
+
+  const handleDropdownLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setCsrDropdownOpen(false);
+    }, 150);
+  };
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        solid ? "bg-white shadow-md py-3" : "bg-transparent py-6"
-      }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${solid ? "bg-white shadow-md py-3" : "bg-transparent py-6"
+        }`}
     >
       <div className="wrapper px-4 md:px-6">
-        
+
         {/* Top Row */}
         <div className="flex items-center justify-between">
-          
+
           {/* Logo */}
           <div className="flex-shrink-0">
             <Image
@@ -69,35 +74,75 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav
-            className={`hidden lg:flex items-center space-x-7 rounded-full px-6 py-3 transition-all duration-300 ${
-              solid
+            className={`hidden lg:flex items-center space-x-7 rounded-full px-6 py-3 transition-all duration-300 ${solid
                 ? "bg-white border border-[#EDEDED]"
                 : "border border-[#ffffff40] backdrop-blur-md"
-            }`}
+              }`}
           >
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.link}
-                className={`text-[15px] transition-colors ${
-                  solid
-                    ? "text-[#335B6E] hover:text-black"
-                    : "text-white hover:text-[#F6F0DE]"
-                }`}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navItems.map((item) =>
+              item.dropdown ? (
+                <div
+                  key={item.name}
+                  className="relative"
+                  onMouseEnter={handleDropdownEnter}
+                  onMouseLeave={handleDropdownLeave}
+                >
+                  <button
+                    className={`flex items-center gap-1 text-[15px] transition-colors ${solid
+                        ? "text-[#335B6E] hover:text-black"
+                        : "text-white hover:text-[#F6F0DE]"
+                      }`}
+                  >
+                    {item.name}
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform duration-200 ${csrDropdownOpen ? "rotate-180" : ""
+                        }`}
+                    />
+                  </button>
+
+                  {/* Dropdown panel */}
+                  <div
+                    className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 transition-all duration-200 ${csrDropdownOpen
+                        ? "opacity-100 translate-y-0 pointer-events-auto"
+                        : "opacity-0 -translate-y-2 pointer-events-none"
+                      }`}
+                  >
+                    <div className="bg-white rounded-xl shadow-xl border border-[#EDEDED] py-2 min-w-[180px]">
+                      {item.dropdown.map((sub) => (
+                        <Link
+                          key={sub.name}
+                          href={sub.link}
+                          className="block px-5 py-2.5 text-[14px] text-[#335B6E] hover:bg-[#F5F5F5] hover:text-black transition-colors whitespace-nowrap"
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.name}
+                  href={item.link}
+                  className={`text-[15px] transition-colors ${solid
+                      ? "text-[#335B6E] hover:text-black"
+                      : "text-white hover:text-[#F6F0DE]"
+                    }`}
+                >
+                  {item.name}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* Right Side */}
           <div className="flex items-center space-x-4">
-            
+
             {/* Icons */}
             <div
-              className={`hidden md:flex items-center space-x-4 transition-colors ${
-                solid ? "text-[#335B6E]" : "text-white"
-              }`}
+              className={`hidden md:flex items-center space-x-4 transition-colors ${solid ? "text-[#335B6E]" : "text-white"
+                }`}
             >
               <Link href="/orders">
                 <Truck className="w-6 h-6 stroke-[1.5]" />
@@ -114,9 +159,8 @@ export default function Header() {
 
             {/* Hamburger */}
             <button
-              className={`lg:hidden ${
-                solid ? "text-[#335B6E]" : "text-white"
-              }`}
+              className={`lg:hidden ${solid ? "text-[#335B6E]" : "text-white"
+                }`}
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
@@ -124,41 +168,104 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu — full-height slide-in drawer */}
         {isOpen && (
-          <div className="lg:hidden mt-4 bg-white rounded-2xl shadow-lg p-5 space-y-4">
-            
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.link}
-                onClick={() => setIsOpen(false)}
-                className="block text-[#335B6E] font-medium text-[15px]"
-              >
-                {item.name}
-              </Link>
-            ))}
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+              onClick={() => setIsOpen(false)}
+            />
 
-            {/* Mobile Icons */}
-            <div className="flex items-center space-x-6 pt-2 text-[#335B6E]">
-              <Link href="/orders">
-                <Truck className="w-6 h-6 stroke-[1.5]" />
-              </Link>
+            {/* Drawer */}
+            <div
+              className={`fixed top-0 left-0 h-full w-[280px] bg-white z-50 shadow-2xl transform transition-transform duration-300 ease-out lg:hidden ${isOpen ? "translate-x-0" : "-translate-x-full"
+                }`}
+            >
+              <div className="flex flex-col h-full">
+                {/* Header row with close button */}
+                <div className="flex items-center justify-between px-5 py-5 border-b border-[#EDEDED]">
+                  <Image
+                    src="/logo.png"
+                    alt="RIPURAJ"
+                    width={110}
+                    height={44}
+                    className="h-10 w-auto object-contain"
+                  />
 
-              <Link href="/cart">
-                <ShoppingBag className="w-6 h-6 stroke-[1.5]" />
-              </Link>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="text-[#335B6E] hover:text-black transition-colors"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
 
-              <Link href="/account">
-                <User className="w-6 h-6 stroke-[1.5]" />
-              </Link>
+                {/* Nav list */}
+                <div className="flex-1 overflow-y-auto px-5 py-6 space-y-1">
+                  {navItems.map((item) =>
+                    item.dropdown ? (
+                      <div key={item.name}>
+                        <button
+                          onClick={() => setMobileCsrOpen(!mobileCsrOpen)}
+                          className="w-full flex items-center justify-between py-3 text-[#335B6E] font-medium text-[15px] border-b border-[#F5F5F5]"
+                        >
+                          {item.name}
+                          <ChevronDown
+                            size={16}
+                            className={`transition-transform duration-200 ${mobileCsrOpen ? "rotate-180" : ""
+                              }`}
+                          />
+                        </button>
+
+                        {mobileCsrOpen && (
+                          <div className="pl-4 py-2 space-y-1 bg-[#FAFAFA]">
+                            {item.dropdown.map((sub) => (
+                              <Link
+                                key={sub.name}
+                                href={sub.link}
+                                onClick={() => setIsOpen(false)}
+                                className="block py-2.5 text-[#335B6E]/80 text-[14px]"
+                              >
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <Link
+                        key={item.name}
+                        href={item.link}
+                        onClick={() => setIsOpen(false)}
+                        className="block py-3 text-[#335B6E] font-medium text-[15px] border-b border-[#F5F5F5]"
+                      >
+                        {item.name}
+                      </Link>
+                    )
+                  )}
+                </div>
+
+                {/* Footer: icons + cashback button */}
+                <div className="px-5 py-5 border-t border-[#EDEDED] space-y-5">
+                  <div className="flex items-center gap-6 text-[#335B6E]">
+                    <Link href="/orders" onClick={() => setIsOpen(false)}>
+                      <Truck className="w-6 h-6 stroke-[1.5]" />
+                    </Link>
+
+                    <Link href="/cart" onClick={() => setIsOpen(false)}>
+                      <ShoppingBag className="w-6 h-6 stroke-[1.5]" />
+                    </Link>
+
+                    <Link href="/login" onClick={() => setIsOpen(false)}>
+                      <User className="w-6 h-6 stroke-[1.5]" />
+                    </Link>
+                  </div>
+
+                </div>
+              </div>
             </div>
-
-            {/* Cashback Button */}
-            <button className="w-full bg-[#335B6E] text-white py-2 rounded-md font-semibold text-sm">
-              CASHBACK
-            </button>
-          </div>
+          </>
         )}
       </div>
     </header>
