@@ -6,8 +6,19 @@ import React, { useEffect, useState } from "react";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { authFetch } from "../utils/authFetch";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
+// Safely builds the image URL whether the backend returns a full
+// absolute URL (http://...) or a relative path (/media/...).
+function resolveImageUrl(image) {
+  if (!image) return null;
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+  return `${API_BASE_URL}${image}`;
+}
 
 export default function CartPage() {
   const router = useRouter();
@@ -25,10 +36,9 @@ export default function CartPage() {
       }
 
       try {
-        const res = await fetch(`${API_BASE_URL}/api/cart/`, {
+        const res = await authFetch(`${API_BASE_URL}/api/cart/`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
         });
 
@@ -58,11 +68,10 @@ export default function CartPage() {
     if (!token) return;
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/cart/${id}/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/cart/${id}/`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ quantity: newQty }),
       });
@@ -91,11 +100,8 @@ export default function CartPage() {
     if (!token) return;
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/cart/${id}/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/cart/${id}/`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
 
       if (!res.ok) throw new Error("Failed to remove item");
@@ -120,27 +126,39 @@ export default function CartPage() {
     setCheckoutLoading(true);
 
     try {
-      // Prepare items payload for DRF checkout
+      // Prepare items payload for DRF checkout.
+      // IMPORTANT: item.id is the CART ITEM's own id, not the product's.
+      // The actual product reference is item.product (confirmed from the
+      // real /api/cart/ response: { id: 4, product: 1, ... }).
       const payload = {
         items: cartItems.map((item) => ({
-          product_id: item.id,      // DRF usually expects product_id
+          product_id: item.product,
           quantity: Number(item.quantity),
         })),
       };
 
-      const res = await fetch(
+      const res = await authFetch(
         `${API_BASE_URL}/api/orders/checkout/`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(payload),
         }
       );
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        console.error("Checkout response wasn't valid JSON:", parseErr);
+        alert(
+          `Server returned an unexpected response (status ${res.status}). ` +
+          `This usually means the backend hit an internal error. Check the Network tab for the raw response.`
+        );
+        return;
+      }
 
       if (!res.ok) {
         console.error("Checkout error:", data);
@@ -150,16 +168,22 @@ export default function CartPage() {
 
       console.log("Checkout initiated:", data);
 
-      // If API returns a payment URL, redirect to it
+      // If API returns a payment URL, redirect to it. Otherwise, send the
+      // user to their Orders page so they can see the order that was
+      // just created, instead of leaving them on an empty alert with
+      // nowhere to go.
       if (data.payment_url) {
         window.location.href = data.payment_url;
       } else {
-        alert("Checkout initiated. Complete payment in your account.");
+        router.push("/orders");
       }
 
     } catch (err) {
-      console.error(err);
-      alert("Checkout failed. Try again.");
+      console.error("Checkout request failed:", err);
+      alert(
+        `Checkout request failed: ${err.message}. ` +
+        `This usually means the browser couldn't reach the server at all (network/CORS issue).`
+      );
     } finally {
       setCheckoutLoading(false);
     }
@@ -198,22 +222,30 @@ export default function CartPage() {
               const itemQty = item.quantity || 0;
               const itemTotal = parseFloat(item.total_price || itemPrice * itemQty);
               const itemName = item.product_name || "Product";
-              const itemImage = item.image 
+              const itemImage = resolveImageUrl(
+                item.product_image || item.image
+              );
 
               return (
                 <div
                   key={item.id}
                   className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-center"
                 >
-                  <div className="bg-gray-100 p-2 rounded-lg">
-                    <Image
-                      src={itemImage}
-                      alt={itemName}
-                      width={96}
-                      height={96}
-                      className="w-24 h-24 object-contain"
-                      unoptimized
-                    />
+                  <div className="bg-gray-100 p-2 rounded-lg w-[104px] h-[104px] flex items-center justify-center">
+                    {itemImage ? (
+                      <Image
+                        src={itemImage}
+                        alt={itemName}
+                        width={96}
+                        height={96}
+                        className="w-24 h-24 object-contain"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="w-24 h-24 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
+                        No image
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex-1">
@@ -227,7 +259,14 @@ export default function CartPage() {
                       </button>
                     </div>
 
-                    <p className="text-sm text-gray-500 mb-3">Weight: {item.weight || "N/A"} kg</p>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Weight:{" "}
+                      {item.weight
+                        ? String(item.weight).match(/kg/i)
+                          ? item.weight
+                          : `${item.weight}Kg`
+                        : "N/A"}
+                    </p>
 
                     <div className="flex justify-between items-end">
                       <div className="flex items-center border rounded-lg bg-white">

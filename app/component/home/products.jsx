@@ -44,23 +44,23 @@ const Shop = () => {
   const swiperRef = useRef(null);
 
   return (
-    <div className="w-full bg-[url('/ProductSectionBG.png')] bg-cover bg-center bg-no-repeat py-20">
-      <div className="wrapper px-4">
+    <div className="w-full bg-[url('/ProductSectionBG.png')] bg-cover bg-center bg-no-repeat py-10 lg:py-20 overflow-hidden">
+      <div className="wrapper px-5 lg:px-4">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-12">
-          <div>
-            <p className="text-white text-sm font-semibold tracking-[3px] uppercase mb-2">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 lg:mb-12 text-center sm:text-left">
+          <div className="w-full sm:w-auto">
+            <p className="text-white text-xs lg:text-sm font-semibold tracking-[3px] uppercase mb-2">
               PRODUCT
             </p>
-            <h2 className="text-white text-3xl sm:text-4xl font-bold">
+            <h2 className="text-white text-2xl sm:text-3xl lg:text-4xl font-bold">
               Ripuraj Finest Products
             </h2>
           </div>
 
-          <div className="flex items-center gap-5 mt-6 sm:mt-0">
+          <div className="flex items-center justify-center gap-4 lg:gap-5 mt-5 sm:mt-0 w-full sm:w-auto">
             <Link
               href="/products"
-              className="bg-white text-[#3A6B7E] px-6 py-3 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-[#2D5B70] hover:text-white transition"
+              className="bg-white text-[#3A6B7E] px-4 lg:px-6 py-2 lg:py-3 rounded-lg font-semibold text-xs lg:text-sm flex items-center gap-2 hover:bg-[#2D5B70] hover:text-white transition whitespace-nowrap"
             >
               VIEW ALL PRODUCT
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -69,7 +69,7 @@ const Shop = () => {
             </Link>
 
             {/* Arrows */}
-            <div className="flex gap-3">
+            <div className="flex gap-2 lg:gap-3">
               <button
                 onClick={() => swiperRef.current?.slidePrev()}
                 className="w-8 h-8 flex items-center justify-center text-white text-xl hover:opacity-70 transition"
@@ -89,13 +89,13 @@ const Shop = () => {
         {/* Swiper */}
         <Swiper
           modules={[Navigation, Pagination]}
-          spaceBetween={24}
-          slidesPerView={1}
+          spaceBetween={16}
+          slidesPerView={1.15}
           onSwiper={(swiper) => (swiperRef.current = swiper)}
           breakpoints={{
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
-            1280: { slidesPerView: 4 },
+            640: { slidesPerView: 2, spaceBetween: 24 },
+            1024: { slidesPerView: 3, spaceBetween: 24 },
+            1280: { slidesPerView: 4, spaceBetween: 24 },
           }}
         >
           {products.map((product) => (
@@ -114,22 +114,22 @@ const ProductCard = ({ product }) => {
     <Link href={`/product/${product.slug}`}>
       <div className="cursor-pointer group">
         {/* Card */}
-        <div className="relative h-[300px] bg-[#EDEEF0] rounded-2xl overflow-hidden transition-transform duration-300 group-hover:-translate-y-1">
+        <div className="relative h-[350px] lg:h-[300px] bg-[#EDEEF0] rounded-2xl overflow-hidden transition-transform duration-300 group-hover:-translate-y-1">
           <Image
             src={product.image}
             alt={product.name}
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            sizes="(max-width: 640px) 90vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover transition-transform duration-500 ease-out group-hover:scale-110 mix-blend-multiply"
           />
         </div>
 
         {/* Text */}
-        <div className="mt-4">
-          <h3 className="text-white font-bold text-[17px] leading-snug">
+        <div className="mt-3 lg:mt-4">
+          <h3 className="text-white font-bold text-sm lg:text-[17px] leading-snug">
             {product.name}
           </h3>
-          <p className="text-white/80 text-[15px] font-medium mt-1">
+          <p className="text-white/80 text-xs lg:text-[15px] font-medium mt-1">
             {product.weight}
           </p>
         </div>

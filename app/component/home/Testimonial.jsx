@@ -148,7 +148,7 @@ export default function Testimonial() {
   }, []);
 
   return (
-    <section className="relative bg-[#F7F7F7] overflow-hidden py-16">
+    <section className="relative bg-[#F7F7F7] overflow-hidden py-10 lg:py-16">
       {/* LEFT BOTTOM ICON */}
       <div className="absolute bottom-0 left-0 z-10">
         <Image
@@ -156,7 +156,7 @@ export default function Testimonial() {
           alt="left icon"
           width={120}
           height={120}
-          className="object-contain"
+          className="object-contain w-16 h-16 lg:w-[120px] lg:h-[120px]"
         />
       </div>
 
@@ -167,13 +167,13 @@ export default function Testimonial() {
           alt="right icon"
           width={80}
           height={80}
-          className="object-contain"
+          className="object-contain w-12 h-12 lg:w-[80px] lg:h-[80px]"
         />
       </div>
 
-      <div className="wrapper mx-auto relative z-20">
+      <div className="wrapper mx-auto px-5 lg:px-0 relative z-20">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-5">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6 mb-5">
           <div>
             <h3 className="text-[16px] uppercase tracking-wide text-[#000000] font-medium">
               {testimonial.subtitle}
@@ -221,11 +221,11 @@ export default function Testimonial() {
             prevEl: ".prev-btn",
             nextEl: ".next-btn",
           }}
-          spaceBetween={24}
+          spaceBetween={16}
           slidesPerView={1}
           breakpoints={{
-            640: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
+            640: { slidesPerView: 2, spaceBetween: 24 },
+            1024: { slidesPerView: 3, spaceBetween: 24 },
           }}
         >
           {testimonial.videos.map((video) => (
@@ -241,7 +241,7 @@ export default function Testimonial() {
 
 const VideoCard = ({ video }) => {
   return (
-    <div className="rounded-2xl overflow-hidden bg-[#E9E9E9] h-[250px] lg:h-[280px]">
+    <div className="rounded-2xl overflow-hidden bg-[#E9E9E9] h-[200px] sm:h-[230px] lg:h-[280px]">
       <iframe
         src={`https://www.youtube.com/embed/${video.youtube_id}`}
         title={video.title}

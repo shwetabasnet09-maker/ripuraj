@@ -1,5 +1,5 @@
 import React from 'react'
-import Bannermain from '../component/gobal/Banner'
+import Bannermain from '../component/global/Banner'
 import Welcomediv from '../component/about/WelcomeSection'
 import WhatWeDo from '../component/about/Whatwedo'
 import WhyChooseUs from '../component/about/Whychooseus'

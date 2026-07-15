@@ -1,4 +1,4 @@
-import Bannermain from "../component/gobal/Banner";
+import Bannermain from "../component/global/Banner";
 import NewsCard from "../component/latestnew.jsx/NewsCard";
 import { newsData } from "../data/date";
 import Image from "next/image";

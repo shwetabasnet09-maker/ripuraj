@@ -19,7 +19,7 @@ const RipurajHero = () => {
             </div>
 
             {/* Heading */}
-            <h2 className="mt-4 text-[35px]  leading-[1.1] font-extrabold">
+            <h2 className="mt-4 md:text-[35px] text-[25px]  leading-[1.1] font-extrabold">
               Over 46+ Years of Cultivating Quality and Excellence
             </h2>
 

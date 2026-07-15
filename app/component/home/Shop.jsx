@@ -120,21 +120,27 @@ const Shop = () => {
             1280: { slidesPerView: 4 },
           }}
         >
-          {products.map((product) => (
-            <SwiperSlide key={product.id}>
-              <ProductCard
-                product={{
-                  ...product,
-                  weightDisplay: (() => {
-                    const weights = product.weights?.map((w) => w.weight) || [];
-                    if (weights.length === 0) return "";
-                    if (weights.length === 1) return `${weights[0]}Kg`;
-                    return `${weights[0]}Kg - ${weights[weights.length - 1]}Kg`;
-                  })(),
-                }}
-              />
-            </SwiperSlide>
-          ))}
+          {products.map((product) => {
+            // Parse weight values safely, stripping any "Kg"/"kg" text
+            // that might already be present in the data from the backend
+            // (this is what was causing "5KgKg" / "1kgKg" before).
+            const nums = (product.weights || [])
+              .map((w) => parseFloat(w.weight))
+              .filter((n) => !isNaN(n));
+
+            let weightDisplay = "";
+            if (nums.length === 1) {
+              weightDisplay = `${nums[0]}Kg`;
+            } else if (nums.length > 1) {
+              weightDisplay = `${nums[0]}Kg - ${nums[nums.length - 1]}Kg`;
+            }
+
+            return (
+              <SwiperSlide key={product.id}>
+                <ProductCard product={{ ...product, weightDisplay }} />
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
     </div>
@@ -144,8 +150,8 @@ const Shop = () => {
 const ProductCard = ({ product }) => {
   return (
     <div className="group bg-white rounded-[16px] border border-[#e3ecf0] overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-      <Link href={`/shop/${product.slug}`} className="cursor-pointer block p-5 pb-0 h-77,5 "> 
-        <div className="relative w-77.5 h-70 rounded-2xl item- overflow-hidden border justify border-[#2f5f73]/20">
+      <Link href={`/shop/${product.slug}`} className="cursor-pointer block p-5 pb-0">
+        <div className="relative w-full h-[220px] rounded-2xl overflow-hidden border border-[#2f5f73]/20">
           <Image
             src={product.main_image}
             alt={product.name}

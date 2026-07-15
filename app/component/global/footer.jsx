@@ -91,7 +91,7 @@ export default function Footer() {
                 <h4 className="text-lg font-bold text-[#2d5a6b] mb-5">
                   Information
                 </h4>
-                <ul className="space-y-3 text-sm">
+                <ul className="space-y-1.5 text-sm">
                   <li>
                     <a href="/" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
                       Home
@@ -118,12 +118,12 @@ export default function Footer() {
                     </a>
                   </li>
                   <li>
-                    <a href="/winner-list" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
+                    <a href="/contact-us" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
                       Contact
                     </a>
                   </li>
                   <li>
-                    <a href="/contact-us" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
+                    <a href="/cashback" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
                       CashBack Info
                     </a>
                   </li>
@@ -137,22 +137,22 @@ export default function Footer() {
                 </h4>
                 <ul className="space-y-3 text-sm">
                   <li>
-                    <a href="#" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
+                    <a href="/privacy-policy" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
                       Privacy Policy
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
+                    <a href="/terms-and-conditions" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
                       Terms and Conditions
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
+                    <a href="/refund-policy" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
                       Refund and Returns Policy
                     </a>
                   </li>
                   <li>
-                    <a href="#" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
+                    <a href="/shipping-policy" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
                       Shipping Policy
                     </a>
                   </li>
