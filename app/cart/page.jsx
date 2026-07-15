@@ -126,10 +126,13 @@ export default function CartPage() {
     setCheckoutLoading(true);
 
     try {
-      // Prepare items payload for DRF checkout
+      // Prepare items payload for DRF checkout.
+      // IMPORTANT: item.id is the CART ITEM's own id, not the product's.
+      // The actual product reference is item.product (confirmed from the
+      // real /api/cart/ response: { id: 4, product: 1, ... }).
       const payload = {
         items: cartItems.map((item) => ({
-          product_id: item.id,      // DRF usually expects product_id
+          product_id: item.product,
           quantity: Number(item.quantity),
         })),
       };
@@ -165,11 +168,14 @@ export default function CartPage() {
 
       console.log("Checkout initiated:", data);
 
-      // If API returns a payment URL, redirect to it
+      // If API returns a payment URL, redirect to it. Otherwise, send the
+      // user to their Orders page so they can see the order that was
+      // just created, instead of leaving them on an empty alert with
+      // nowhere to go.
       if (data.payment_url) {
         window.location.href = data.payment_url;
       } else {
-        alert("Checkout initiated. Complete payment in your account.");
+        router.push("/orders");
       }
 
     } catch (err) {
@@ -253,7 +259,14 @@ export default function CartPage() {
                       </button>
                     </div>
 
-                    <p className="text-sm text-gray-500 mb-3">Weight: {item.weight || "N/A"} kg</p>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Weight:{" "}
+                      {item.weight
+                        ? String(item.weight).match(/kg/i)
+                          ? item.weight
+                          : `${item.weight}Kg`
+                        : "N/A"}
+                    </p>
 
                     <div className="flex justify-between items-end">
                       <div className="flex items-center border rounded-lg bg-white">
