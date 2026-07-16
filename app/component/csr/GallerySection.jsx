@@ -45,7 +45,7 @@ const GallerySection = () => {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16 bg-white font-sans">
+    <section className="max-w-7xl mx-auto px-4 py-0 bg-white font-sans">
       {/* Section Title */}
       <h2 className="text-3xl md:text-4xl font-extrabold text-[#2D5A71] text-center mb-3">
         Moments of Kindness

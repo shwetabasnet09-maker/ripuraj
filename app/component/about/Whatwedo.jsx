@@ -19,7 +19,7 @@ const WhatWeDo = () => {
   return (
     <section className="w-full bg-[#fafafa] py-14 overflow-hidden relative">
       {/* Side Decorations */}
-      <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 opacity-80">
+      {/* <div className="hidden lg:block absolute left-0 top-1/2 -translate-y-1/2 opacity-80">
         <Image
           src="/Left Pic.svg"
           alt="Decoration"
@@ -35,7 +35,7 @@ const WhatWeDo = () => {
           width={90}
           height={180}
         />
-      </div>
+      </div> */}
 
       <div className="wrapper px-4">
         {/* Heading */}

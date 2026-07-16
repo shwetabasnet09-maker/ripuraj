@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const MessageCard = () => {
   return (
-    <section className="relative py-16 px-4 bg-white overflow-hidden">
+    <section className="relative py-14 px-4 bg-white overflow-hidden">
   
       <div className="max-w-7xl mx-auto relative z-10">
         

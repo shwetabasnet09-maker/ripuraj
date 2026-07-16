@@ -49,10 +49,10 @@ export default function ShopPage() {
     <>
       <Bannermain backgroundImg="/About%20Banner.webp" title="Shop" />
 
-      <div className="py-16 px-4 bg-[#f5f5f5] relative overflow-hidden">
+      <div className="py-14 px-4 bg-[#f5f5f5] relative overflow-hidden">
         
         {/* Left Icon */}
-        <div className="absolute top-0 left-0 w-32 md:w-44 opacity-80">
+        {/* <div className="absolute top-0 left-0 w-32 md:w-44 opacity-80">
           <Image
             src="/leftpea.png"
             alt="left design"
@@ -60,9 +60,9 @@ export default function ShopPage() {
             height={180}
             className="w-full h-auto"
           />
-        </div>
+        </div> */}
 
-        {/* Right Icon */}
+        {/* Right Icon
         <div className="absolute top-0 right-0 w-32 md:w-44 opacity-80 ">
           <Image
             src="/rightpea.png"
@@ -71,7 +71,7 @@ export default function ShopPage() {
             height={180}
             className="w-full h-auto"
           />
-        </div>
+        </div> */}
 
         <div className="max-w-7xl mx-auto relative z-10">
           
@@ -80,7 +80,7 @@ export default function ShopPage() {
             Explore Our Products Range
           </p>
 
-          <h1 className="text-center text-3xl md:text-4xl font-semibold text-[#2f5f73] mb-12">
+          <h1 className="text-center text-3xl md:text-4xl font-semibold text-[#2f5f73] mb-5">
             High Quality Ripuraj Premium Rice
           </h1>
 

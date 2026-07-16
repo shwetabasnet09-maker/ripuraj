@@ -15,7 +15,7 @@ const products = [
     slug: "ripuraj-sonashakti-premium-jeera-parboiled-rice",
     name: "Ripuraj Sonashakti Premium Jeera Parboiled Rice",
     weight: "5Kg - 20Kg",
-    image: "/Sonashakti.png",
+    image: "/Sonashakti .webp",
   },
   {
     id: 2,

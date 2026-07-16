@@ -197,9 +197,7 @@ export default function Footer() {
                       <p className="font-semibold text-[#2d5a6b] mb-1">Head Office</p>
                       <p className="text-gray-700">
                         RIPURAJ AGRO PVT LTD NH-527D,
-                        <br />
                         Village Amodei Anchal, Ramgarhwa,
-                        <br />
                         District East Champaran Bihar – 845433
                       </p>
                     </div>

@@ -12,11 +12,11 @@ export default async function EventDetailPage({ params }) {
 
   return (
     <>
-      <Bannermain backgroundImg="/aboutbanner.png" title={event.title} />
+      <Bannermain backgroundImg="/About%20Banner.webp" title={event.title} />
 
-      <section className="relative py-16 md:py-20 px-4 bg-white overflow-hidden">
+      <section className="relative py-14 md:py-20 px-4 bg-white overflow-hidden">
         {/* Decorative corner icons */}
-        <div className="absolute top-0 left-0 w-32 md:w-44 opacity-70 pointer-events-none">
+        {/* <div className="absolute top-0 left-0 w-32 md:w-44 opacity-70 pointer-events-none">
           <Image
             src="/leftpea.png"
             alt=""
@@ -33,7 +33,7 @@ export default async function EventDetailPage({ params }) {
             height={180}
             className="w-full h-auto"
           />
-        </div>
+        </div> */}
 
         <div className="max-w-5xl mx-auto relative z-10">
           <h1 className="text-3xl md:text-4xl font-bold text-[#2f5f73] mb-4 text-center">

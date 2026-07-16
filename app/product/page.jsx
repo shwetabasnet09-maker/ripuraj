@@ -13,7 +13,7 @@ const ProductsPage = () => {
 
       <div className="py-16 px-4 bg-[#f5f5f5] relative overflow-hidden">
 
-        {/* Left Icon */}
+        {/* Left Icon
         <div className="absolute top-0 left-0 w-32 md:w-44 opacity-80">
           <Image
             src="/leftpea.png"
@@ -22,10 +22,10 @@ const ProductsPage = () => {
             height={180}
             className="w-full h-auto"
           />
-        </div>
+        </div> */}
 
         {/* Right Icon */}
-        <div className="absolute top-0 right-0 w-32 md:w-44 opacity-80 ">
+        {/* <div className="absolute top-0 right-0 w-32 md:w-44 opacity-80 ">
           <Image
             src="/rightpea.png"
             alt="right design"
@@ -33,7 +33,7 @@ const ProductsPage = () => {
             height={180}
             className="w-full h-auto"
           />
-        </div>
+        </div> */}
 
         <div className="container mx-auto relative z-10">
 
@@ -42,7 +42,7 @@ const ProductsPage = () => {
             Explore Our Products Range
           </p>
 
-          <h1 className="text-center text-3xl md:text-4xl font-semibold text-[#2f5f73] mb-12">
+          <h1 className="text-center text-3xl md:text-4xl font-semibold text-[#2f5f73] mb-5">
             High Quality Ripuraj Premium Rice
           </h1>
 

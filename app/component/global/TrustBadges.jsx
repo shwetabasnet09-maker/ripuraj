@@ -5,7 +5,7 @@ export default function TrustBadges() {
     { name: "Blinkit", src: "/blinkit.svg" },
     { name: "Smart Bazaar", src: "/smartbazaar.svg" },
     { name: "JioMart", src: "/jiomart.svg" },
-    { name: "Swiggy Instamart", src: "/swiggy.svg" },
+    { name: "Swiggy Instamart", src: "/SwiggyLogo.png" },
     { name: "BigBasket", src: "/bigbasket.svg" },
   ];
 

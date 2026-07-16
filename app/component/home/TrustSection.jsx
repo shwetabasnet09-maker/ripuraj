@@ -26,23 +26,23 @@ export default function Trustdiv() {
 
   return (
     <div className="py-10 lg:py-14 bg-white px-5 lg:px-4 relative overflow-hidden">
-      {/* Top Left Icon */}
+      {/* Top Left Icon
       <Image
         src="/leftpea.png"
         alt="left design"
         width={149.61}
         height={149.61}
         className="absolute top-0 left-0 opacity-80 w-16 h-16 lg:w-[149.61px] lg:h-[149.61px]"
-      />
+      /> */}
 
       {/* Top Right Icon */}
-      <Image
+      {/* <Image
         src="/rightpea.png"
         alt="right design"
         width={149.61}
         height={149.61}
         className="absolute top-0 right-0 opacity-80 w-16 h-16 lg:w-[149.61px] lg:h-[149.61px]"
-      />
+      /> */}
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}

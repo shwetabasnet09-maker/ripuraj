@@ -38,7 +38,7 @@ import {
   
   export default function WhatWeDo() {
     return (
-      <section className="py-24 bg-white">
+      <section className="py-14 bg-white">
         <div className="container mx-auto px-5">
   
           {/* Top Section */}

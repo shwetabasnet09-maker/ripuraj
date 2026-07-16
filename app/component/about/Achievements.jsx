@@ -24,9 +24,9 @@ const achievements = [
 
 const Achievements = () => {
   return (
-    <div className="relative py-16 px-4 bg-white overflow-hidden">
+    <div className="relative py-14 px-4 bg-white overflow-hidden">
       {/* Decorative corner icons */}
-      <Image
+      {/* <Image
         src="/leftpea.png"
         alt=""
         width={149.61}
@@ -39,11 +39,11 @@ const Achievements = () => {
         width={149.61}
         height={188.34}
         className="absolute top-0 right-0 opacity-80 pointer-events-none"
-      />
+      /> */}
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
-        <div className="relative flex items-center justify-center mb-10">
+        <div className="relative flex items-center justify-center mb-5">
           <h2 className="text-2xl md:text-3xl font-semibold text-[#2f5f73] text-center">
             Achievements
           </h2>

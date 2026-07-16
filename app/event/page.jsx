@@ -8,8 +8,8 @@ export default function EventPage() {
     <>
       <Bannermain backgroundImg="/About%20Banner.webp" title="Events" />
 
-      <section className="relative py-16 md:py-20 px-4 bg-white overflow-hidden">
-        {/* Decorative corner icons */}
+      <section className="relative py-14 md:py-20 px-4 bg-white overflow-hidden">
+        {/* Decorative corner icons
         <div className="absolute top-0 left-0 w-32 md:w-44 opacity-70 pointer-events-none">
           <Image
             src="/leftpea.png"
@@ -18,8 +18,8 @@ export default function EventPage() {
             height={180}
             className="w-full h-auto"
           />
-        </div>
-        <div className="absolute top-0 right-0 w-32 md:w-44 opacity-70 pointer-events-none">
+        </div> */}
+        {/* <div className="absolute top-0 right-0 w-32 md:w-44 opacity-70 pointer-events-none">
           <Image
             src="/rightpea.png"
             alt=""
@@ -27,7 +27,7 @@ export default function EventPage() {
             height={180}
             className="w-full h-auto"
           />
-        </div>
+        </div> */}
 
         <div className="max-w-7xl mx-auto relative z-10">
           

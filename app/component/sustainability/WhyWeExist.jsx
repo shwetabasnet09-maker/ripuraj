@@ -6,8 +6,8 @@ import {
 
 export default function WhyWeExist() {
   return (
-    <section className="bg-[#3F6C84] py-24">
-      <div className="container mx-auto px-5">
+    <section className="bg-[#3F6C84] py-14">
+      <div className="container mx-auto px-4">
 
         {/* Heading */}
         <div className="text-center max-w-4xl mx-auto">

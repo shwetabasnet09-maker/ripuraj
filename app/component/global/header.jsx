@@ -38,7 +38,16 @@ export default function Header() {
   // either condition makes the header render "solid".
   const solid = isSticky || noHeroBackground;
 
-  const navItems = [{ name: "Home", link: "/" }, { name: "About us", link: "/about-us" }, { name: "Shop", link: "/shop" }, { name: "Product", link: "/product" }, { name: "Event", dropdown: [{ name: "CSR Activity", link: "/csr" }, { name: "Latest News", link: "/latest-news" }, { name: "Event", link: "/event" },] }, { name: "Sustainability", link: "/sustainability" }, { name: "Contact Us", link: "/contact-us" },];
+  const navItems =
+  [{ name: "Home", link: "/" },
+    { name: "About us", link: "/about-us" },
+    { name: "Shop", link: "/shop" },
+    { name: "Product", link: "/product" },
+    { name: "Event",
+      dropdown: [{ name: "CSR Activity", link: "/csr" }, { name: "Latest News", link: "/latest-news" }, { name: "Event", link: "/event" },] },
+      { name: "Sustainability", link: "/sustainability" },
+      { name: "Blog", link: "/blog" },
+      { name: "Contact Us", link: "/contact-us" },];
 
   const handleDropdownEnter = () => {
     if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
@@ -75,8 +84,8 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav
             className={`hidden lg:flex items-center space-x-7 rounded-full px-6 py-3 transition-all duration-300 ${solid
-                ? "bg-white border border-[#EDEDED]"
-                : "border border-[#ffffff40] backdrop-blur-md"
+              ? "bg-white border border-[#EDEDED]"
+              : "border border-[#ffffff40] backdrop-blur-md"
               }`}
           >
             {navItems.map((item) =>
@@ -89,8 +98,8 @@ export default function Header() {
                 >
                   <button
                     className={`flex items-center gap-1 text-[15px] transition-colors ${solid
-                        ? "text-[#335B6E] hover:text-black"
-                        : "text-white hover:text-[#F6F0DE]"
+                      ? "text-[#335B6E] hover:text-black"
+                      : "text-white hover:text-[#F6F0DE]"
                       }`}
                   >
                     {item.name}
@@ -104,8 +113,8 @@ export default function Header() {
                   {/* Dropdown panel */}
                   <div
                     className={`absolute top-full left-1/2 -translate-x-1/2 pt-3 transition-all duration-200 ${csrDropdownOpen
-                        ? "opacity-100 translate-y-0 pointer-events-auto"
-                        : "opacity-0 -translate-y-2 pointer-events-none"
+                      ? "opacity-100 translate-y-0 pointer-events-auto"
+                      : "opacity-0 -translate-y-2 pointer-events-none"
                       }`}
                   >
                     <div className="bg-white rounded-xl shadow-xl border border-[#EDEDED] py-2 min-w-[180px]">
@@ -126,8 +135,8 @@ export default function Header() {
                   key={item.name}
                   href={item.link}
                   className={`text-[15px] transition-colors ${solid
-                      ? "text-[#335B6E] hover:text-black"
-                      : "text-white hover:text-[#F6F0DE]"
+                    ? "text-[#335B6E] hover:text-black"
+                    : "text-white hover:text-[#F6F0DE]"
                     }`}
                 >
                   {item.name}
