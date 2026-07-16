@@ -9,7 +9,7 @@ export default function MyOrders() {
 
   useEffect(() => {
     async function fetchOrders() {
-      const res = await fetch(`/api/orders?status=${tab}`);
+      const res = await fetch(`/api/orders/history/?status=All`);
       const data = await res.json();
       setOrders(data);
     }

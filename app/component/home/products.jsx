@@ -38,6 +38,29 @@ const products = [
     weight: "5Kg - 20Kg",
     image: "/Zayeka1.png",
   },
+  {
+    id: 5,
+    slug: "ripuraj-sonachoor-govindBhog",
+    name: "Ripuraj Sonachoor GovindBhog",
+    weight: "5Kg - 20Kg",
+    image: "/Ripuraj Sonachoor GovindBhog | Kheer | Joha Rice.webp",
+  },
+  {
+    id: 6,
+    slug: "ripuraj-jeera-boiled-rice",
+    name: "Ripuraj Jeera Boiled Rice",
+    weight: "5Kg - 20Kg",
+    image: "/Ripuraj Jeera Boiled Rice.webp",
+  },
+  {
+    id: 7,
+    slug: "ripura-annapoorna",
+    name: "Ripuraj Annapoorna",
+    weight: "5Kg - 20Kg",
+    image: "/Ripuraj Annapoorna.webp",
+  },
+ 
+  
 ];
 
 const Shop = () => {
@@ -59,7 +82,7 @@ const Shop = () => {
 
           <div className="flex items-center justify-center gap-4 lg:gap-5 mt-5 sm:mt-0 w-full sm:w-auto">
             <Link
-              href="/products"
+              href="/product"
               className="bg-white text-[#3A6B7E] px-4 lg:px-6 py-2 lg:py-3 rounded-lg font-semibold text-xs lg:text-sm flex items-center gap-2 hover:bg-[#2D5B70] hover:text-white transition whitespace-nowrap"
             >
               VIEW ALL PRODUCT

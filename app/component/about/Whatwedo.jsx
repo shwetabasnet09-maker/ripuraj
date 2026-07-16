@@ -40,15 +40,15 @@ const WhatWeDo = () => {
       <div className="wrapper px-4">
         {/* Heading */}
         <h2
-          className="font-black text-center text-[#2d5f73] mb-4"
-          style={{ fontSize: "clamp(1.8rem,4vw,2.8rem)" }}
+          className="font-bold text-center text-[#2d5f73] mb-4"
+          style={{ fontSize: "35px" }}
         >
-          What We Do
+          What Defines Ripuraj 
         </h2>
 
         {/* Description */}
         <p className="max-w-full mx-auto text-center text-gray-700 leading-relaxed mb-10 text-sm md:text-[15px]">
-        At Ripuraj Agro Pvt. Ltd., we specialize in the production, milling, refinement, and delivery of high-quality rice across various segments of society and multiple states. Our premium basmati and non-basmati rice varieties offer the perfect blend of taste, nutrient content, and texture. For Forty-Six years, we have consistently delivered top-quality rice. Our commitment to excellence is evident in the purity of our intentions and the superior quality of our products, making us renowned across many states. This journey of delivering the best rice continues, as we strive to meet and exceed the expectations of our valued customers.
+        At Ripuraj Agro, we transform carefully selected paddy into rice that's trusted for its purity, consistency, and exceptional taste. From sourcing and advanced milling to quality assurance and packaging, every step is guided by one commitment—to deliver rice that families enjoy and businesses rely on.
         </p>
 
         {/* Main Layout */}

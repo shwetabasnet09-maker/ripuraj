@@ -17,13 +17,11 @@ export default function WhyWeExist() {
           </span>
 
           <h2 className="text-[35px] font-bold text-white mt-2">
-            A Farmer's Problem. A Founder's Answer.
+          Built on Farmers' Trust. Grown Through Quality.
           </h2>
 
           <p className="text-white/90 text-[15px] mt-2 leading-6">
-            The story of Ripuraj Agro begins not in a boardroom, but in the
-            paddy fields of East Champaran — where farmers had no reliable
-            buyer for their harvest.
+          Ripuraj Agro was founded with a simple purpose—to create lasting value for farmers while delivering exceptional rice to families across India. Every decision we make is guided by quality, integrity, and the belief that great rice begins long before it reaches the table.
           </p>
         </div>
 
@@ -59,11 +57,8 @@ export default function WhyWeExist() {
             <div className="border-l-4 border-[#3F6C84] pl-6 mt-10">
 
               <p className="text-gray-700 leading-5 text-[14px]">
-                "The absence of an industry in this region to assist the farmer
-                sell his crop in a timely manner was missing — and that is what
-                prompted me to start Ripuraj Agro. With a background of more
-                than three decades of farming experience, we produce some of the
-                best rice varieties in the country."
+                "Ripuraj was built with the belief that when farmers are respected and quality is never compromised, trust naturally follows. That belief continues to guide us every single day.
+                "
               </p>
 
             </div>
@@ -73,15 +68,15 @@ export default function WhyWeExist() {
             <div className="flex flex-wrap gap-4 mt-10">
 
               <span className="bg-[#3F6C84] text-white rounded-full px-5 py-2">
-                3 decades farming background
+              Rooted in Agriculture
               </span>
 
               <span className="bg-[#3F6C84] text-white rounded-full px-5 py-2">
-                East Champaran native
+              Farmer First Approach
               </span>
 
               <span className="bg-[#3F6C84] text-white rounded-full px-5 py-2">
-                Founded Raxaul, 2010
+              Proudly from East Champaran
               </span>
 
             </div>
@@ -94,20 +89,20 @@ export default function WhyWeExist() {
 
             <InfoCard
               icon={<ClipboardList size={34} />}
-              title="Transparency in every grain"
-              description="Full transparency in our food sourcing process—from which farm the paddy came, to how it was milled, to what the lab results said. We share because we have nothing to hide."
+              title="Quality Without Compromise"
+              description="From sourcing the finest paddy to maintaining rigorous quality standards, every grain reflects our commitment to excellence"
             />
 
             <InfoCard
               icon={<Users size={34} />}
-              title="Connecting with our heritage"
-              description="Ripuraj is not a new brand pivoting to sustainability. Our roots in Bihar's Gangetic plains go back decades—the farming knowledge, the land, and the community are our foundation."
+              title="Growing Together"
+              description="Our success is deeply connected to the farmers, partners, and communities who have been part of the Ripuraj journey."
             />
 
             <InfoCard
               icon={<Handshake size={34} />}
-              title="Committed to conscious action"
-              description="From organic paddy and Gangetic water to zero hand-touch production—every operational choice reflects our belief that how rice is made matters as much as how it tastes."
+              title="Always Looking Ahead"
+              description="While our roots remain strong, we continue to invest in innovation, modern infrastructure, and sustainable growth to serve future generations."
             />
 
           </div>

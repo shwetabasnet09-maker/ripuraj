@@ -20,16 +20,14 @@ const RipurajHero = () => {
 
             {/* Heading */}
             <h2 className="mt-4 md:text-[35px] text-[25px]  leading-[1.1] font-extrabold">
-              Over 46+ Years of Cultivating Quality and Excellence
+            The Story Behind<br></br>Every Grain of Ripuraj
+
             </h2>
 
             {/* Description */}
             <p className="mt- max-w-140 text-[15px]  text-[#E8EEF2]">
-              Rice is the heart of a delicious meal for billions across the globe.
-              Ripuraj Agro Pvt Ltd has been dedicated to rice and paddy production.
-              Our passion has marked our journey for supporting local farmers in Bihar
-              and pioneering organic agriculture practices. Our commitment to quality
-              and sustainability has made us a trusted name in Bihar and beyond.
+            For over 46 years, Ripuraj Agro has been growing with the people who grow our food. Through strong farmer partnerships, advanced milling technology, and a relentless focus on quality, we continue to deliver rice that families proudly serve every day
+
             </p>
 
            

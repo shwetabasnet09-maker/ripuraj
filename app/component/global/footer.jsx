@@ -23,10 +23,8 @@ export default function Footer() {
                 <Image src="/logo.png" alt="Logo" width={150} height={50} />
 
                 <p className="text-gray-700 text-sm leading-relaxed mt-5">
-                  With 1200 MT/day production and 200000 MT of storage
-                  capacity, Ripuraj Agro's mission is to produce nutritious
-                  and affordable rice that will also appeal to the taste
-                  buds.
+                With a production capacity of 1200 MT per day and storage capacity of 200,000 MT, Ripuraj Agro is committed to delivering quality rice that combines purity, consistency, and exceptional taste for every home. 
+
                 </p>
 
                 <div className="flex items-center gap-3 mt-6">

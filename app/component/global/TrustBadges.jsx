@@ -12,14 +12,13 @@ export default function TrustBadges() {
   return (
     <div className="relative pt-10 lg:pt-16 pb-14 lg:pb-24 px-5 lg:px-6 text-center">
       <h2 className="text-[24px] leading-snug lg:text-[35px] lg:leading-normal font-bold text-black">
-        Trusted by Global Brands &{" "}
-        <span className="text-[#2d5a6b]">Local Businesses Alike</span>
+      Available Across India's {" "}
+        <span className="text-[#2d5a6b]">Trusted Retail Network</span>
       </h2>
 
-      <p className="text-gray-800 max-w-2xl mx-auto mt-3 lg:mt-4 text-sm lg:text-[17px] leading-relaxed">
-        From growing brands to established names, businesses trust us for
-        consistent quality, reliable service, and results that truly make a
-        difference.
+      <p className="text-gray-800 max-w-4xl mx-auto mt-3 lg:mt-4 text-sm lg:text-[17px] leading-relaxed">
+      Whether you shop online or visit your neighbourhood store, your favourite Ripuraj products are always within reach through India's leading retail and grocery partners. 
+
       </p>
 
       <div className="mt-6 lg:mt-8 flex justify-center">

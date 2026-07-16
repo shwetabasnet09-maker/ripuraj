@@ -44,10 +44,9 @@ const SustainabilityIntro = () => {
         </span>
 
         <h2 className="text-3xl sm:text-4xl md:text-[42px] font-bold leading-tight mb-6 max-w-2xl">
-          <span className="text-[#1a1a1a]">Growing Rice That Is Good</span>
+          <span className="text-[#1a1a1a]">Growing with Purpose,</span>
           <br />
-          <span className="text-[#1a1a1a]">For </span>
-          <span className="text-[#2f5f73]">Bihar And The Planet</span>
+          <span className="text-[#2f5f73]">Delivering with Pride</span>
         </h2>
 
         {/* Content grid */}
@@ -65,10 +64,7 @@ const SustainabilityIntro = () => {
           {/* Right: Text + Stats */}
           <div>
             <p className="text-gray-700 text-[15px] sm:text-base leading-relaxed mb-8">
-              Ripuraj Agro Pvt. Ltd. has spent 46+ years dedicated to rice and
-              paddy production in East Champaran, Bihar — supporting local
-              farmers and pioneering organic agriculture practices with 1,200
-              MT/day production capacity.
+            For over four decades, Ripuraj Agro has combined experience, innovation, and large-scale infrastructure to deliver rice that meets the highest standards of quality. From our advanced manufacturing facility in Bihar to homes across India, every milestone reflects our commitment to excellence and continuous growth.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

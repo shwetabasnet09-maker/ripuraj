@@ -152,7 +152,8 @@ export default function AuthPage() {
       localStorage.setItem("refresh_token", data.refresh);
 
       alert("Login successful ✅");
-      router.push("/");
+
+      router.push("/dashboard"); // redirect
     } catch (err) {
       console.error("Login request failed:", err);
       alert("Could not reach the server. Check your connection and try again.");

@@ -84,34 +84,34 @@ export default function Faq() {
 
   const divs = [
     {
-      title: "We share goodness",
+      title: "How does Ripuraj ensure consistent quality?",
       content:
-        "Our commitment to sharing goodness reflects in every grain we deliver with care and quality.",
+        "Every batch of Ripuraj rice undergoes careful selection, advanced processing, and multiple quality checks to ensure consistency in taste, texture, and purity.",
     },
     {
-      title: "We deliver each grain of rice",
+      title: "Where is Ripuraj rice sourced from?",
       content:
-        "Every grain is carefully selected, processed, and delivered to maintain premium quality.",
+        "We work closely with trusted farming communities and carefully source premium-quality paddy to maintain the standards our customers expect.",
     },
     {
-      title: "We try to foster a culture of transparency",
+      title: "What makes Ripuraj different from other rice brands?",
       content:
-        "We believe in honest processes, open communication, and complete trust with our customers.",
+        "Our focus on quality, modern milling technology, hygienic processing, and decades of expertise allows us to deliver rice that's trusted by families and businesses alike.",
     },
     {
-      title: "Hygienically processed and packed",
+      title: "Is Ripuraj rice hygienically processed?",
       content:
-        "Our rice is processed and packed in hygienic facilities using modern technology standards.",
+        "Yes. Our rice is processed and packed in modern facilities that follow strict hygiene and quality standards to preserve freshness and purity.",
     },
     {
-      title: "Our focus is also on spreading awareness",
+      title: "Which varieties of rice does Ripuraj offer?",
       content:
-        "We actively spread awareness about healthy food choices and nutritional living.",
+        "Ripuraj offers a carefully curated range of rice to suit everyday meals, traditional recipes, and special occasions, catering to the diverse preferences of Indian kitchens.",
     },
     {
-      title: "We are determined",
+      title: "Who is Ripuraj rice ideal for?",
       content:
-        "Our determination drives us to consistently provide the finest quality products.",
+        "Whether you're cooking at home, managing a restaurant, or serving large gatherings, Ripuraj offers dependable quality and consistency for every requirement.",
     },
   ];
 
@@ -133,16 +133,13 @@ export default function Faq() {
 
       <div className="wrapper max-w-7xl mx-auto relative z-10">
         {/* Heading */}
-        <div className="text-center mb-12">
-          <h2 className="text-[25px] md:text-[38px] font-bold text-[#F5E6D3] mb-4">
-            Why are we different ?
+        <div className="text-center mb-6">
+          <h2 className="text-[25px] md:text-[38px] font-bold text-[#F5E6D3] mb-2">
+          Why Do Families Choose Ripuraj?
           </h2>
 
-          <p className="text-white text-[15px]  max-w-5xl mx-auto leading-relaxed">
-            We are determined to bring you the finest quality rice, ensuring
-            purity, nutrition, and trust in every grain. Our commitment goes
-            beyond just delivering rice we focus on transparency, hygiene, and
-            spreading awareness for a healthier, better future.
+          <p className="text-white text-[15px]  max-w-5xl mx-auto leading-relaxed ">
+          Quality isn't a promise we make—it's the standard we follow every single day. Every grain is selected with care, processed with precision, and delivered with the trust that has defined Ripuraj for generations.
           </p>
         </div>
 

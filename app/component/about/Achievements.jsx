@@ -5,23 +5,23 @@ const achievements = [
   {
     title: "India's First Steam Jeera Rice",
     description:
-      "Ripuraj Agro Pvt Ltd is the first in India to introduce Steam Jeera Rice in convenient 1 kg and 5 kg packages. This innovation underscores our dedication to quality and consumer satisfaction.",
+      "Ripuraj proudly introduced India's first Steam Jeera Rice in convenient retail packs, making this unique variety more accessible while setting a new benchmark in product innovation.",
     image: "/India’s First Steam Jeera Rice.webp",
   },
   {
     title: "Redefining Non-Basmati Rice",
     description:
-      "We have transformed the non-Basmati rice market by introducing branded products, setting new quality standards and earning consumer trust across India.",
+      "By combining superior quality with strong branding, Ripuraj helped redefine how consumers experience non-basmati rice, bringing greater trust and consistency to the category.",
     image: "/Redefining Non-Basmati Rice.webp",
   },
   {
     title: "Committed to Quality, Scaling to 1000 MT",
     description:
-      "From an initial production capacity of 120 MT/day, Ripuraj Agro Pvt Ltd now proudly produces 1000 MT/day, reflecting our commitment to meeting the growing demand for our premium rice.",
+      "From our early beginnings to a production capacity of 1200 MT per day, every milestone reflects our commitment to continuous growth, modern infrastructure, and delivering quality at scale.",
     image: "/Committed to Quality, Scaling to 1000 MT.webp",
   },
 ];
-
+1
 const Achievements = () => {
   return (
     <div className="relative py-14 px-4 bg-white overflow-hidden">
@@ -45,7 +45,7 @@ const Achievements = () => {
         {/* Header */}
         <div className="relative flex items-center justify-center mb-5">
           <h2 className="text-2xl md:text-3xl font-semibold text-[#2f5f73] text-center">
-            Achievements
+          Milestones That Define Us 
           </h2>
         </div>
 
