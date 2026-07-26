@@ -3,7 +3,7 @@ import AnimateIn from "./AnimateIn";
 
 const ContactFooter = () => {
   return (
-    <div className="w-full p-4 md:p-8 bg-white">
+    <div className="w-full p-4 md:px-28 py-14 bg-white">
       <AnimateIn>
         <div className="bg-[#325a67] text-white rounded-[40px] p-10 md:p-14 flex flex-col md:flex-row justify-between gap-12 font-sans">
           {/* Registered Office Column */}

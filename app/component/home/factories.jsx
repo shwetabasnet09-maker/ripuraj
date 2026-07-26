@@ -39,26 +39,22 @@ const Factories = () => {
           <div className="bg-[#FFF8E2] p-8 lg:p-12 flex flex-col justify-center rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none">
             
             <h2 className="text-[35px] font-bold text-black leading-tight">
-              From Farm to{" "}
-              <span className="text-[#306177]">Factories</span>
+            Where Every Grain Meets{" "}
+              <span className="text-[#306177]">Our Highest Standards</span>
             </h2>
 
-            <p className="mt-4 leading-relaxed text-[15px] text-[#444]">
-              Transporting grains from the fields to the factories is an
-              essential part of our process. Ensuring that the grains remain
-              safe and maintain their quality during transport is our top
-              priority. Each grain is securely packed in woven bags and covered
-              with protective tarps, safeguarding them from weather conditions
-              and potential damage.
+            <p className="mt-1 leading-relaxed text-[15px] text-[#444]">
+            Behind every pack of Ripuraj is a state-of-the-art processing facility where technology, expertise, and uncompromising quality come together. Every grain is carefully cleaned, processed, and quality-checked to ensure consistency, purity, and the taste families trust.
+
             </p>
 
             {/* FEATURES */}
-            <div className="grid grid-cols-2 gap-y-4 gap-x-6 mt-6">
+            <div className="grid grid-cols-2 gap-y-4 gap-x-6 mt-3">
               {[
-                "Premium Grain",
-                "Streamlined Production",
-                "Expert Field",
-                "Top-Quality Produce",
+                "Advanced Technology",
+                "Multiple Quality Checks",
+                "Hygienic Manufacturing",
+                "Consistent Grain Selection",
               ].map((item, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <CheckCircle className="w-5 h-5 text-[#306177]" />
@@ -70,7 +66,7 @@ const Factories = () => {
             </div>
 
             {/* BUTTON */}
-            <div className="mt-8">
+            <div className="mt-5">
               <Link
                 href="/shop"
                 className="inline-flex items-center gap-2 bg-white text-[#306177] px-6 py-3 rounded-full font-semibold shadow hover:shadow-md transition"

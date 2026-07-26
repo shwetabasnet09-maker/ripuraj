@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Pencil } from "lucide-react";
+import { authFetch } from "../../../utils/authFetch";
 
-// const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
-const API_BASE_URL =  "http://127.0.0.1:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
 export default function ManageAccount() {
   const [profile, setProfile] = useState({
@@ -15,41 +14,51 @@ export default function ManageAccount() {
   });
 
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
   const [editingProfile, setEditingProfile] = useState(false);
   const [editingAddress, setEditingAddress] = useState(false);
 
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("access_token") : null;
+  const fetchProfile = async () => {
+    setLoading(true);
+    setError(null);
 
-  // Fetch profile
-  useEffect(() => {
-    async function fetchProfile() {
-      try {
-        const res = await fetch(`${API_BASE_URL}/api/accounts/profile/`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    try {
+      const res = await authFetch(`${API_BASE_URL}/api/accounts/profile/`, {
+        headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(10000),
+      });
 
-        if (res.ok) {
-          const data = await res.json();
-          setProfile({
-            username: data.username || "",
-            phone: data.phone || "",
-            email: data.email || "",
-            address: data.address || "",
-          });
-        }
-      } catch (error) {
-        console.error("Profile fetch error", error);
+      if (!res.ok) {
+        throw new Error(`Server returned status ${res.status}`);
       }
 
+      const data = await res.json();
+      setProfile({
+        username: data.username || "",
+        phone: data.phone || "",
+        email: data.email || "",
+        address: data.address || "",
+      });
+    } catch (err) {
+      console.error("Profile fetch error:", err);
+      if (err.name === "TimeoutError" || err.name === "AbortError") {
+        setError("The server took too long to respond.");
+      } else if (err.message === "Failed to fetch") {
+        setError(
+          "Couldn't reach the server. Check your internet connection, or the backend may be temporarily down."
+        );
+      } else {
+        setError(err.message || "Failed to load your profile.");
+      }
+    } finally {
       setLoading(false);
     }
+  };
 
+  useEffect(() => {
     fetchProfile();
-  }, [token]);
+  }, []);
 
   const handleChange = (e) => {
     setProfile({
@@ -62,12 +71,9 @@ export default function ManageAccount() {
     setSaving(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/accounts/profile/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/accounts/profile/`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(profile),
       });
 
@@ -77,15 +83,43 @@ export default function ManageAccount() {
       } else {
         alert("Update failed");
       }
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error("Profile save error:", err);
+      alert(
+        err.message === "Failed to fetch"
+          ? "Couldn't reach the server. Check your connection and try again."
+          : "Something went wrong while saving."
+      );
     }
 
     setSaving(false);
   };
 
   if (loading) {
-    return <p className="text-gray-500 text-sm">Loading...</p>;
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 animate-pulse">
+        {[0, 1].map((i) => (
+          <div key={i} className="bg-white rounded-xl border border-gray-200 p-5 h-40" />
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-16 bg-white rounded-xl border border-gray-200">
+        <p className="text-red-600 font-medium mb-2">
+          Couldn't load your account
+        </p>
+        <p className="text-gray-500 text-sm mb-6">{error}</p>
+        <button
+          onClick={fetchProfile}
+          className="bg-[#2f5f73] hover:bg-[#244a5a] text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
+        >
+          Try Again
+        </button>
+      </div>
+    );
   }
 
   return (
@@ -103,7 +137,7 @@ export default function ManageAccount() {
             </h3>
             <button
               onClick={() => setEditingProfile(!editingProfile)}
-              className="text-[#2f5f73] text-sm font-medium hover:underline flex items-center gap-1"
+              className="text-[#2f5f73] text-sm font-medium hover:underline"
             >
               {editingProfile ? "Cancel" : "Edit"}
             </button>
@@ -112,9 +146,7 @@ export default function ManageAccount() {
           {editingProfile ? (
             <div className="space-y-3">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">
-                  Phone
-                </label>
+                <label className="block text-xs text-gray-500 mb-1">Phone</label>
                 <input
                   type="text"
                   name="phone"
@@ -125,9 +157,7 @@ export default function ManageAccount() {
               </div>
 
               <div>
-                <label className="block text-xs text-gray-500 mb-1">
-                  Email
-                </label>
+                <label className="block text-xs text-gray-500 mb-1">Email</label>
                 <input
                   type="email"
                   name="email"
@@ -156,9 +186,7 @@ export default function ManageAccount() {
         {/* ADDRESS CARD */}
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
-            <h3 className="font-semibold text-[#1a1a1a] text-[15px]">
-              Address
-            </h3>
+            <h3 className="font-semibold text-[#1a1a1a] text-[15px]">Address</h3>
             <button
               onClick={() => setEditingAddress(!editingAddress)}
               className="text-[#2f5f73] text-sm font-medium hover:underline"
@@ -170,9 +198,7 @@ export default function ManageAccount() {
           {editingAddress ? (
             <div className="space-y-3">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">
-                  Address
-                </label>
+                <label className="block text-xs text-gray-500 mb-1">Address</label>
                 <textarea
                   name="address"
                   value={profile.address}

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-const YOUTUBE_ID = "BOKQClMzRM0";
+const YOUTUBE_ID = "UBii6jklDo0";
 
 const Video = () => {
   const [playing, setPlaying] = useState(false);

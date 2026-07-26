@@ -1,69 +1,131 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const Herodiv = () => {
-  const [hero, setHero] = useState(null);
+  const [slides, setSlides] = useState(null); // null = loading
+  const [activeIndex, setActiveIndex] = useState(0);
+  const swiperRef = useRef(null);
 
   useEffect(() => {
+    let cancelled = false;
+
     async function fetchHero() {
       try {
         const res = await fetch(`${API_BASE_URL}/api/homepage/hero/`);
         const data = await res.json();
-        setHero(data);
+
+        if (cancelled) return;
+
+        // Handles BOTH cases: backend returns a single hero object today,
+        // or an array of multiple hero banners once that's added later.
+        const normalized = Array.isArray(data) ? data : [data];
+        setSlides(normalized.filter(Boolean));
       } catch (error) {
         console.error("Error fetching hero:", error);
+        if (!cancelled) setSlides([]);
       }
     }
 
     fetchHero();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  if (!hero) {
+  // ---------------- LOADING SKELETON ----------------
+  if (slides === null) {
     return (
-      <div className="h-[560px] md:h-[786px] bg-neutral-900 flex items-center">
-        <div className="wrapper px-5 md:px-0 text-white flex justify-between pt-14 md:pt-[120px]">
-          <div className="w-full md:w-[48%] space-y-3 md:space-y-4">
-            <div className="h-9 md:h-12 w-3/4 bg-white/10 rounded-md animate-pulse" />
-            <div className="h-4 md:h-5 w-full bg-white/10 rounded-md animate-pulse" />
-            <div className="h-4 md:h-5 w-4/5 bg-white/10 rounded-md animate-pulse" />
-            <div className="h-10 md:h-12 w-32 md:w-40 bg-white/10 rounded-md mt-5 md:mt-6 animate-pulse" />
-          </div>
-        </div>
-      </div>
+      <div className="h-[560px] md:h-[786px] bg-neutral-900 animate-pulse" />
     );
   }
 
+  // ---------------- NO DATA ----------------
+  if (slides.length === 0) {
+    return <div className="h-[560px] md:h-[786px] bg-neutral-900" />;
+  }
+
+  const hasMultiple = slides.length > 1;
+
   return (
-    <div
-      className="h-[560px] md:h-[786px] bg-cover bg-center bg-neutral-900 flex items-center"
-      style={{
-        backgroundImage: `url(${API_BASE_URL}${hero.image})`,
-      }}
-    >
-      <div className="wrapper px-5 md:px-0 text-white flex justify-between pt-14 md:pt-[120px]">
-        <div className="w-full md:w-[48%]">
-          <h1 className="text-[28px] leading-[1.25] md:text-[45px] md:leading-tight font-bold">
-            {hero.title}
-          </h1>
+    <div className="relative group h-[560px] md:h-[786px] overflow-hidden bg-neutral-900">
+      <Swiper
+        modules={[Autoplay, EffectFade]}
+        effect="fade"
+        fadeEffect={{ crossFade: true }}
+        speed={800}
+        autoplay={
+          hasMultiple
+            ? { delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true }
+            : false
+        }
+        loop={hasMultiple}
+        onSwiper={(swiper) => (swiperRef.current = swiper)}
+        onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+        className="h-full w-full"
+      >
+        {slides.map((hero, index) => (
+          <SwiperSlide key={hero.id || index}>
+            <div
+              className="h-full w-full bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${API_BASE_URL}${hero.image})`,
+              }}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
-          <p className="mt-3 md:mt-4 text-sm md:text-[20px]">
-            {hero.description}
-          </p>
+      {hasMultiple && (
+        <>
+          {/* Custom nav arrows — fade in on hover, sit above the image */}
+          <button
+            onClick={() => swiperRef.current?.slidePrev()}
+            aria-label="Previous slide"
+            className="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 z-20 w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/25 hover:scale-105 active:scale-95"
+          >
+            <ChevronLeft size={22} />
+          </button>
 
-          {hero.button_link && (
-            <Link
-              href={hero.button_link}
-              className="mt-5 md:mt-6 inline-block bg-[#3b6b7a] px-5 md:px-6 py-2.5 md:py-3 rounded-md text-sm md:text-[19px] font-medium text-white hover:bg-[#335b6e] transition-colors"
-            >
-              {hero.button_text || "Shop Now"}
-            </Link>
-          )}
-        </div>
-      </div>
+          <button
+            onClick={() => swiperRef.current?.slideNext()}
+            aria-label="Next slide"
+            className="absolute top-1/2 right-4 md:right-8 -translate-y-1/2 z-20 w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/25 hover:scale-105 active:scale-95"
+          >
+            <ChevronRight size={22} />
+          </button>
+
+          {/* Progress-bar style pagination — modern alternative to dots */}
+          <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => swiperRef.current?.slideToLoop(i)}
+                aria-label={`Go to slide ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-500 ${
+                  i === activeIndex
+                    ? "w-8 bg-white"
+                    : "w-1.5 bg-white/40 hover:bg-white/60"
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Slide counter */}
+          <div className="absolute bottom-6 md:bottom-10 right-4 md:right-8 z-20 text-white/80 text-xs md:text-sm font-medium tracking-wide">
+            {String(activeIndex + 1).padStart(2, "0")} /{" "}
+            {String(slides.length).padStart(2, "0")}
+          </div>
+        </>
+      )}
     </div>
   );
 };

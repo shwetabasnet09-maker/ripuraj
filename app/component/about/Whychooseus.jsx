@@ -17,22 +17,17 @@ const WhyChooseUs = () => {
       <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex items-center">
         <div className="max-w-lg text-white">
           
-          <p className="uppercase tracking-widest text-xs mb-3 opacity-90">
+          <p className="uppercase tracking-widest text-1xs mb-3 opacity-90">
             Why Choose Us
           </p>
 
           <h2 className="text-[35px]  font-bold leading-tight mb-3">
-            Quality You Can Trust
+          Excellence, Refined Through Every Step.
+
           </h2>
 
-          <p className="text-sm md:text-base text-gray-200 leading-relaxed mb-8">
-            Our fully automated plant ensures zero hand-touch production with
-            strict hygiene standards. We use pure Gangetic basin water and
-            organic paddy to preserve natural taste and quality. With automated
-            milling, time-efficient processes, and secure storage, we focus on
-            delivering rice with superior sensory quality. Backed by strong
-            sales and customer support, our solutions are always within your
-            reach.
+          <p className="text-sm md:text-[15px] text-gray-200 leading-relaxed mb-8">
+          From sourcing to processing and packaging, every step is carefully monitored to preserve the purity, freshness, and natural goodness of our rice. It's this attention to detail that allows us to deliver a product our customers trust, time and time again.
           </p>
 
           <button className="bg-white text-[#0b2d3a] font-semibold px-6 py-3 rounded shadow hover:bg-gray-200 transition">

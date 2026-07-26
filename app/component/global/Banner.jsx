@@ -18,14 +18,14 @@ const Bannermain = ({ title, subTitle, backgroundImg }) => {
       {/* Content */}
       <div className="relative z-10 flex justify-center items-center h-full  px-4">
         <div className=" w-full wrapper mt-20">
-          <h1 className="text-[45px] sm:text-[35px] md:text-[45px] lg:text-[45px] font-primary font-bold text-white leading-tight mb-4">
+          <h1 className="text-[25px] sm:text-[25px] max-w-2xl md:text-[45px] lg:text-[45px] font-primary font-bold text-white leading-tight mb-4">
             {title}
           </h1>
 
           <ol className="flex flex-wrap text-base sm:text-lg">
             <li>
               <Link
-                className="text-white text-[15px] sm:text-[16.5px] md:text-[17.5px]  font-medium"
+                className="text-white text-[12px] sm:text-[12px] md:text-[17.5px]  font-medium"
                 href="/"
               >
                 Home

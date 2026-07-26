@@ -26,37 +26,35 @@ export default function Trustdiv() {
 
   return (
     <div className="py-10 lg:py-14 bg-white px-5 lg:px-4 relative overflow-hidden">
-      {/* Top Left Icon */}
+      {/* Top Left Icon
       <Image
         src="/leftpea.png"
         alt="left design"
         width={149.61}
         height={149.61}
         className="absolute top-0 left-0 opacity-80 w-16 h-16 lg:w-[149.61px] lg:h-[149.61px]"
-      />
+      /> */}
 
       {/* Top Right Icon */}
-      <Image
+      {/* <Image
         src="/rightpea.png"
         alt="right design"
         width={149.61}
         height={149.61}
         className="absolute top-0 right-0 opacity-80 w-16 h-16 lg:w-[149.61px] lg:h-[149.61px]"
-      />
+      /> */}
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-8 lg:mb-12">
           <h2 className="text-[24px] leading-snug lg:text-[35px] md:text-4xl font-bold text-black mb-3">
-            Trusted by Millions,{" "}
-            <span className="text-[#2B6B7E]">Perfected Over Decades</span>
+          A Legacy That {" "}
+            <span className="text-[#2B6B7E]">Continues to Grow</span>
           </h2>
 
           <p className="text-[#000000] max-w-4xl mx-auto text-sm lg:text-[15px] leading-relaxed">
-            Ripuraj, a trusted name for over 46 years. With lakhs of happy
-            customers, our commitment to quality shines in every grain. We
-            pride ourselves on delivering a product that stands out in both
-            flavor and texture.
+          For over 46 years, Ripuraj has embraced progress without losing sight of its values. Every milestone reflects our dedication to quality, innovation, and building lasting relationships with families, partners, and communities.
+
           </p>
         </div>
 

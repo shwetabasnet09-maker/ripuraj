@@ -32,7 +32,7 @@ const RipurajContactPage = () => {
   };
 
   return (
-    <div className="w-full bg-white px-4 py-16 md:py-20 space-y-10 font-sans overflow-hidden">
+    <div className="w-full bg-white px-4 py-10 md:py-14 space-y-10  font-sans overflow-hidden">
       {/* SECTION 1: CONTACT FORM & INFO */}
       <AnimateIn>
         <div className="relative flex flex-col md:flex-row w-full max-w-7xl mx-auto rounded-[50px] overflow-hidden bg-[#FFF5E1] shadow-xl">

@@ -296,7 +296,7 @@ export default function CartPage() {
     return (
       <div className="text-center py-20">
         <ShoppingBag className="mx-auto h-16 w-16 text-gray-300 mb-4" />
-
+      
         <h2 className="text-2xl font-semibold text-gray-800">
           Your cart is empty
         </h2>

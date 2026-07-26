@@ -40,8 +40,8 @@ export default function About() {
 
   return (
     <section
-      className="py-10 md:py-20 overflow-hidden bg-cover bg-center"
-      style={{ backgroundImage: "url('/background_about.png')" }}
+      className="py-10 md:py-20 overflow-hidden bg-[#FFF8E2] bg-cover bg-center"
+      // style={{ backgroundImage: "url('/background_about.png')" }}
     >
       <div className="wrapper px-5 md:px-0">
 

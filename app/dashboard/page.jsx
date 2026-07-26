@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import ManageAccount from "../component/dashboard/tabs/ManageAccount";
 import MyOrders from "../component/dashboard/tabs/MyOrders";
 import Wishlist from "../component/dashboard/tabs/Wishlist";
+import MyReviews from "../component/dashboard/tabs/MyReviews";
+import ReturnsCancellations from "../component/dashboard/tabs/ReturnsCancellations";
 import { User, ShoppingBag, Heart, Star, XCircle, LogOut } from "lucide-react";
 
 export default function DashboardPage() {
@@ -53,6 +55,10 @@ export default function DashboardPage() {
         return <MyOrders />;
       case "wishlist":
         return <Wishlist />;
+      case "reviews":
+        return <MyReviews />;
+      case "returns":
+        return <ReturnsCancellations />;
       default:
         return <ManageAccount />;
     }

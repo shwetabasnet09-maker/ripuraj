@@ -21,9 +21,9 @@ const CSRSection = () => {
   };
 
   return (
-    <div className="relative overflow-hidden py-20">
+    <div className="relative overflow-hidden py-14">
       {/* Left Decorative Icon */}
-      <div className="absolute top-0 left-0 w-32 md:w-44 opacity-80">
+      {/* <div className="absolute top-0 left-0 w-32 md:w-44 opacity-80">
         <Image
           src="/leftpea.png"
           alt="left design"
@@ -31,10 +31,10 @@ const CSRSection = () => {
           height={180}
           className="w-full h-auto"
         />
-      </div>
+      </div> */}
 
       {/* Right Decorative Icon */}
-      <div className="absolute top-0 right-0 w-32 md:w-44 opacity-80">
+      {/* <div className="absolute top-0 right-0 w-32 md:w-44 opacity-80">
         <Image
           src="/rightpea.png"
           alt="right design"
@@ -42,9 +42,9 @@ const CSRSection = () => {
           height={180}
           className="w-full h-auto"
         />
-      </div>
+      </div> */}
 
-      <div className="max-w-7xl mx-auto p-6 font-sans text-[#2D4356] relative z-10">
+      <div className="max-w-7xl mx-auto font-objective text-[#2D4356] relative z-10">
         {/* Header Section */}
         <div className="gap-8 mb-12 text-center">
           <div className="md:w-1/2 mx-auto">
