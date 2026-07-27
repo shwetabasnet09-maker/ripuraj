@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, ArrowLeft, ArrowRight } from "lucide-react";
+import { ChevronRight, ArrowLeft, ArrowRight, CheckCircle2, XCircle, Info, X } from "lucide-react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
@@ -22,6 +22,73 @@ const INDIAN_STATES = [
 
 const PAN_REGEX = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 
+// ---------------- TOAST NOTIFICATION SYSTEM ----------------
+const TOAST_STYLES = {
+  success: {
+    icon: CheckCircle2,
+    iconColor: "text-green-500",
+    bg: "bg-white",
+    border: "border-l-4 border-green-500",
+  },
+  error: {
+    icon: XCircle,
+    iconColor: "text-red-500",
+    bg: "bg-white",
+    border: "border-l-4 border-red-500",
+  },
+  info: {
+    icon: Info,
+    iconColor: "text-[#2f5f73]",
+    bg: "bg-white",
+    border: "border-l-4 border-[#2f5f73]",
+  },
+};
+
+function ToastContainer({ toasts, onDismiss }) {
+  return (
+    <div className="fixed top-6 right-6 z-[100] flex flex-col gap-3 w-[90vw] max-w-sm">
+      {toasts.map((toast) => {
+        const style = TOAST_STYLES[toast.type] || TOAST_STYLES.info;
+        const Icon = style.icon;
+
+        return (
+          <div
+            key={toast.id}
+            className={`${style.bg} ${style.border} rounded-xl shadow-2xl p-4 flex items-start gap-3 animate-toast-in`}
+          >
+            <Icon size={22} className={`${style.iconColor} flex-shrink-0 mt-0.5`} />
+            <p className="text-sm text-[#1a1a1a] font-medium leading-relaxed flex-1">
+              {toast.message}
+            </p>
+            <button
+              onClick={() => onDismiss(toast.id)}
+              className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        );
+      })}
+
+      <style jsx global>{`
+        @keyframes toastIn {
+          from {
+            opacity: 0;
+            transform: translateX(40px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        .animate-toast-in {
+          animation: toastIn 0.3s ease-out;
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function AuthPage() {
   const router = useRouter();
 
@@ -30,8 +97,23 @@ export default function AuthPage() {
     if (token) router.replace("/dashboard");
   }, [router]);
 
+  // ---------------- Toast state + helper ----------------
+  const [toasts, setToasts] = useState([]);
+
+  const showToast = (message, type = "info") => {
+    const id = Date.now() + Math.random();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4500);
+  };
+
+  const dismissToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
+
   const [activeTab, setActiveTab] = useState("login");
-  const [step, setStep] = useState(1); // register wizard step
+  const [step, setStep] = useState(1);
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [panError, setPanError] = useState("");
@@ -42,6 +124,7 @@ export default function AuthPage() {
     password: "", confirm_password: "",
     street: "", city: "", state: "",
     otp: "",
+    loginId: "",
     account_type: "customer",
     business_name: "", pan_number: "", gst_number: "",
     store_address: "", same_as_personal_address: true,
@@ -65,7 +148,6 @@ export default function AuthPage() {
     return JSON.stringify(data);
   };
 
-  // Total steps depends on account type: reseller gets an extra step.
   const totalSteps = formData.account_type === "reseller" ? 3 : 2;
 
   const goNext = () => {
@@ -148,15 +230,15 @@ export default function AuthPage() {
       console.log("Register response:", res.status, data);
 
       if (!res.ok) {
-        alert(extractErrorMessage(data));
+        showToast(extractErrorMessage(data), "error");
         return;
       }
 
-      alert("OTP sent!");
+      showToast("OTP sent! Check your email.", "success");
       setOtpSent(true);
     } catch (err) {
       console.error("Register request failed:", err);
-      alert("Could not reach the server. Check your connection and try again.");
+      showToast("Could not reach the server. Check your connection and try again.", "error");
     } finally {
       setLoading(false);
     }
@@ -178,53 +260,60 @@ export default function AuthPage() {
       console.log("Verify response:", res.status, data);
 
       if (!res.ok) {
-        alert(extractErrorMessage(data));
+        showToast(extractErrorMessage(data), "error");
         return;
       }
 
-      alert(
+      showToast(
         formData.account_type === "reseller"
           ? "Registration successful! Your reseller account is pending verification."
-          : "Registration successful! Please login."
+          : "Registration successful! Please login.",
+        "success"
       );
       setActiveTab("login");
       setOtpSent(false);
       setStep(1);
     } catch (err) {
       console.error("Verify request failed:", err);
-      alert("Could not reach the server. Check your connection and try again.");
+      showToast("Could not reach the server. Check your connection and try again.", "error");
     } finally {
       setLoading(false);
     }
   };
 
-  // ---------------- LOGIN ----------------
+  // ---------------- LOGIN (email OR username) ----------------
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
+      const isEmail = formData.loginId.includes("@");
+
+      const loginPayload = isEmail
+        ? { email: formData.loginId, password: formData.password }
+        : { username: formData.loginId, password: formData.password };
+
       const res = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: formData.email, password: formData.password }),
+        body: JSON.stringify(loginPayload),
       });
 
       const data = await res.json();
       console.log("Login response:", res.status, data);
 
       if (!res.ok) {
-        alert(extractErrorMessage(data));
+        showToast(extractErrorMessage(data), "error");
         return;
       }
 
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
-      alert("Login successful ✅");
-      router.push("/");
+      showToast("Login successful!", "success");
+      setTimeout(() => router.push("/"), 800);
     } catch (err) {
       console.error("Login request failed:", err);
-      alert("Could not reach the server. Check your connection and try again.");
+      showToast("Could not reach the server. Check your connection and try again.", "error");
     } finally {
       setLoading(false);
     }
@@ -232,6 +321,8 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen bg-white pt-24 md:pt-28 pb-16 relative overflow-hidden">
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+
       <div className="absolute bottom-0 left-0 w-28 md:w-36 opacity-80 pointer-events-none">
         <Image src="/leftpea.png" alt="" width={160} height={160} className="w-full h-auto" />
       </div>
@@ -268,10 +359,9 @@ export default function AuthPage() {
 
           {/* ================= REGISTER ================= */}
           {activeTab === "register" && (
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
               {!otpSent ? (
                 <>
-                  {/* Progress dots */}
                   <div className="flex items-center justify-center gap-2 mb-2">
                     {Array.from({ length: totalSteps }).map((_, i) => (
                       <div
@@ -283,7 +373,6 @@ export default function AuthPage() {
                     ))}
                   </div>
 
-                  {/* ===== STEP 1: Account type + basic info ===== */}
                   {step === 1 && (
                     <div className="space-y-4">
                       <div>
@@ -325,7 +414,6 @@ export default function AuthPage() {
                     </div>
                   )}
 
-                  {/* ===== STEP 2: Address ===== */}
                   {step === 2 && (
                     <div className="space-y-4">
                       <p className="text-white font-semibold text-sm">Your Address</p>
@@ -349,7 +437,6 @@ export default function AuthPage() {
                     </div>
                   )}
 
-                  {/* ===== STEP 3: Reseller details (only if reseller) ===== */}
                   {step === 3 && formData.account_type === "reseller" && (
                     <div className="space-y-4">
                       <p className="text-white font-semibold text-sm">Reseller Details</p>
@@ -393,7 +480,6 @@ export default function AuthPage() {
                     <p className="text-red-200 text-xs text-center">{stepError}</p>
                   )}
 
-                  {/* Navigation buttons */}
                   <div className="flex items-center gap-3 pt-1">
                     {step > 1 && (
                       <button
@@ -416,6 +502,7 @@ export default function AuthPage() {
                       </button>
                     ) : (
                       <button
+                        type="button"
                         onClick={handleRegister}
                         disabled={loading}
                         className="flex-1 bg-white text-[#2f5f73] font-bold py-3 rounded-xl text-base hover:bg-gray-100 transition-colors"
@@ -429,6 +516,7 @@ export default function AuthPage() {
                 <>
                   <InputField name="otp" placeholder="Enter OTP" value={formData.otp} handleChange={handleChange} />
                   <button
+                    type="button"
                     onClick={handleVerify}
                     disabled={loading}
                     className="w-full bg-white text-[#2f5f73] font-bold py-3 rounded-xl text-base hover:bg-gray-100 transition-colors"
@@ -440,14 +528,20 @@ export default function AuthPage() {
             </form>
           )}
 
-          {/* ================= LOGIN ================= */}
+          {/* ================= LOGIN (email OR username) ================= */}
           {activeTab === "login" && (
-            <form className="space-y-5">
+            <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
               <div>
                 <label className="block mb-2 font-medium text-white text-sm">
-                  Email address <span className="text-red-300">*</span>
+                  Email or Username <span className="text-red-300">*</span>
                 </label>
-                <InputField name="email" type="email" placeholder="Email address" value={formData.email} handleChange={handleChange} />
+                <InputField
+                  name="loginId"
+                  type="text"
+                  placeholder="Email address or Username"
+                  value={formData.loginId}
+                  handleChange={handleChange}
+                />
               </div>
 
               <div>
@@ -463,6 +557,7 @@ export default function AuthPage() {
               </div>
 
               <button
+                type="button"
                 onClick={handleLogin}
                 disabled={loading}
                 className="w-full bg-white text-[#1a1a1a] font-bold py-3 rounded-xl text-base hover:bg-gray-100 transition-colors"

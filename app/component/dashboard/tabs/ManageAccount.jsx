@@ -11,6 +11,7 @@ export default function ManageAccount() {
     phone: "",
     email: "",
     address: "",
+    account_type: "customer",
   });
 
   const [loading, setLoading] = useState(true);
@@ -34,11 +35,13 @@ export default function ManageAccount() {
       }
 
       const data = await res.json();
+      console.log("Profile response:", data);
       setProfile({
         username: data.username || "",
         phone: data.phone || "",
         email: data.email || "",
         address: data.address || "",
+        account_type: data.account_type || "customer",
       });
     } catch (err) {
       console.error("Profile fetch error:", err);
@@ -124,9 +127,23 @@ export default function ManageAccount() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-[#1a1a1a] mb-6">
-        Manage My Account
-      </h2>
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
+        <h2 className="text-2xl font-bold text-[#1a1a1a]">
+          Manage My Account
+        </h2>
+
+        <span
+          className={`text-xs font-bold px-3 py-1.5 rounded-full ${
+            profile.account_type === "reseller"
+              ? "bg-[#2f5f73] text-white"
+              : "bg-gray-100 text-gray-600"
+          }`}
+        >
+          {profile.account_type === "reseller"
+            ? "Reseller Account"
+            : "Normal Customer"}
+        </span>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* PERSONAL PROFILE CARD */}
