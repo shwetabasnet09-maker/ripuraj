@@ -72,8 +72,8 @@ export default function Header() {
 
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Image
-              src="/logo.png"
+          <Image
+              src={solid ? "/logo.png" : "/RipurajLogo.webp"}
               alt="RIPURAJ"
               width={150}
               height={60}

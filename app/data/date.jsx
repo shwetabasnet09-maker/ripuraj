@@ -144,7 +144,7 @@ export const products = [
     name: "Ripuraj Sonachoor GovindBhog | Kheer | Joha Rice",
     price: 1149,
     weights: ["26KG", "20KG", "10KG", "5KG"],
-    image: "/Ripuraj Sonachoor GovindBhog | Kheer | Joha Rice.webp",
+    image: "/Ripuraj-Sonachoor-GovindBhog-Kheer-Joha-Rice.webp",
     rating: 5,
 
     description:
@@ -209,7 +209,7 @@ export const products = [
     ]
   },
   {
-    slug: "ripuraj-annapoornae",
+    slug: "ripuraj-annapoorna",
     name: "Ripuraj Annapoorna",
     price: 1149,
     weights: ["26KG", "20KG", "10KG", "5KG"],
@@ -232,8 +232,8 @@ export const products = [
     ]
   },
   {
-    slug: "ripuraj-jeera-boiled-rice",
-    name: "Ripuraj Jeera Boiled Rice",
+    slug: "premium-jeera-boiled-rice",
+    name: "Premium Jeera Boiled Rice",
     price: 1149,
     weights: ["26KG", '10KG'],
     image: "/Ripuraj Jeera Boiled Rice.webp",
