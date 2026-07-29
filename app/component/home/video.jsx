@@ -5,9 +5,17 @@ import Image from "next/image";
 
 const YOUTUBE_ID = "UBii6jklDo0";
 
+// Set this to your own image path to use a custom thumbnail instead of
+// YouTube's auto-generated one. Set to null to fall back to YouTube's
+// thumbnail automatically.
+const CUSTOM_THUMBNAIL = "/video-thumbnail.jpg";
+
 const Video = () => {
   const [playing, setPlaying] = useState(false);
   const [thumbLoaded, setThumbLoaded] = useState(false);
+
+  const thumbnailSrc =
+    CUSTOM_THUMBNAIL || `https://img.youtube.com/vi/${YOUTUBE_ID}/maxresdefault.jpg`;
 
   return (
     <div className="py-10 lg:py-20 px-5 lg:px-0">
@@ -32,7 +40,7 @@ const Video = () => {
             )}
 
             <Image
-              src={`https://img.youtube.com/vi/${YOUTUBE_ID}/maxresdefault.jpg`}
+              src={thumbnailSrc}
               alt="Video thumbnail"
               fill
               unoptimized

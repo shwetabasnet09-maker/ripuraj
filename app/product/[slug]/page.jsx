@@ -30,7 +30,7 @@ export default function ProductHighlight() {
       
 
       {/* Main Section */}
-      <section className="w-400 bg-[#f5f5f5] py-14 px-4 md:px-14 font-sans relative overflow-hidden">
+      <section className="w-full  bg-[#f5f5f5] py-14 px-4 md:px-14 font-sans relative overflow-hidden">
 
         {/* Left Decorative Icon */}
         {/* <div className="absolute top-0 left-0 w-32 md:w-44 opacity-80">
