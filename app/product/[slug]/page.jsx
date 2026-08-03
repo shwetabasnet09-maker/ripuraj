@@ -217,13 +217,36 @@ export default function ProductHighlight() {
 
   return (
     <>
-      <Bannermain
-        backgroundImg="/About Banner.webp"
-        title={product.name}
-      />
+      {/* Breadcrumb */}
+      <Bannermain backgroundImg="/About%20Banner.webp" title={product.name} />
+      
 
-      <section className="bg-[#f5f5f5] py-14 px-4 md:px-14">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+      {/* Main Section */}
+      <section className="w-full  bg-[#f5f5f5] py-14 px-4 md:px-14 font-sans relative overflow-hidden">
+
+        {/* Left Decorative Icon */}
+        {/* <div className="absolute top-0 left-0 w-32 md:w-44 opacity-80">
+          <Image
+            src="/leftpea.png"
+            alt="left design"
+            width={180}
+            height={180}
+            className="w-full h-auto"
+          />
+        </div>
+
+        {/* Right Decorative Icon */}
+        {/* <div className="absolute top-0 right-0 w-32 md:w-44 opacity-80 ">
+          <Image
+            src="/rightpea.png"
+            alt="right design"
+            width={180}
+            height={180}
+            className="w-full h-auto"
+          />
+        </div> */} 
+
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
 
           {/* Product Image */}
           <div className="bg-[#EDEDED] rounded-[40px] h-[560px] flex items-center justify-center overflow-hidden">
