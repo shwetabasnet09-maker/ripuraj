@@ -43,7 +43,7 @@ const products = [
     slug: "ripuraj-sonachoor-govindBhog",
     name: "Ripuraj Sonachoor GovindBhog",
     weight: "5Kg - 20Kg",
-    image: "/Ripuraj Sonachoor GovindBhog | Kheer | Joha Rice.webp",
+    image: "/Ripuraj-Sonachoor.webp",
   },
   {
     id: 6,

@@ -2,12 +2,14 @@
 //
 // Wraps fetch() so that:
 // 1. It automatically attaches the current access_token.
-// 2. If the server rejects the token (401 / "token not valid"), it
-//    tries once to refresh the token using the stored refresh_token.
+// 2. If the server rejects the request with a 401 for ANY reason
+//    (expired token, malformed token, or no token attached at all),
+//    it tries once to refresh the token using the stored refresh_token.
 // 3. If the refresh succeeds, it retries the original request with
 //    the new access_token.
-// 4. If the refresh also fails, it clears stored tokens and redirects
-//    the user to /login instead of showing a raw backend error.
+// 4. If there's no refresh_token, or the refresh also fails, it clears
+//    stored tokens and redirects the user to /login instead of showing
+//    a raw backend error.
 //
 // Usage (replaces a normal fetch call):
 //   const res = await authFetch(`${API_BASE_URL}/api/cart/add/`, {
@@ -44,16 +46,6 @@ async function refreshAccessToken() {
   }
 }
 
-function isTokenError(status, data) {
-  if (status !== 401) return false;
-  const message = JSON.stringify(data || "").toLowerCase();
-  return (
-    message.includes("token not valid") ||
-    message.includes("token_not_valid") ||
-    message.includes("expired")
-  );
-}
-
 export async function authFetch(url, options = {}) {
   const token = localStorage.getItem("access_token");
 
@@ -67,32 +59,28 @@ export async function authFetch(url, options = {}) {
 
   let res = await fetch(url, buildOptions(token));
 
-  // If the token was rejected, try refreshing once and retry.
+  // NOTE: previously this only retried when the 401's error message
+  // matched specific "token not valid"/"expired" strings. That missed
+  // the very common case of `access_token` simply being absent from
+  // localStorage — DRF returns "Authentication credentials were not
+  // provided." for that, which didn't match, so no refresh was ever
+  // attempted even when a valid refresh_token was available.
+  // Now: any 401 triggers a refresh attempt, since a refresh is cheap
+  // and harmless to try regardless of the exact rejection reason.
   if (res.status === 401) {
-    let data = null;
-    try {
-      data = await res.clone().json();
-    } catch (_) {
-      // response wasn't JSON — leave data as null
-    }
+    const newToken = await refreshAccessToken();
 
-    if (isTokenError(res.status, data)) {
-      const newToken = await refreshAccessToken();
-
-      if (newToken) {
-        res = await fetch(url, buildOptions(newToken));
-      } else {
-        // Refresh failed — session is truly over. Clear stale tokens
-        // and send the user to log in again instead of showing a
-        // confusing raw backend error.
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-
-        if (typeof window !== "undefined") {
-          alert("Your session has expired. Please log in again.");
-          window.location.href = "/login";
-        }
-      }
+    if (newToken) {
+      res = await fetch(url, buildOptions(newToken));
+    } else if (typeof window !== "undefined") {
+      // No refresh_token, or the refresh attempt itself failed — the
+      // session is genuinely over. Clear stale tokens and send the
+      // user to log in again instead of showing a confusing raw
+      // backend error.
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      alert("Your session has expired. Please log in again.");
+      window.location.href = "/login";
     }
   }
 

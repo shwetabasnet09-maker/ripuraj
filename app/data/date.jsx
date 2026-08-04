@@ -144,7 +144,7 @@ export const products = [
     name: "Ripuraj Sonachoor GovindBhog | Kheer | Joha Rice",
     price: 1149,
     weights: ["26KG", "20KG", "10KG", "5KG"],
-    image: "/Ripuraj-Sonachoor-GovindBhog-Kheer-Joha-Rice.webp",
+    image: "/Ripuraj Sonachoor Rice.webp",
     rating: 5,
 
     description:

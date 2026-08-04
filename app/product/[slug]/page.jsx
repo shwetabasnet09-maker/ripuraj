@@ -141,7 +141,7 @@ export default function ProductHighlight() {
 
             {/* BUTTON */}
             <Link
-              href="/shop"
+              href={`/shop/${product.slug}`}
               className="mt-5 inline-block bg-[#3a6372] hover:bg-[#2f515d] text-white px-10 py-4 rounded-md font-semibold text-lg transition"
             >
               SHOP NOW
