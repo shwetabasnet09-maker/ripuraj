@@ -8,7 +8,7 @@ const YOUTUBE_ID = "UBii6jklDo0";
 // Set this to your own image path to use a custom thumbnail instead of
 // YouTube's auto-generated one. Set to null to fall back to YouTube's
 // thumbnail automatically.
-const CUSTOM_THUMBNAIL = "/video-thumbnail.jpg";
+const CUSTOM_THUMBNAIL = "/Thumbnail.jpeg";
 
 const Video = () => {
   const [playing, setPlaying] = useState(false);
@@ -19,7 +19,7 @@ const Video = () => {
 
   return (
     <div className="py-10 lg:py-20 px-5 lg:px-0">
-      <div className="wrapper w-full h-[220px] sm:h-[320px] md:h-[420px] lg:h-[501px] rounded-2xl lg:rounded-[25px] overflow-hidden relative bg-gray-200">
+      <div className="wrapper w-full h-[220px] sm:h-[320px] md:h-[420px] lg:h-[500px] rounded-2xl lg:rounded-[25px] overflow-hidden relative bg-gray-200">
         {playing ? (
           <iframe
             className="w-full h-full"

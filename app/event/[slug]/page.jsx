@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import Bannermain from "../../component/global/Banner";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
@@ -21,6 +22,10 @@ export default function EventDetailPage({ params }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [notFoundState, setNotFoundState] = useState(false);
+
+  // Lightbox state — which gallery image (by index) is currently open.
+  // null means the lightbox is closed.
+  const [lightboxIndex, setLightboxIndex] = useState(null);
 
   // params is a Promise in Next.js 15+ — resolve it once on mount.
   useEffect(() => {
@@ -48,7 +53,6 @@ export default function EventDetailPage({ params }) {
       }
 
       const data = await res.json();
-      console.log("Event gallery response:", data);
       setEvent(data);
     } catch (err) {
       console.error("Failed to fetch event:", err);
@@ -67,6 +71,29 @@ export default function EventDetailPage({ params }) {
   useEffect(() => {
     if (slug) fetchEvent(slug);
   }, [slug]);
+
+  const gallery = event ? event.gallery || event.images || [] : [];
+  const galleryUrls = gallery.map((img) =>
+    resolveImageUrl(typeof img === "string" ? img : img.image)
+  );
+
+  // Close on Escape, navigate with arrow keys while the lightbox is open.
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setLightboxIndex(null);
+      if (e.key === "ArrowRight") {
+        setLightboxIndex((i) => (i + 1) % galleryUrls.length);
+      }
+      if (e.key === "ArrowLeft") {
+        setLightboxIndex((i) => (i - 1 + galleryUrls.length) % galleryUrls.length);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxIndex, galleryUrls.length]);
 
   // ---------------- LOADING ----------------
   if (loading) {
@@ -119,7 +146,6 @@ export default function EventDetailPage({ params }) {
 
   const title = event.title || event.name;
   const description = event.description;
-  const gallery = event.gallery || event.images || [];
 
   return (
     <>
@@ -132,35 +158,31 @@ export default function EventDetailPage({ params }) {
           </h1>
 
           {description && (
-            <p className="text-gray-600 text-[15px] md:text-base leading-relaxed text-center max-w-3xl mx-auto mb-12">
+            <p className="text-gray-600 text-[15px] md:text-base leading-relaxed text-center max-w-3xl mx-auto mb-5">
               {description}
             </p>
           )}
 
-          {gallery.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {gallery.map((img, i) => {
-                const imageUrl = resolveImageUrl(
-                  typeof img === "string" ? img : img.image
-                );
-
-                return (
-                  <div
-                    key={i}
-                    className="relative h-[200px] rounded-2xl overflow-hidden shadow-md group"
-                  >
-                    {imageUrl && (
-                      <Image
-                        src={imageUrl}
-                        alt={`${title} photo ${i + 1}`}
-                        fill
-                        unoptimized
-                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                      />
-                    )}
-                  </div>
-                );
-              })}
+          {galleryUrls.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {galleryUrls.map((imageUrl, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setLightboxIndex(i)}
+                  className="relative h-[200px] rounded-2xl overflow-hidden shadow-md group cursor-zoom-in"
+                >
+                  {imageUrl && (
+                    <Image
+                      src={imageUrl}
+                      alt={`${title} photo ${i + 1}`}
+                      fill
+                      unoptimized
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                    />
+                  )}
+                </button>
+              ))}
             </div>
           )}
 
@@ -174,6 +196,70 @@ export default function EventDetailPage({ params }) {
           </div>
         </div>
       </section>
+
+      {/* ================= LIGHTBOX ================= */}
+      {lightboxIndex !== null && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-5"
+          onClick={() => setLightboxIndex(null)}
+        >
+          <button
+            onClick={() => setLightboxIndex(null)}
+            className="absolute top-5 right-5 z-10 bg-white rounded-full p-2 shadow hover:scale-110 active:scale-95 transition-transform"
+          >
+            <X size={28} />
+          </button>
+
+          {galleryUrls.length > 1 && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex(
+                    (i) => (i - 1 + galleryUrls.length) % galleryUrls.length
+                  );
+                }}
+                className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-10 bg-white/90 rounded-full p-2 shadow hover:scale-110 active:scale-95 transition-transform"
+              >
+                <ChevronLeft size={24} />
+              </button>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex((i) => (i + 1) % galleryUrls.length);
+                }}
+                className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-10 bg-white/90 rounded-full p-2 shadow hover:scale-110 active:scale-95 transition-transform"
+              >
+                <ChevronRight size={24} />
+              </button>
+            </>
+          )}
+
+          <div
+            className="relative bg-white rounded-3xl max-w-5xl w-full h-[85vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative w-full h-full">
+              {galleryUrls[lightboxIndex] && (
+                <Image
+                  src={galleryUrls[lightboxIndex]}
+                  alt={`${title} photo ${lightboxIndex + 1}`}
+                  fill
+                  unoptimized
+                  className="object-contain p-8"
+                />
+              )}
+            </div>
+          </div>
+
+          {galleryUrls.length > 1 && (
+            <p className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/80 text-sm">
+              {lightboxIndex + 1} / {galleryUrls.length}
+            </p>
+          )}
+        </div>
+      )}
     </>
   );
 }
