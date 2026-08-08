@@ -6,7 +6,7 @@ export default function ShippingPolicyPage() {
       <Bannermain backgroundImg="/aboutbanner.png" title="Shipping Policy" />
 
       <section className="py-16 md:py-20 px-4 bg-white">
-        <div className="max-w-3xl mx-auto">
+        <div className="w-full p-4 md:px-28 py-0 bg-white">
           <h1 className="text-2xl md:text-3xl font-bold text-[#2f5f73] mb-6">
             Shipping Policy
           </h1>

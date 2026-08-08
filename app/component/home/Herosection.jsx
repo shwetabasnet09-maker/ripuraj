@@ -44,19 +44,19 @@ const Herodiv = () => {
   // ---------------- LOADING SKELETON ----------------
   if (slides === null) {
     return (
-      <div className="h-[560px] md:h-[786px] bg-neutral-900 animate-pulse" />
+      <div className="h-[220px] sm:h-[320px] md:h-[786px] bg-neutral-900 animate-pulse" />
     );
   }
 
   // ---------------- NO DATA ----------------
   if (slides.length === 0) {
-    return <div className="h-[560px] md:h-[786px] bg-neutral-900" />;
+    return <div className="h-[220px] sm:h-[320px] md:h-[786px] bg-neutral-900" />;
   }
 
   const hasMultiple = slides.length > 1;
 
   return (
-    <div className="relative group h-[560px] md:h-[786px] overflow-hidden bg-neutral-900">
+    <div className="relative group h-auto md:h-[786px] overflow-hidden bg-neutral-900">
       <Swiper
         modules={[Autoplay, EffectFade]}
         effect="fade"
@@ -74,11 +74,14 @@ const Herodiv = () => {
       >
         {slides.map((hero, index) => (
           <SwiperSlide key={hero.id || index}>
-            <div
-              className="h-full w-full bg-cover bg-center"
-              style={{
-                backgroundImage: `url(${API_BASE_URL}${hero.image})`,
-              }}
+            {/* Mobile: show the whole image, letterboxed if needed —
+                no cropping, matches the reference. Desktop: fill the
+                tall hero band, cropping is fine since there's more
+                room to work with. */}
+            <img
+              src={`${API_BASE_URL}${hero.image}`}
+              alt={hero.title || "Hero banner"}
+              className="w-full h-full object-contain md:object-cover bg-neutral-900"
             />
           </SwiperSlide>
         ))}
@@ -130,4 +133,4 @@ const Herodiv = () => {
   );
 };
 
-export default Herodiv; 
+export default Herodiv;

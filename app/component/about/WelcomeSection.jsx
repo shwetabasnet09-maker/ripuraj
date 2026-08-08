@@ -11,7 +11,7 @@ const RipurajHero = () => {
         <div className="overflow-hidden rounded-[42px] grid grid-cols-12 items-stretch">
 
           {/* LEFT */}
-          <div className="col-span-12 lg:col-span-7 bg-[#2F657C] px-8 md:px-14 py-14 text-white relative">
+          <div className="col-span-12 lg:col-span-7 bg-[#2F657C] px-8 md:px-14 py-12 text-white relative">
 
             {/* Top Badge */}
             <div className="inline-block rounded-full bg-[#F6E7C8] font-medium px-2 py-1 text-[15px]  text-black">

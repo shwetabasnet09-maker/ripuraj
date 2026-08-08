@@ -9,7 +9,7 @@ export default function GoogleMapClone() {
 
   return (
     <AnimateIn>
-      <div className="p-14 md:p-14 bg-white">
+      <div className="p-5 md:p-14 bg-white">
         <div className="max-w-7xl mx-auto rounded-[40px] overflow-hidden shadow-xl h-[400px] md:h-[500px] relative">
           <iframe
             src={mapSrc}

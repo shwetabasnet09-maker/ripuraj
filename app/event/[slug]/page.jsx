@@ -164,13 +164,13 @@ export default function EventDetailPage({ params }) {
           )}
 
           {galleryUrls.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {galleryUrls.map((imageUrl, i) => (
                 <button
                   key={i}
                   type="button"
                   onClick={() => setLightboxIndex(i)}
-                  className="relative h-[200px] rounded-2xl overflow-hidden shadow-md group cursor-zoom-in"
+                  className="relative h-[150px] rounded-2xl overflow-hidden shadow-md group cursor-zoom-in"
                 >
                   {imageUrl && (
                     <Image

@@ -3,17 +3,55 @@
 import Image from "next/image";
 import { Check, ChevronRight } from "lucide-react";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { products } from "../../data/date";
 import Link from "next/link";
 import Bannermain from "../../component/global/Banner";
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 export default function ProductHighlight() {
   const params = useParams();
-  const slug = Array.isArray(params.slug)
-    ? params.slug[0]
-    : params.slug;
+  const slug = Array.isArray(params.slug) ? params.slug[0] : params.slug;
 
   const product = products.find((p) => p.slug === slug);
+
+  // Some products in the static list don't actually have a matching
+  // entry in the real backend (so /shop/{slug} would 404 for them).
+  // Check the real product list once, and only link to the specific
+  // shop page if the slug is genuinely there — otherwise fall back to
+  // the general /shop listing.
+  const [hasShopPage, setHasShopPage] = useState(true);
+
+  useEffect(() => {
+    if (!product) return;
+    let cancelled = false;
+
+    async function checkShopPage() {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/products/`, {
+          cache: "no-store",
+        });
+        if (!res.ok) return;
+
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : [];
+        const exists = list.some((p) => p.slug === product.slug);
+
+        if (!cancelled) setHasShopPage(exists);
+      } catch (err) {
+        console.error("Failed to verify shop page:", err);
+        // On failure, assume it exists rather than silently breaking
+        // the button — worst case the user hits a 404 and can go back.
+      }
+    }
+
+    checkShopPage();
+    return () => {
+      cancelled = true;
+    };
+  }, [product]);
 
   if (!product) {
     return (
@@ -23,37 +61,15 @@ export default function ProductHighlight() {
     );
   }
 
+  const shopHref = hasShopPage ? `/shop/${product.slug}` : "/shop";
+
   return (
     <>
       {/* Breadcrumb */}
       <Bannermain backgroundImg="/About%20Banner.webp" title={product.name} />
-      
 
       {/* Main Section */}
       <section className="w-full  bg-[#f5f5f5] py-14 px-4 md:px-14 font-sans relative overflow-hidden">
-
-        {/* Left Decorative Icon */}
-        {/* <div className="absolute top-0 left-0 w-32 md:w-44 opacity-80">
-          <Image
-            src="/leftpea.png"
-            alt="left design"
-            width={180}
-            height={180}
-            className="w-full h-auto"
-          />
-        </div>
-
-        {/* Right Decorative Icon */}
-        {/* <div className="absolute top-0 right-0 w-32 md:w-44 opacity-80 ">
-          <Image
-            src="/rightpea.png"
-            alt="right design"
-            width={180}
-            height={180}
-            className="w-full h-auto"
-          />
-        </div> */} 
-
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center relative z-10">
 
           {/* LEFT IMAGE */}
@@ -141,7 +157,7 @@ export default function ProductHighlight() {
 
             {/* BUTTON */}
             <Link
-              href={`/shop/${product.slug}`}
+              href={shopHref}
               className="mt-5 inline-block bg-[#3a6372] hover:bg-[#2f515d] text-white px-10 py-4 rounded-md font-semibold text-lg transition"
             >
               SHOP NOW

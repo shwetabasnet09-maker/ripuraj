@@ -36,9 +36,9 @@ const Factories = () => {
           </div>
 
           {/* RIGHT CONTENT */}
-          <div className="bg-[#FFF8E2] p-8 lg:p-12 flex flex-col justify-center rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none">
+          <div className="bg-[#FFF8E2] p-3 lg:p-12 flex flex-col justify-center rounded-b-3xl lg:rounded-r-3xl lg:rounded-bl-none">
             
-            <h2 className="text-[35px] font-bold text-black leading-tight">
+            <h2 className="text-[35px] sm:text-[20px] font-bold text-black leading-tight">
             Where Every Grain Meets{" "}
               <span className="text-[#306177]">Our Highest Standards</span>
             </h2>

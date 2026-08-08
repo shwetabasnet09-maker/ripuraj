@@ -104,7 +104,7 @@ export default function TermsAndConditionsPage() {
       <Bannermain backgroundImg="/aboutbanner.png" title="Terms and Conditions" />
 
       <section className="py-16 md:py-20 px-4 bg-white">
-        <div className="max-w-3xl mx-auto">
+        <div className="w-full p-4 md:px-28 py-0 bg-white">
           <h1 className="text-2xl md:text-3xl font-bold text-[#2f5f73] mb-6">
             Read Our Terms and Conditions
           </h1>
