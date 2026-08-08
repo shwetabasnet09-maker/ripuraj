@@ -1317,7 +1317,7 @@ export default function ProductDetail({ params }) {
                         fill
                         unoptimized
                         sizes="240px"
-                        className="object-contain p-6 transition-transform duration-500 ease-out group-hover:scale-110"
+                        className="object-contain p-7 transition-transform duration-500 ease-out group-hover:scale-110"
                       />
                     )}
                   </div>
