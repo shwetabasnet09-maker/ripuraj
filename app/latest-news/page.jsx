@@ -10,14 +10,9 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 // ==================================================================
 // NewsCard (inlined from component/latestnew.jsx/NewsCard.jsx)
 // ==================================================================
-function NewsCard({ id, slug, image, title, short_description }) {
-  // Some news items have an empty slug from the backend — fall back to
-  // the numeric id so the link always points somewhere valid instead of
-  // a broken "/latest-news/" URL.
-  const linkTarget = slug && slug.trim() ? slug : id;
-
+function NewsCard({ title, image, url }) {
   return (
-    <Link href={`/latest-news/${linkTarget}`}>
+    <Link href={url || "#"}>
       <div className="group cursor-pointer">
         {/* Image */}
         <div className="relative h-64 bg-[#2f5f73] rounded-[21px] overflow-hidden">
@@ -40,13 +35,6 @@ function NewsCard({ id, slug, image, title, short_description }) {
         <p className="text-center text-[#2f5f73] font-medium text-[20px] mt-4">
           {title}
         </p>
-
-        {/* Short description */}
-        {/* {short_description && (
-          <p className="text-center text-gray-500 text-sm mt-2 line-clamp-2">
-            {short_description}
-          </p>
-        )} */}
       </div>
     </Link>
   );
@@ -257,8 +245,13 @@ export default function LatestNewsPage() {
           {/* ---------------- NEWS GRID ---------------- */}
           {!loading && !error && newsItems.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
-              {newsItems.map((news) => (
-                <NewsCard key={news.id} {...news} />
+              {newsItems.map((news, i) => (
+                <NewsCard
+                  key={news.id ?? news.url ?? i}
+                  title={news.title}
+                  image={news.image}
+                  url={news.url}
+                />
               ))}
             </div>
           )}
