@@ -14,12 +14,33 @@ import {
   ChevronRight,
   Check,
   Download,
+  Trash2,
 } from "lucide-react";
 import { authFetch } from "../../utils/authFetch";
 import { cachedFetchJson } from "../../utils/cachedFetch";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
+// Decode a JWT's payload without any extra dependency, just so we can
+// tell which review (if any) in the list belongs to the logged-in user.
+// Returns null if there's no token or it can't be parsed.
+function decodeJwtPayload(token) {
+  if (!token) return null;
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+}
 
 function Reveal({ children, className = "", delay = 0 }) {
   const ref = React.useRef(null);
@@ -164,6 +185,65 @@ function parseFaqText(raw) {
   return items.length > 0 ? items : null;
 }
 
+// ---------------- REVIEW HELPERS ----------------
+// We don't yet know the exact serializer shape your /api/reviews/
+// endpoint returns, so these helpers are written defensively: they try
+// several plausible field names rather than assuming one. Once you
+// confirm the real shape, this can be trimmed down.
+
+// Confirmed from the live API response: `product` is a flat integer id.
+function reviewBelongsToProduct(review, product) {
+  if (!review || !product) return false;
+  return Number(review.product) === Number(product.id);
+}
+
+// Confirmed: `user` is a flat integer id.
+function reviewBelongsToUser(review, userId) {
+  if (!review || userId == null) return false;
+  return Number(review.user) === Number(userId);
+}
+
+function StarRatingDisplay({ value, size = 13 }) {
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <Star
+          key={n}
+          size={size}
+          fill={n <= Math.round(value || 0) ? "#facc15" : "none"}
+          className={n <= Math.round(value || 0) ? "text-yellow-400" : "text-gray-200"}
+        />
+      ))}
+    </div>
+  );
+}
+
+function StarRatingInput({ value, onChange }) {
+  return (
+    <div className="flex items-center gap-1">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <button
+          key={n}
+          type="button"
+          onClick={() => onChange(n)}
+          className="cursor-pointer"
+        >
+          <Star
+            size={26}
+            fill={n <= value ? "#facc15" : "none"}
+            className={n <= value ? "text-yellow-400" : "text-gray-200"}
+          />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// Confirmed: the API already gives us a plain `username` string per review.
+function displayName(review) {
+  return review.username || "Anonymous";
+}
+
 export default function ProductDetail({ params }) {
   const { slug } = React.use(params);
   const router = useRouter();
@@ -179,6 +259,26 @@ export default function ProductDetail({ params }) {
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // ---------------- REVIEWS STATE ----------------
+  const [reviews, setReviews] = useState([]);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
+  const [reviewsError, setReviewsError] = useState(null);
+  const [ratingFilter, setRatingFilter] = useState("All");
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewFormData, setReviewFormData] = useState({ rating: 5, comment: "" });
+  const [deletingReviewId, setDeletingReviewId] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const token = localStorage.getItem("access_token");
+    const payload = decodeJwtPayload(token);
+    if (payload) {
+      setCurrentUserId(payload.user_id ?? payload.id ?? payload.pk ?? null);
+    }
+  }, []);
 
   useEffect(() => {
     if (images.length <= 1 || isModalOpen) return;
@@ -294,6 +394,143 @@ export default function ProductDetail({ params }) {
     };
   }, [slug]);
 
+  // ---------------- FETCH REVIEWS FOR THIS PRODUCT ----------------
+  // Anonymous visitors need to see reviews too, so this uses plain
+  // fetch() rather than authFetch() — no auth required just to read.
+  // We try filtering server-side via ?product=<id>, and ALSO filter
+  // client-side against several possible field names, in case the
+  // backend ignores the query param or uses a different key.
+  useEffect(() => {
+    if (!product?.id) return;
+    let cancelled = false;
+
+    async function fetchReviews() {
+      setReviewsLoading(true);
+      setReviewsError(null);
+
+      try {
+        const res = await fetch(
+          `${API_BASE_URL}/api/reviews/?product=${product.id}`,
+          { signal: AbortSignal.timeout(10000) }
+        );
+
+        if (!res.ok) throw new Error(`Server returned status ${res.status}`);
+
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : data.results || [];
+        const filtered = list.filter((r) => reviewBelongsToProduct(r, product));
+
+        if (!cancelled) {
+          // If nothing matched our client-side filter but the server
+          // did return something, trust the server's filtering instead
+          // of assuming our field-name guesses were wrong.
+          setReviews(filtered.length > 0 ? filtered : list);
+        }
+      } catch (err) {
+        console.error("Failed to fetch reviews:", err);
+        if (!cancelled) {
+          setReviewsError(
+            err.name === "TimeoutError" || err.name === "AbortError"
+              ? "Reviews took too long to load."
+              : "Couldn't load reviews."
+          );
+        }
+      } finally {
+        if (!cancelled) setReviewsLoading(false);
+      }
+    }
+
+    fetchReviews();
+    return () => {
+      cancelled = true;
+    };
+  }, [product?.id]);
+
+  const refetchReviews = async () => {
+    if (!product?.id) return;
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/reviews/?product=${product.id}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      const list = Array.isArray(data) ? data : data.results || [];
+      const filtered = list.filter((r) => reviewBelongsToProduct(r, product));
+      setReviews(filtered.length > 0 ? filtered : list);
+    } catch (err) {
+      console.error("Failed to refresh reviews:", err);
+    }
+  };
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      alert("Please login first");
+      router.push("/login");
+      return;
+    }
+
+    if (!reviewFormData.comment.trim()) {
+      alert("Please write a few words about the product.");
+      return;
+    }
+
+    setReviewSubmitting(true);
+
+    try {
+      const res = await authFetch(`${API_BASE_URL}/api/reviews/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product: product.id,
+          rating: reviewFormData.rating,
+          comment: reviewFormData.comment,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        const errorMsg =
+          data.detail ||
+          data.error ||
+          (typeof data === "object" ? JSON.stringify(data) : "Failed to submit review");
+        alert(errorMsg);
+        return;
+      }
+
+      setShowReviewForm(false);
+      setReviewFormData({ rating: 5, comment: "" });
+      refetchReviews();
+    } catch (err) {
+      console.error("Failed to submit review:", err);
+      alert("Couldn't submit your review. Please try again.");
+    } finally {
+      setReviewSubmitting(false);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    if (!confirm("Delete your review? This can't be undone.")) return;
+
+    setDeletingReviewId(reviewId);
+    const previous = reviews;
+    setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+
+    try {
+      const res = await authFetch(`${API_BASE_URL}/api/reviews/${reviewId}/`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete review");
+    } catch (err) {
+      console.error("Failed to delete review:", err);
+      setReviews(previous);
+      alert("Couldn't delete this review. Please try again.");
+    } finally {
+      setDeletingReviewId(null);
+    }
+  };
+
   const handleAction = async (type) => {
     try {
       setButtonLoading(true);
@@ -336,6 +573,16 @@ export default function ProductDetail({ params }) {
       setButtonLoading(false);
     }
   };
+
+  const visibleReviews =
+    ratingFilter === "All"
+      ? reviews
+      : reviews.filter((r) => Math.round(r.rating) === Number(ratingFilter));
+
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + (Number(r.rating) || 0), 0) / reviews.length
+      : Number(product?.rating) || 0;
 
   const handleRecommendedScroll = () => {
     const el = scrollRef.current;
@@ -467,13 +714,11 @@ export default function ProductDetail({ params }) {
             </h1>
 
             <div className="flex items-center gap-2 mt-2">
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={14} fill="#facc15" className="text-yellow-400" />
-                ))}
-              </div>
-
-              <p className="text-gray-600 text-sm">{product.rating || 4.9} · 100 reviews</p>
+              <StarRatingDisplay value={averageRating} size={14} />
+              <p className="text-gray-600 text-sm">
+                {averageRating ? averageRating.toFixed(1) : "No ratings yet"} · {reviews.length}{" "}
+                {reviews.length === 1 ? "review" : "reviews"}
+              </p>
             </div>
 
             <div className="mt-3">
@@ -872,60 +1117,181 @@ export default function ProductDetail({ params }) {
         <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-5xl font-black text-[#1e1e1e]">{Math.round(product.rating || 5)}</span>
-              <div className="flex items-center gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={16} fill="#facc15" className="text-yellow-400" />
-                ))}
-              </div>
+              <span className="text-5xl font-black text-[#1e1e1e]">
+                {averageRating ? averageRating.toFixed(1) : "—"}
+              </span>
+              <StarRatingDisplay value={averageRating} size={16} />
             </div>
-            <p className="text-gray-500 text-sm mt-1">100 reviews</p>
+            <p className="text-gray-500 text-sm mt-1">
+              {reviews.length} {reviews.length === 1 ? "review" : "reviews"}
+            </p>
           </div>
 
           <div className="flex items-center gap-2">
-            {["All", "5★", "4★"].map((filter) => (
-              <button key={filter} className="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1.5 rounded-md transition-colors">
-                {filter}
+            {["All", "5", "4", "3", "2", "1"].map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setRatingFilter(filter)}
+                className={`text-xs font-semibold px-3 py-1.5 rounded-md transition-colors ${
+                  ratingFilter === filter
+                    ? "bg-[#2e6378] text-white"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                }`}
+              >
+                {filter === "All" ? "All" : `${filter}★`}
               </button>
             ))}
+
+            <button
+              onClick={() => setShowReviewForm(true)}
+              className="ml-2 bg-[#2e6378] hover:bg-[#234d5d] text-white text-xs font-semibold px-4 py-1.5 rounded-md transition-colors"
+            >
+              Write a review
+            </button>
           </div>
         </div>
 
-        <div className="space-y-4">
-          {[1, 2, 3].map((_, i) => (
-            <Reveal key={i} delay={i * 100}>
-              <div className={`bg-gray-50 rounded-lg p-5 transition-shadow hover:shadow-md ${i === 1 ? "border-2 border-blue-400" : ""}`}>
-                <div className="flex items-start justify-between flex-wrap gap-2">
-                  <div>
-                    <div className="flex items-center gap-0.5">
-                      {[...Array(5)].map((_, s) => (
-                        <Star key={s} size={13} fill="#facc15" className="text-yellow-400" />
-                      ))}
+        {reviewsLoading && (
+          <div className="space-y-4">
+            {[0, 1].map((i) => (
+              <div key={i} className="bg-gray-50 rounded-lg p-5 animate-pulse">
+                <div className="h-4 w-24 bg-gray-200 rounded mb-3" />
+                <div className="h-3 w-full bg-gray-200 rounded mb-2" />
+                <div className="h-3 w-2/3 bg-gray-200 rounded" />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!reviewsLoading && reviewsError && (
+          <div className="bg-gray-50 rounded-lg p-8 text-center text-sm text-gray-500">
+            {reviewsError}
+          </div>
+        )}
+
+        {!reviewsLoading && !reviewsError && visibleReviews.length === 0 && (
+          <div className="bg-gray-50 rounded-lg p-8 text-center text-sm text-gray-500">
+            {reviews.length === 0
+              ? "No reviews yet — be the first to review this product."
+              : "No reviews match this filter."}
+          </div>
+        )}
+
+        {!reviewsLoading && !reviewsError && visibleReviews.length > 0 && (
+          <div className="space-y-4">
+            {visibleReviews.map((review, i) => {
+              const isMine = reviewBelongsToUser(review, currentUserId);
+              return (
+                <Reveal key={review.id ?? i} delay={i * 80}>
+                  <div
+                    className={`bg-gray-50 rounded-lg p-5 transition-shadow hover:shadow-md ${
+                      isMine ? "border-2 border-blue-400" : ""
+                    }`}
+                  >
+                    <div className="flex items-start justify-between flex-wrap gap-2">
+                      <div>
+                        <StarRatingDisplay value={review.rating} />
+                        <p className="text-sm mt-1">
+                          <span className="text-gray-700">
+                            {isMine ? "You" : displayName(review)}
+                          </span>{" "}
+                          <span className="text-[#2c5c43] font-medium">
+                            Verified Purchase
+                          </span>
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {review.created_at && (
+                          <span className="text-gray-400 text-xs">
+                            {new Date(review.created_at).toLocaleDateString()}
+                          </span>
+                        )}
+                        {isMine && (
+                          <button
+                            onClick={() => handleDeleteReview(review.id)}
+                            disabled={deletingReviewId === review.id}
+                            aria-label="Delete review"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <p className="text-sm mt-1">
-                      <span className="text-gray-700">9***7</span>{" "}
-                      <span className="text-[#2c5c43] font-medium">Verified Purchase</span>
+
+                    <p className="text-gray-600 text-sm leading-relaxed mt-3">
+                      {review.comment || review.text}
                     </p>
                   </div>
-                  <span className="text-gray-400 text-xs">4 weeks ago</span>
-                </div>
-
-                <p className="text-gray-600 text-sm leading-relaxed mt-3">
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever.
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-end gap-2 mt-6">
-          {[1, 2, 3, 4].map((page) => (
-            <button key={page} className="w-8 h-8 rounded-md bg-gray-100 hover:bg-gray-200 hover:scale-110 active:scale-95 text-gray-700 text-xs font-semibold transition-all">
-              {page}
-            </button>
-          ))}
-        </div>
+                </Reveal>
+              );
+            })}
+          </div>
+        )}
       </Reveal>
+
+      {/* ================= WRITE REVIEW MODAL ================= */}
+      {showReviewForm && (
+        <div
+          className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+          onClick={() => setShowReviewForm(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-lg font-bold text-slate-800">
+                Write a review for {product.name}
+              </h3>
+              <button
+                onClick={() => setShowReviewForm(false)}
+                className="text-slate-400 hover:text-slate-600"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmitReview} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                  Rating
+                </label>
+                <StarRatingInput
+                  value={reviewFormData.rating}
+                  onChange={(val) =>
+                    setReviewFormData({ ...reviewFormData, rating: val })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">
+                  Your review
+                </label>
+                <textarea
+                  value={reviewFormData.comment}
+                  onChange={(e) =>
+                    setReviewFormData({ ...reviewFormData, comment: e.target.value })
+                  }
+                  rows={4}
+                  placeholder="Share your experience with this product..."
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#2f5f73]/30"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={reviewSubmitting}
+                className="w-full bg-[#2f5f73] hover:bg-[#244a5a] text-white font-semibold py-3 rounded-xl text-sm transition-colors disabled:opacity-70"
+              >
+                {reviewSubmitting ? "Submitting..." : "Submit review"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* ================= MORE RECOMMENDED PRODUCTS ================= */}
       {recommended.length > 0 && (

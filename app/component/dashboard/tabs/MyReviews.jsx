@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Star, Trash2, Pencil, MessageSquareOff } from "lucide-react";
+import { Star, Trash2, MessageSquareOff } from "lucide-react";
 import { authFetch } from "../../../utils/authFetch";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
@@ -42,7 +42,7 @@ export default function MyReviews() {
     setError(null);
 
     try {
-      const res = await authFetch(`${API_BASE_URL}/api/reviews/my/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/reviews/`, {
         headers: { "Content-Type": "application/json" },
         signal: AbortSignal.timeout(10000),
       });
@@ -52,7 +52,7 @@ export default function MyReviews() {
       }
 
       const data = await res.json();
-      console.log("My reviews response:", data);
+      console.log("Reviews response:", data);
       setReviews(Array.isArray(data) ? data : data.results || []);
     } catch (err) {
       console.error("Failed to fetch reviews:", err);
@@ -60,10 +60,6 @@ export default function MyReviews() {
         setError("The server took too long to respond.");
       } else if (err.message === "Failed to fetch") {
         setError("Couldn't reach the server. Check your connection.");
-      } else if (err.message.includes("404")) {
-        setError(
-          "Reviews endpoint not found (404). The API path may be different than expected."
-        );
       } else {
         setError(err.message || "Failed to load your reviews.");
       }
@@ -102,7 +98,9 @@ export default function MyReviews() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-6">My Reviews</h2>
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
+        <h2 className="text-2xl font-bold text-slate-800">My Reviews</h2>
+      </div>
 
       {/* Loading skeleton */}
       {loading && (
@@ -145,15 +143,10 @@ export default function MyReviews() {
       {!loading && !error && reviews.length === 0 && (
         <div className="text-center py-16 bg-white rounded-2xl border border-slate-100">
           <MessageSquareOff className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 mb-4">
-            You haven't written any reviews yet.
+          <p className="text-gray-500">
+            You haven't written any reviews yet. Head to a product page to
+            leave one.
           </p>
-          <Link
-            href="/orders"
-            className="inline-block bg-[#2f5f73] hover:bg-[#244a5a] text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
-          >
-            Review a Past Order
-          </Link>
         </div>
       )}
 
@@ -203,12 +196,6 @@ export default function MyReviews() {
                       </div>
 
                       <div className="flex items-center gap-1 flex-shrink-0">
-                        <button
-                          aria-label="Edit review"
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-[#2f5f73] hover:bg-slate-50 transition-colors"
-                        >
-                          <Pencil size={14} />
-                        </button>
                         <button
                           onClick={() => handleDelete(review.id)}
                           disabled={deletingId === review.id}
