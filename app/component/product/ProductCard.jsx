@@ -7,17 +7,17 @@ const ProductCard = ({ product }) => {
   return (
     <Link href={`/product/${product.slug}`}>
       <div className="group cursor-pointer">
-        <div className="relative h-[318px] w-[296px] bg-[#EDEEF0] flex items-center justify-center overflow-hidden">
+        <div className="relative w-full aspect-[296/318] bg-[#EDEEF0] overflow-hidden">
           <Image
             src={product.image}
             alt={product.name}
-            width={271}
-            height={318}
-            className="object-contain h-[318px] w-[auto] transition-transform duration-500 ease-out group-hover:scale-105"
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-105"
           />
         </div>
 
-        <div className="pt-4 etext-left">
+        <div className="pt-4 text-left">
           <h3 className="font-semibold text-[#2f5f73] text-sm leading-snug">
             {product.name}
           </h3>

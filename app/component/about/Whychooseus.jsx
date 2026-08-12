@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const WhyChooseUs = () => {
   return (
     <div className="relative w-full h-105 md:h-120 lg:h-130 overflow-hidden">
@@ -30,9 +32,12 @@ const WhyChooseUs = () => {
           From sourcing to processing and packaging, every step is carefully monitored to preserve the purity, freshness, and natural goodness of our rice. It's this attention to detail that allows us to deliver a product our customers trust, time and time again.
           </p>
 
-          <button className="bg-white text-[#0b2d3a] font-semibold px-6 py-3 rounded shadow hover:bg-gray-200 transition">
+          <Link
+            href="/shop"
+            className="inline-block bg-white text-[#0b2d3a] font-semibold px-6 py-3 rounded shadow hover:bg-gray-200 transition"
+          >
             SHOP NOW
-          </button>
+          </Link>
         </div>
       </div>
 

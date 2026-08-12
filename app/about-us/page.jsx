@@ -5,7 +5,7 @@ import WhatWeDo from '../component/about/Whatwedo'
 import WhyChooseUs from '../component/about/Whychooseus'
 import MissionVision from '../component/about/MissionVision'
 import MessageCard from '../component/about/MessageCard'
-import Achievements from '../component/about/Achievements'
+import Achievements from '../component/global/Achievements'
 
 const page = () => {
   return (

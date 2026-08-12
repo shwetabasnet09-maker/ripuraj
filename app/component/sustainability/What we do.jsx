@@ -22,7 +22,7 @@ import {
     },
     {
       icon: Warehouse,
-      title: "Comfortable storage — 2,00,000 MT capacity",
+      title: "Comfortable storage — 3,00,000 MT capacity",
       description:
         "Our warehousing facility maintains optimal grain conditions including temperature, moisture, and pest control to preserve freshness until delivery.",
       badge: "LARGE STORAGE",
@@ -49,7 +49,7 @@ import {
                 WHAT WE DO
               </span>
   
-              <h2 className="mt-5 text-[35px] lg:text-[35px] font-bold leading-tight">
+              <h2 className="mt-5 text-[22px] lg:text-[35px] font-bold leading-tight">
                 Specialising In Every Stage
                 <br />
                 <span className="text-[#3F6C84]">
@@ -58,7 +58,7 @@ import {
               </h2>
             </div>
   
-            <p className="text-gray-700 text-[15px] leading-5 mt-2">
+            <p className="text-gray-700 text-[15px] leading-5 mt-">
               At Ripuraj Agro Pvt. Ltd., we specialise in the production,
               milling, refinement, and delivery of high-quality rice across
               multiple states—basmati and non-basmati varieties with the perfect

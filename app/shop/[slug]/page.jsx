@@ -1027,7 +1027,7 @@ export default function ProductDetail({ params }) {
                       },
                       {
                         emoji: "📅",
-                        title: "Shelf life",
+                        title: "Self life",
                         desc: "18 months from packaging date in sealed bag. Store in cool, dry place away from direct sunlight",
                       },
                       {
@@ -1317,7 +1317,7 @@ export default function ProductDetail({ params }) {
                         fill
                         unoptimized
                         sizes="240px"
-                        className="object-contain p-7 transition-transform duration-500 ease-out group-hover:scale-110"
+                        className="object-contain p-4 transition-transform  duration-500 ease-out group-hover:scale-110"
                       />
                     )}
                   </div>

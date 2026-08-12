@@ -2,22 +2,22 @@ import Image from "next/image";
 
 const stats = [
   {
-    value: "1,200",
+    value: "1,500",
     unit: "MT",
     desc: "Daily production capacity at Raxaul — one of India's largest",
   },
   {
-    value: "2,00,000",
+    value: "3,00,000",
     unit: "MT",
     desc: "Total grain storage capacity at our facility",
   },
   {
-    value: "15+",
-    unit: "states",
+    value: "16+",
+    unit: "States",
     desc: "Ripuraj rice distributed across India",
   },
   {
-    value: "Lakhs",
+    value: "50M+",
     unit: "",
     desc: "Of happy customers who trust every grain",
   },

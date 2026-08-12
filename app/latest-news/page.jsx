@@ -171,7 +171,7 @@ export default function LatestNewsPage() {
     setError(null);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/news/`, {
+      const res = await fetch(`${API_BASE_URL}/api/latest-news/`, {
         signal: AbortSignal.timeout(10000),
       });
 

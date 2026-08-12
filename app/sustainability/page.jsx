@@ -2,7 +2,7 @@ import Bannermain from "../component/global/Banner";
 import SustainabilityIntro from "../component/sustainability/SustainabilityIntro";
 import WhyWeExist from "../component/sustainability/WhyWeExist";
 import WhatWeDo from "../component/sustainability/What we do";
-import Achievements from "../component/sustainability/Achievements";
+import Achievements from "../component/global/Achievements";
 
 const SustainabilityPage = () => {
   return (
