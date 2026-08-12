@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Package, ArrowLeft, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { authFetch } from "../../utils/authFetch";
+import ShippingTracker from "../../component/global/ShippingTracker";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -230,6 +231,8 @@ export default function OrderDetailsPage({ params }) {
             {itemCount !== 1 ? "s" : ""}
           </p>
         </div>
+
+        <ShippingTracker status={order.status} />
 
         {itemCount > 0 && (
           <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-6">
