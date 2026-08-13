@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ManageAccount from "../component/dashboard/tabs/ManageAccount";
 import MyOrders from "../component/dashboard/tabs/MyOrders";
-import Wishlist from "../component/dashboard/tabs/Wishlist";
 import MyReviews from "../component/dashboard/tabs/MyReviews";
 import ReturnsCancellations from "../component/dashboard/tabs/ReturnsCancellations";
 import { User, ShoppingBag, Heart, Star, XCircle, LogOut } from "lucide-react";
@@ -53,8 +52,6 @@ export default function DashboardPage() {
         return <ManageAccount />;
       case "orders":
         return <MyOrders />;
-      case "wishlist":
-        return <Wishlist />;
       case "reviews":
         return <MyReviews />;
       case "returns":
@@ -67,7 +64,6 @@ export default function DashboardPage() {
   const menuItems = [
     { key: "account", label: "Manage My Account", icon: <User size={20} /> },
     { key: "orders", label: "My Orders", icon: <ShoppingBag size={20} /> },
-    { key: "wishlist", label: "My Wishlist", icon: <Heart size={20} /> },
     { key: "reviews", label: "My Reviews", icon: <Star size={20} /> },
     { key: "returns", label: "My Return & Cancellations", icon: <XCircle size={20} /> },
   ];

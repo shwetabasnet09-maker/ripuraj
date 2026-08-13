@@ -46,13 +46,13 @@ const CSRSection = () => {
 
       <div className="max-w-7xl mx-auto font-objective text-[#2D4356] relative z-10">
         {/* Header Section */}
-        <div className="gap-8 mb-12 text-center">
+        <div className="gap-8 mb-6 text-center">
           <div className="md:w-1/2 mx-auto">
-            <span className="text-[16px] md:text-[18px] font-semibold text-black uppercase mb-2 block tracking-wide">
+            <span className="text-[16px] md:text-[18px] font-medium text-black uppercase mb-2 block tracking-wide">
               {content.sectionTag}
             </span>
 
-            <h2 className="text-3xl md:text-[35px] font-bold leading-[1.2]">
+            <h2 className="text-[22px] md:text-[35px] font-bold leading-[1.2]">
               <span className="text-[#1a1a1a]">{content.mainTitleLine1}</span>
               <br />
               <span className="text-[#315A6F]">{content.mainTitleLine2}</span>
@@ -61,9 +61,9 @@ const CSRSection = () => {
         </div>
 
         {/* Main Feature Card */}
-        <div className="flex flex-col md:flex-row rounded-[40px] overflow-hidden shadow-2xl min-h-[484px]">
+        <div className="flex flex-col md:flex-row rounded-[20px] overflow-hidden shadow-2xl min-h-[484px]">
           {/* Left Content Column */}
-          <div className="col-span-12 lg:col-span-7 bg-[#315A6F] px-8 md:px-14 py-14 text-white relative overflow-hidden flex-1">
+          <div className="col-span-12 lg:col-span-7 bg-[#315A6F] px-8 md:px-7 py-5 text-white relative overflow-hidden flex-1">
             <h2 className="mt-5 text-[35px] leading-[1.1] font-extrabold">
               {content.card.title}
             </h2>
@@ -77,7 +77,7 @@ const CSRSection = () => {
             </button>
 
             {/* Bottom Left Illustration */}
-            <div className="absolute bottom-0 left-8 opacity-30 text-white">
+            <div className="absolute bottom-0 left-8 opacity-20 text-white">
               <Image
                 src="/framer.svg"
                 alt="Farmer Illustration"

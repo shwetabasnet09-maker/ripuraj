@@ -15,16 +15,16 @@ const achievements = [
     image: "/Redefining Non-Basmati Rice.webp",
   },
   {
-    title: "Committed to Quality, Scaling to 1000 MT",
+    title: "Committed to Quality, Scaling to 1,500 MT",
     description:
-      "From an initial production capacity of 120 MT/day, Ripuraj Agro Pvt Ltd now proudly produces 1000 MT/day, reflecting our commitment to meeting the growing demand for our premium rice.",
+      "From an initial production capacity of 1,000 MT/day, Ripuraj Agro Pvt Ltd now proudly produces 1,500 MT/day, reflecting our commitment to meeting the growing demand for our premium rice.",
     image: "/Committed to Quality, Scaling to 1000 MT.webp",
   },
 ];
 
 const Achievements = () => {
   return (
-    <div className="relative py-0 px-4 bg-white overflow-hidden">
+    <div className="relative py-14 px-4 bg-white overflow-hidden">
       {/* Decorative corner icons */}
       {/* <Image
         src="/leftpea.png"

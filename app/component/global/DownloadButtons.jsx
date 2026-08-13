@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, FileText } from "lucide-react";
 
 const DownloadButtons = () => {
   const items = [
@@ -79,17 +79,18 @@ const DownloadButtons = () => {
   return (
     <>
       {/* Sticky pill buttons */}
-      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-40">
-        <div className="flex items-center bg-[#1f3a42]/70 backdrop-blur-md border border-white/10 rounded-full shadow-lg p-1.5">
+      <div className="fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-40 w-full px-4 sm:w-auto sm:px-0">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center bg-[#1f3a42]/70 backdrop-blur-md border border-white/10 rounded-2xl sm:rounded-full shadow-lg p-1.5 gap-1 sm:gap-0 max-w-sm mx-auto sm:max-w-none">
           {items.map((item, index) => (
             <button
               key={item.label}
               type="button"
               onClick={() => openModal(item)}
-              className={`font-serif uppercase tracking-wide text-sm font-bold text-[#f4efe6] px-7 py-4 rounded-full whitespace-nowrap hover:bg-white/10 transition-colors duration-200 ${
-                index > 0 ? "border-l border-white/20" : ""
+              className={`flex items-center justify-center gap-2 font-serif uppercase tracking-wide text-xs sm:text-sm font-bold text-[#f4efe6] px-4 sm:px-7 py-3 sm:py-4 rounded-xl sm:rounded-full whitespace-nowrap hover:bg-white/10 transition-colors duration-200 ${
+                index > 0 ? "sm:border-l border-white/20" : ""
               }`}
             >
+              <FileText size={16} className="shrink-0" />
               {item.label}
             </button>
           ))}
@@ -103,7 +104,7 @@ const DownloadButtons = () => {
           onClick={closeModal}
         >
           <div
-            className="relative w-full max-w-md bg-[#f4efe6] rounded-2xl shadow-2xl p-8"
+            className="relative w-full max-w-md bg-[#f4efe6] rounded-2xl shadow-2xl p-6 sm:p-8"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -114,7 +115,7 @@ const DownloadButtons = () => {
               <X size={22} />
             </button>
 
-            <h2 className="font-serif text-xl font-bold text-[#1f3a42] mb-1">
+            <h2 className="font-serif text-lg sm:text-xl font-bold text-[#1f3a42] mb-1 pr-8">
               Download {activeItem.label}
             </h2>
             <p className="text-sm text-[#1f3a42]/70 mb-6">

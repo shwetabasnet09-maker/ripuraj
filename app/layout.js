@@ -2,6 +2,7 @@ import "./globals.css";
 import Header from "./component/global/header";
 import Footer from "./component/global/footer";
 import DownloadButtons from "./component/global/DownloadButtons";
+import WhatsAppFloat from "./component/global/WhatsAppFloat";
 
 export const metadata = {
   other: {
@@ -20,6 +21,8 @@ export default function RootLayout({ children }) {
         {children}
         <Footer/>
         <DownloadButtons />
+        <WhatsAppFloat />
+
       </body>
     </html>
   );

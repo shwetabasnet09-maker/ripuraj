@@ -16,7 +16,7 @@ export default function WhyWeExist() {
             WHY WE EXIST
           </span>
 
-          <h2 className="text-[35px] font-bold text-white mt-2">
+          <h2 className="text-[22px] md:text-[35px] font-bold text-white mt-2">
           Built on Farmers' Trust. Grown Through Quality.
           </h2>
 
@@ -29,7 +29,7 @@ export default function WhyWeExist() {
         <div className="grid lg:grid-cols-2 gap-12 mt-10">
 
           {/* Founder Card */}
-          <div className="bg-white rounded-[35px] p-10">
+          <div className="bg-white rounded-[35px] p-5">
 
             {/* Profile */}
             <div className="flex items-center gap-5">
@@ -41,7 +41,7 @@ export default function WhyWeExist() {
               />
 
               <div>
-                <h3 className="text-[22px] font-bold">
+                <h3 className="text-[17px] md:text-[22px] font-bold">
                   Rameshwar Prasad Gupta
                 </h3>
 
