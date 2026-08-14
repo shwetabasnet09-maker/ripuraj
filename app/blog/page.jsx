@@ -1,77 +1,150 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Bannermain from "../component/global/Banner";
-import { blogs } from "../data/date";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
 export default function BlogPage() {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchBlogs = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/news/`, {
+        signal: AbortSignal.timeout(10000),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Server returned status ${res.status}`);
+      }
+
+      const data = await res.json();
+      setBlogs(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to fetch blogs:", err);
+      setError(
+        err.name === "TimeoutError" || err.name === "AbortError"
+          ? "The server took too long to respond."
+          : err.message || "Couldn't load blog posts."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
   return (
     <>
       <Bannermain backgroundImg="/About%20Banner.webp" title="Blog" />
 
       <section className="relative py-14 lg:py-20 px-5 lg:px-4 bg-white overflow-hidden">
-        {/* Decorative corner icons */}
-        {/* <div className="absolute top-0 left-0 w-16 lg:w-44 opacity-70 pointer-events-none">
-          <Image
-            src="/leftpea.png"
-            alt=""
-            width={180}
-            height={180}
-            className="w-full h-auto"
-          />
-        </div>
-        <div className="absolute top-0 right-0 w-16 lg:w-44 opacity-70 pointer-events-none">
-          <Image
-            src="/rightpea.png"
-            alt=""
-            width={180}
-            height={180}
-            className="w-full h-auto"
-          />
-        </div> */}
-
         <div className="max-w-7xl mx-auto relative z-10">
-          {/* <p className="text-center uppercase text-[10px] lg:text-sm tracking-widest text-gray-500 mb-2">
-            From Our Kitchen
-          </p>
-          <h1 className="text-center text-xl lg:text-4xl font-bold text-[#2f5f73] mb-8 lg:mb-14">
-            Ripuraj Blog
-          </h1> */}
+          {/* ---------------- LOADING ---------------- */}
+          {loading && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 animate-pulse">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="bg-[#f8f6f1] rounded-2xl overflow-hidden">
+                  <div className="w-full h-[180px] lg:h-[220px] bg-gray-200" />
+                  <div className="p-4 lg:p-6 space-y-2">
+                    <div className="h-3 w-1/3 bg-gray-200 rounded" />
+                    <div className="h-4 w-full bg-gray-200 rounded" />
+                    <div className="h-4 w-2/3 bg-gray-200 rounded" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {blogs.map((blog) => (
-              <Link
-                key={blog.slug}
-                href={`/blog/${blog.slug}`}
-                className="group block bg-[#f8f6f1] rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+          {/* ---------------- ERROR ---------------- */}
+          {!loading && error && (
+            <div className="text-center py-16">
+              <p className="text-red-600 font-medium mb-2">Couldn't load the blog</p>
+              <p className="text-gray-500 text-sm mb-6">{error}</p>
+              <button
+                onClick={fetchBlogs}
+                className="bg-[#2f5f73] hover:bg-[#244a5a] text-white px-6 py-2.5 rounded-full text-sm font-semibold transition-colors"
               >
-                <div className="relative w-full h-[180px] lg:h-[220px] overflow-hidden">
-                  <Image
-                    src={blog.coverImage}
-                    alt={blog.title}
-                    fill
-                    unoptimized
-                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                  />
-                </div>
+                Try Again
+              </button>
+            </div>
+          )}
 
-                <div className="p-4 lg:p-6">
-                  <p className="text-gray-400 text-xs mb-2">{blog.date}</p>
+          {/* ---------------- EMPTY ---------------- */}
+          {!loading && !error && blogs.length === 0 && (
+            <p className="text-center text-gray-500 py-16">
+              No blog posts have been published yet.
+            </p>
+          )}
 
-                  <h3 className="font-bold text-[#1a1a1a] text-base lg:text-lg leading-snug mb-2 group-hover:text-[#2f5f73] transition-colors line-clamp-2">
-                    {blog.title}
-                  </h3>
+          {/* ---------------- GRID ---------------- */}
+          {!loading && !error && blogs.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+              {blogs.map((blog) => {
+                // Some articles have an empty slug from the backend —
+                // fall back to id so the link always resolves.
+                const linkTarget =
+                  blog.slug && blog.slug.trim() ? blog.slug : blog.id;
 
-                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
-                    {blog.excerpt}
-                  </p>
+                const formattedDate = blog.published_date
+                  ? new Date(blog.published_date).toLocaleDateString("en-IN", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  : "";
 
-                  <span className="inline-block mt-3 text-[#2f5f73] text-sm font-semibold group-hover:underline">
-                    Read More →
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+                return (
+                  <Link
+                    key={linkTarget}
+                    href={`/blog/${linkTarget}`}
+                    className="group block bg-[#f8f6f1] rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                  >
+                    <div className="relative w-full h-[180px] lg:h-[220px] overflow-hidden bg-gray-200">
+                      {blog.image && (
+                        <Image
+                          src={blog.image}
+                          alt={blog.title}
+                          fill
+                          unoptimized
+                          className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                        />
+                      )}
+                    </div>
+
+                    <div className="p-4 lg:p-6">
+                      {formattedDate && (
+                        <p className="text-gray-400 text-xs mb-2">{formattedDate}</p>
+                      )}
+
+                      <h3 className="font-bold text-[#1a1a1a] text-base lg:text-lg leading-snug mb-2 group-hover:text-[#2f5f73] transition-colors line-clamp-2">
+                        {blog.title}
+                      </h3>
+
+                      {blog.short_description && (
+                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                          {blog.short_description}
+                        </p>
+                      )}
+
+                      <span className="inline-block mt-3 text-[#2f5f73] text-sm font-semibold group-hover:underline">
+                        Read More →
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
     </>

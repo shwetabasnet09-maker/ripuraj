@@ -21,6 +21,7 @@ const INDIAN_STATES = [
 ];
 
 const PAN_REGEX = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
+const GST_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
 // ---------------- TOAST NOTIFICATION SYSTEM ----------------
 const TOAST_STYLES = {
@@ -117,6 +118,7 @@ export default function AuthPage() {
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [panError, setPanError] = useState("");
+  const [gstError, setGstError] = useState("");
   const [stepError, setStepError] = useState("");
 
   const [formData, setFormData] = useState({
@@ -134,6 +136,7 @@ export default function AuthPage() {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
     if (name === "pan_number") setPanError("");
+    if (name === "gst_number") setGstError("");
   };
 
   const extractErrorMessage = (data) => {
@@ -193,6 +196,16 @@ export default function AuthPage() {
         setPanError("Invalid PAN format. Expected: ABCDE1234F");
         return;
       }
+
+      const gst = formData.gst_number.trim().toUpperCase();
+      if (!gst) {
+        setGstError("GST number is required for reseller accounts.");
+        return;
+      }
+      if (!GST_REGEX.test(gst)) {
+        setGstError("Invalid GST format. Expected: 22ABCDE1234F1Z5");
+        return;
+      }
     }
 
     setLoading(true);
@@ -214,7 +227,7 @@ export default function AuthPage() {
       if (formData.account_type === "reseller") {
         payload.business_name = formData.business_name;
         payload.pan_number = formData.pan_number.trim().toUpperCase();
-        payload.gst_number = formData.gst_number || null;
+        payload.gst_number = formData.gst_number.trim().toUpperCase();
         payload.store_address = formData.same_as_personal_address
           ? formData.street
           : formData.store_address;
@@ -389,7 +402,7 @@ export default function AuthPage() {
                                 : "bg-transparent text-white/70 border-white/30 hover:border-white/60"
                             }`}
                           >
-                            Normal Customer
+                            Customer
                           </button>
                           <button
                             type="button"
@@ -457,7 +470,19 @@ export default function AuthPage() {
                         {panError && <p className="text-red-200 text-xs mt-1.5">{panError}</p>}
                       </div>
 
-                      <InputField name="gst_number" placeholder="GST Number (optional)" value={formData.gst_number} handleChange={handleChange} />
+                      <div>
+                        <input
+                          name="gst_number"
+                          placeholder="GST Number (required, e.g. 22ABCDE1234F1Z5)"
+                          value={formData.gst_number}
+                          onChange={(e) => handleChange({ target: { name: "gst_number", value: e.target.value.toUpperCase(), type: "text" } })}
+                          maxLength={15}
+                          className={`w-full p-3 rounded-xl bg-white border-none focus:outline-none focus:ring-2 text-[#1a1a1a] placeholder:text-gray-400 uppercase ${
+                            gstError ? "ring-2 ring-red-400" : "focus:ring-white/50"
+                          }`}
+                        />
+                        {gstError && <p className="text-red-200 text-xs mt-1.5">{gstError}</p>}
+                      </div>
 
                       <label className="flex items-center gap-2 text-white text-sm">
                         <input
