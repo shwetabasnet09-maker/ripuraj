@@ -54,7 +54,7 @@ export const products = [
     rating: 4,
 
     description:
-      "Mahashakti Finest Jeera Rice, We all are aware with food culture so we have kept your concerns our priority. Mahashakti Jeera rice is rich in its features, full of aroma and highly able of tingling the taste bud for every food connoisseur. Health is also its concern, so along with taste, it also includes amino acids, low arsenic levels and also manages in maintain heart health.",
+      "We understand the importance of good food and the role it plays in everyday life. That's why we have made your preferences and expectations our priority. Mahashakti Jeera Rice is known for its rich aroma, exceptional quality, and delightful taste that appeals to every food lover. Along with great taste, it also offers nutritional benefits, including essential amino acids and low arsenic levels, making it a thoughtful choice for a balanced lifestyle.",
 
     features: [
       {
@@ -78,7 +78,7 @@ export const products = [
     rating: 5,
 
     description:
-      "Shaktijeera Premium rice, Having perfect lunch is something everyone looks for but it starts with choosing right products. So when it comes to rice, the first recommendation is Sonashakti Finest Jeera rice, easy to cook, a healthy choice. Each grain shows its good quality and gives a fluffy texture to your dish.",
+      "Shaktijeera Premium Rice is known for its quality, pleasant aroma, and ease of cooking. Carefully selected to deliver consistency in every meal, it cooks into soft, fluffy grains that enhance the overall dining experience. Whether it's an everyday lunch or a special family meal, Shaktijeera Premium Rice is a wholesome choice that brings both taste and quality to your plate.",
 
     features: [
       {
@@ -148,7 +148,7 @@ export const products = [
     rating: 5,
 
     description:
-      "Ripuraj Nandini is natural steam rice with a rich aroma and a pleasant fragrance. It is perfect for preparing dishes like pulao, biryani, and other everyday favorites. It is an ideal choice for weddings, parties, and festive occasions.",
+      "Ripuraj Sonachoor GovindBhog Rice is a premium aromatic rice known for its naturally rich fragrance and delicate texture. Widely cherished for preparing traditional kheer, sweet dishes, and festive delicacies, it adds an authentic touch to every recipe. Its unique aroma and soft texture make it a preferred choice for special occasions and traditional celebrations.",
 
     features: [
       {
@@ -198,7 +198,7 @@ export const products = [
 
     features: [
       {
-        text: "luffy grains"
+        text: "Fluffy grains"
       },
       {
         text: "Naturally aromatic"
@@ -240,7 +240,7 @@ export const products = [
     rating: 5,
 
     description:
-      "Ripuraj Jeera Boiled Rice offers the perfect balance of taste and health for your everyday meals. With medium-to-long grains and a natural jeera fragrance, it cooks easily into soft, fluffy rice that is light on the stomach and rich in fiber. FOOD . FEED . BIO",
+      "Ripuraj Jeera Boiled Rice offers the perfect balance of taste and health for your everyday meals. With medium-to-long grains and a natural jeera fragrance, it cooks easily into soft, fluffy rice that is light on the stomach and rich in fiber.",
 
     features: [
       {
@@ -286,7 +286,7 @@ export const products = [
     rating: 5,
 
     description:
-      "Our premium Ripuraj Gold Boiled Basmati Rice, is for those who love rich, aromatic, and perfectly fluffy rice. It brings a delightful aroma and a premium texture to every meal.",
+      "Our premium Ripuraj Gold Basmati Rice, is for those who love rich, aromatic, and perfectly fluffy rice. It brings a delightful aroma and a premium texture to every meal.",
 
     features: [
       {

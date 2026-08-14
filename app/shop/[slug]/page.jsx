@@ -1027,8 +1027,8 @@ export default function ProductDetail({ params }) {
                       },
                       {
                         emoji: "📅",
-                        title: "Self life",
-                        desc: "18 months from packaging date in sealed bag. Store in cool, dry place away from direct sunlight",
+                        title: "Shelf life",
+                        desc: "24 months from packaging date in sealed bag. Store in cool, dry place away from direct sunlight",
                       },
                       {
                         emoji: "🏭",

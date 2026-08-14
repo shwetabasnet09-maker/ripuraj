@@ -4,8 +4,11 @@ import React, { useState } from "react";
 import { Phone, MapPin, Mail } from "lucide-react";
 import AnimateIn from "./AnimateIn";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 const RipurajContactPage = () => {
-  const [status, setStatus] = useState("idle"); // idle | loading | success
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [errorMsg, setErrorMsg] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,14 +24,49 @@ const RipurajContactPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
+    setErrorMsg("");
 
-    // Simulated submit — replace with real API call when ready
-    await new Promise((resolve) => setTimeout(resolve, 1200));
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/contact/message/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+        signal: AbortSignal.timeout(10000),
+      });
 
-    setStatus("success");
-    setFormData({ name: "", email: "", phone: "", state: "", message: "" });
+      if (!res.ok) {
+        // DRF validation errors come back as { field: ["message", ...] }.
+        // Surface the first one so we can see exactly which field the
+        // backend rejected, instead of a generic failure message.
+        let detail = `Server returned status ${res.status}`;
+        try {
+          const errData = await res.json();
+          const firstField = Object.keys(errData)[0];
+          if (firstField) {
+            detail = `${firstField}: ${
+              Array.isArray(errData[firstField])
+                ? errData[firstField][0]
+                : errData[firstField]
+            }`;
+          }
+        } catch {
+          // Response wasn't JSON — keep the generic status message.
+        }
+        throw new Error(detail);
+      }
 
-    setTimeout(() => setStatus("idle"), 3000);
+      setStatus("success");
+      setFormData({ name: "", email: "", phone: "", state: "", message: "" });
+      setTimeout(() => setStatus("idle"), 3000);
+    } catch (err) {
+      console.error("Failed to submit contact form:", err);
+      setStatus("error");
+      setErrorMsg(
+        err.name === "TimeoutError" || err.name === "AbortError"
+          ? "The server took too long to respond. Please try again."
+          : err.message || "Couldn't send your message. Please try again."
+      );
+    }
   };
 
   return (
@@ -130,6 +168,12 @@ const RipurajContactPage = () => {
                   />
                 </div>
               </AnimateIn>
+
+              {status === "error" && (
+                <AnimateIn delay={320}>
+                  <p className="text-red-300 text-sm ml-1">{errorMsg}</p>
+                </AnimateIn>
+              )}
 
               <AnimateIn delay={350}>
                 <button

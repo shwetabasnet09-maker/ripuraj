@@ -48,7 +48,7 @@ const WhatWeDo = () => {
 
         {/* Description */}
         <p className="max-w-full mx-auto text-center text-gray-700 leading-relaxed mb-10 text-sm md:text-[15px]">
-        At Ripuraj Agro, we transform carefully selected paddy into rice that's trusted for its purity, consistency, and exceptional taste. From sourcing and advanced milling to quality assurance and packaging, every step is guided by one commitment—to deliver rice that families enjoy and businesses rely on.
+        At Ripuraj Agro, we transform carefully selected paddy into rice that's trusted for its purity, consistency and exceptional taste. From sourcing and advanced milling to quality assurance and packaging, every step is guided by one commitment—to deliver rice that families enjoy and businesses rely on.
         </p>
 
         {/* Main Layout */}

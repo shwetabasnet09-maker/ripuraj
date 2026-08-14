@@ -44,7 +44,7 @@ const Factories = () => {
             </h2>
 
             <p className="mt-1 leading-relaxed text-[15px] text-[#444]">
-            Behind every pack of Ripuraj is a state-of-the-art processing facility where technology, expertise, and uncompromising quality come together. Every grain is carefully cleaned, processed, and quality-checked to ensure consistency, purity, and the taste families trust.
+            Behind every pack of Ripuraj is a modern processing facility where technology, expertise, and uncompromising quality come together. Every grain is carefully cleaned, processed, and quality-checked to ensure consistency, purity, and the taste families trust.
 
             </p>
 
