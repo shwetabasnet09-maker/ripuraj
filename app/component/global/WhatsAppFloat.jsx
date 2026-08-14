@@ -3,7 +3,7 @@
 // ---------------- CONFIG ----------------
 // Replace with your real WhatsApp number, country code first, no
 // spaces/dashes/plus sign (e.g. 91XXXXXXXXXX for India).
-const WHATSAPP_NUMBER = "+919905555666";
+const WHATSAPP_NUMBER = "+917766916305";
 const DEFAULT_MESSAGE = "Hi! I'd like to know more about Ripuraj products.";
 
 export default function WhatsAppFloat() {
