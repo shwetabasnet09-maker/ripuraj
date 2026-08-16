@@ -3,15 +3,15 @@
 import { useState } from "react";
 import { X, FileText } from "lucide-react";
 
-const DownloadButtons = () => {
+const DownloadButtons = ({ isAtBottom = false }) => {
   const items = [
     {
       label: "Annual Report",
-      href: "/Annual Income.pdf",
+      href: "/Annual%20Income.pdf",
     },
     {
       label: "Product Catalogue",
-      href: "/Ripuraj Cataloug.pdf",
+      href: "/Ripuraj%20Cataloug.pdf",
     },
   ];
 
@@ -46,14 +46,20 @@ const DownloadButtons = () => {
     setError("");
 
     try {
-      await fetch(
+      // Fire-and-forget: don't let a CORS/network hiccup on the logging
+      // call block the actual file download. Google Apps Script exec
+      // endpoints often don't return usable CORS headers from the browser,
+      // which previously caused this fetch to throw and abort the download.
+      fetch(
         "https://script.google.com/macros/s/AKfycbxkw-ynTxIoLOrHElLP6RbCXBEcIrgX2Iz7gEw6e98DzqBoG4gxxVxbCO98vypQ3oF6pQ/exec",
         {
           method: "POST",
           headers: { "Content-Type": "text/plain" },
           body: JSON.stringify({ ...form, file: activeItem.label }),
         }
-      );
+      ).catch(() => {
+        // Swallow logging errors silently — the download should still happen.
+      });
 
       const link = document.createElement("a");
       link.href = activeItem.href;
@@ -74,10 +80,15 @@ const DownloadButtons = () => {
 
   return (
     <>
-      {/* Sticky pill bar — single row on ALL screen sizes now,
-          width shrinks to fit content instead of stacking/stretching */}
+      {/* Sticky pill bar — single row on ALL screen sizes,
+          width shrinks to fit content instead of stacking/stretching.
+          Position now driven by isAtBottom prop passed from the parent
+          scroll-aware wrapper, since this element owns its own `fixed`
+          positioning (a wrapping fixed div can't override it). */}
       <div
-        className="fixed bottom-3 sm:bottom-8 left-1/2 -translate-x-1/2 z-40 w-full px-3 sm:px-0 sm:w-auto flex justify-center"
+        className={`fixed left-1/2 -translate-x-1/2 z-40 w-full px-3 sm:px-0 sm:w-auto flex justify-center transition-all duration-300 ${
+          isAtBottom ? "bottom-[8rem]" : "bottom-3 sm:bottom-8"
+        }`}
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
         <div className="flex flex-row items-center justify-center bg-[#1f3a42]/70 backdrop-blur-md border border-white/10 rounded-full shadow-lg p-1.5 w-fit max-w-full">

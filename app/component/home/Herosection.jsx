@@ -77,7 +77,11 @@ const Herodiv = () => {
         }}
         autoplay={
           hasMultiple
-            ? { delay: 5500, disableOnInteraction: false, pauseOnMouseEnter: true }
+            ? {
+                delay: 5500,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }
             : false
         }
         loop={hasMultiple}
