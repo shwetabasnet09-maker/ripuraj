@@ -29,7 +29,7 @@ const WhyChooseUs = () => {
           </h2>
 
           <p className="text-sm md:text-[15px] text-gray-200 leading-relaxed mb-8">
-          From sourcing to processing and packaging, every step is carefully monitored to preserve the purity, freshness, and natural goodness of our rice. It's this attention to detail that allows us to deliver a product our customers trust, time and time again.
+          From sourcing to processing and packaging, every step is carefully monitored to preserve the purity, freshness, and natural goodness of our rice. It's our attention to detail that helps us deliver the quality our customers trust, time and time again.
           </p>
 
           <Link

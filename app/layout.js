@@ -5,6 +5,11 @@ import DownloadButtons from "./component/global/DownloadButtons";
 import WhatsAppFloat from "./component/global/WhatsAppFloat";
 
 export const metadata = {
+  title: "Ripuraj",
+  icons: {
+    icon: "/RipurajFavicon.png",
+    apple: "/RipurajFavicon.png",
+  },
   other: {
     "color-scheme": "light",
   },

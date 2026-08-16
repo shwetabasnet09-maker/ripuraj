@@ -53,7 +53,7 @@ export default function Trustdiv() {
           </h2>
 
           <p className="text-[#000000] max-w-4xl mx-auto text-sm lg:text-[15px] leading-relaxed">
-          For over 46 years, Ripuraj has embraced progress without losing sight of its values. Every milestone reflects our dedication to quality, innovation, and building lasting relationships with families, partners, and communities.
+          For over 46 years, Ripuraj has embraced progress without losing sight of its values. Every milestone reflects our dedication to quality, innovation, and building lasting relationships with families, partners and communities.
 
           </p>
         </div>

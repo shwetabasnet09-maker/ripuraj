@@ -95,7 +95,7 @@ export default function ProductHighlight() {
             </p>
 
             <h3 className="mt-2 text-xl font-bold text-[#3a6372]">
-              Packaging Size Available Online
+              Packaging Size Available Offline
             </h3>
 
             {/* FEATURES */}

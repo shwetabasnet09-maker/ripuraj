@@ -18,11 +18,11 @@ const MessageCard = () => {
 
             <div className="space-y-0 text-[#000000] text-[15px] leading-relaxed">
               <p>
-              When I started Ripuraj Agro, my vision was simple—to build a brand that would honour the hard work of our farmers and deliver rice that families could trust with confidence. What began as a small step has grown into a journey shaped by dedication, integrity, and an unwavering commitment to quality.
-Over the years, we have continuously evolved by modern technology, strengthening our quality standards, and expanding our capabilities. 
-At Ripuraj, we nurture relationships. With our farmers, who are the backbone of our journey. With our partners, who help us reach new markets. And with our customers, whose trust inspires us to keep raising our standards every single day.
-As we continue to grow, our focus remains clear—to deliver the finest quality rice and proudly take the Ripuraj name to more homes across India and the world.
-I extend my heartfelt gratitude to every customer, partner, employee, and farmer who has been a part of this journey. Your trust is our greatest strength, and we remain committed to earning it with every grain we deliver.
+                When I started Ripuraj Agro, my vision was simple—to build a brand that would honour the hard work of our farmers and deliver rice that families could trust with confidence. What began as a small step has grown into a journey shaped by dedication, integrity, and an unwavering commitment to quality.
+                Over the years, we have continuously evolved by modern technology, strengthening our quality standards, and expanding our capabilities.
+                At Ripuraj, we nurture relationships, with our farmers, who are the backbone of our journey. With our partners, who help us reach new markets. And with our customers, whose trust inspires us to keep raising our standards every single day.
+                As we continue to grow, our focus remains clear—to deliver the finest quality rice and proudly take the Ripuraj name to more homes across India and the world.
+                I extend my heartfelt gratitude to every customer, partner, employee, and farmer who has been a part of this journey. Your trust is our greatest strength, and we remain committed to earning it with every grain we deliver.
 
 
 

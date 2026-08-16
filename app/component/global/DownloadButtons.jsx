@@ -15,7 +15,6 @@ const DownloadButtons = () => {
     },
   ];
 
-  // Which item was clicked (null = modal closed)
   const [activeItem, setActiveItem] = useState(null);
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -47,8 +46,6 @@ const DownloadButtons = () => {
     setError("");
 
     try {
-      // Send the lead to Google Sheets via Apps Script webhook.
-      // Replace the URL below with your own deployed Web App URL from Step 3.
       await fetch(
         "https://script.google.com/macros/s/AKfycbxkw-ynTxIoLOrHElLP6RbCXBEcIrgX2Iz7gEw6e98DzqBoG4gxxVxbCO98vypQ3oF6pQ/exec",
         {
@@ -58,7 +55,6 @@ const DownloadButtons = () => {
         }
       );
 
-      // Trigger the PDF download
       const link = document.createElement("a");
       link.href = activeItem.href;
       link.download = "";
@@ -78,19 +74,24 @@ const DownloadButtons = () => {
 
   return (
     <>
-      {/* Sticky pill buttons */}
-      <div className="fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-40 w-full px-4 sm:w-auto sm:px-0">
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center bg-[#1f3a42]/70 backdrop-blur-md border border-white/10 rounded-2xl sm:rounded-full shadow-lg p-1.5 gap-1 sm:gap-0 max-w-sm mx-auto sm:max-w-none">
+      {/* Sticky pill bar — single row on ALL screen sizes now,
+          width shrinks to fit content instead of stacking/stretching */}
+      <div
+        className="fixed bottom-3 sm:bottom-8 left-1/2 -translate-x-1/2 z-40 w-full px-3 sm:px-0 sm:w-auto flex justify-center"
+        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+      >
+        <div className="flex flex-row items-center justify-center bg-[#1f3a42]/70 backdrop-blur-md border border-white/10 rounded-full shadow-lg p-1.5 w-fit max-w-full">
           {items.map((item, index) => (
             <button
               key={item.label}
               type="button"
               onClick={() => openModal(item)}
-              className={`flex items-center justify-center gap-2 font-serif uppercase tracking-wide text-xs sm:text-sm font-bold text-[#f4efe6] px-4 sm:px-7 py-3 sm:py-4 rounded-xl sm:rounded-full whitespace-nowrap hover:bg-white/10 transition-colors duration-200 ${
-                index > 0 ? "sm:border-l border-white/20" : ""
+              className={`flex items-center justify-center gap-1.5 sm:gap-2 font-objective uppercase tracking-wide text-[10px] xs:text-xs sm:text-sm font-bold text-[#f4efe6] px-2.5 xs:px-4 sm:px-7 py-2.5 sm:py-4 rounded-full whitespace-nowrap hover:bg-white/10 active:bg-white/15 transition-colors duration-200 ${
+                index > 0 ? "border-l border-white/20" : ""
               }`}
             >
-              <FileText size={16} className="shrink-0" />
+              <FileText size={14} className="shrink-0 sm:hidden" />
+              <FileText size={16} className="shrink-0 hidden sm:block" />
               {item.label}
             </button>
           ))}
@@ -100,31 +101,35 @@ const DownloadButtons = () => {
       {/* Modal */}
       {activeItem && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 px-0 sm:px-4"
           onClick={closeModal}
         >
           <div
-            className="relative w-full max-w-md bg-[#f4efe6] rounded-2xl shadow-2xl p-6 sm:p-8"
+            className="relative w-full sm:max-w-md bg-[#f4efe6] rounded-t-2xl sm:rounded-2xl shadow-2xl p-5 xs:p-6 sm:p-8 max-h-[92vh] overflow-y-auto"
+            style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom, 0px))" }}
             onClick={(e) => e.stopPropagation()}
           >
             <button
               type="button"
               onClick={closeModal}
-              className="absolute top-4 right-4 text-[#1f3a42] hover:opacity-70 transition-opacity"
+              aria-label="Close"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 text-[#1f3a42] hover:opacity-70 active:opacity-50 transition-opacity"
             >
               <X size={22} />
             </button>
 
-            <h2 className="font-serif text-lg sm:text-xl font-bold text-[#1f3a42] mb-1 pr-8">
+            <div className="sm:hidden w-10 h-1 rounded-full bg-[#1f3a42]/15 mx-auto mb-4" />
+
+            <h2 className="font-objective text-base xs:text-lg sm:text-xl font-bold text-[#1f3a42] mb-1 pr-8">
               Download {activeItem.label}
             </h2>
-            <p className="text-sm text-[#1f3a42]/70 mb-6">
+            <p className="text-xs xs:text-sm text-[#1f3a42]/70 mb-5 sm:mb-6">
               Please share a few details before downloading.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5 sm:space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-[#1f3a42] mb-1">
+                <label className="block text-xs xs:text-sm font-semibold text-[#1f3a42] mb-1">
                   Name
                 </label>
                 <input
@@ -132,13 +137,14 @@ const DownloadButtons = () => {
                   name="name"
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#1f3a42]/20 px-4 py-2.5 text-[#1f3a42] focus:outline-none focus:ring-2 focus:ring-[#1f3a42]/40"
+                  autoComplete="name"
+                  className="w-full rounded-lg border border-[#1f3a42]/20 px-3.5 sm:px-4 py-2.5 text-sm sm:text-base text-[#1f3a42] focus:outline-none focus:ring-2 focus:ring-[#1f3a42]/40"
                   placeholder="Your full name"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[#1f3a42] mb-1">
+                <label className="block text-xs xs:text-sm font-semibold text-[#1f3a42] mb-1">
                   Email
                 </label>
                 <input
@@ -146,13 +152,15 @@ const DownloadButtons = () => {
                   name="email"
                   value={form.email}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#1f3a42]/20 px-4 py-2.5 text-[#1f3a42] focus:outline-none focus:ring-2 focus:ring-[#1f3a42]/40"
+                  autoComplete="email"
+                  inputMode="email"
+                  className="w-full rounded-lg border border-[#1f3a42]/20 px-3.5 sm:px-4 py-2.5 text-sm sm:text-base text-[#1f3a42] focus:outline-none focus:ring-2 focus:ring-[#1f3a42]/40"
                   placeholder="you@example.com"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-[#1f3a42] mb-1">
+                <label className="block text-xs xs:text-sm font-semibold text-[#1f3a42] mb-1">
                   Phone (optional)
                 </label>
                 <input
@@ -160,19 +168,21 @@ const DownloadButtons = () => {
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-[#1f3a42]/20 px-4 py-2.5 text-[#1f3a42] focus:outline-none focus:ring-2 focus:ring-[#1f3a42]/40"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  className="w-full rounded-lg border border-[#1f3a42]/20 px-3.5 sm:px-4 py-2.5 text-sm sm:text-base text-[#1f3a42] focus:outline-none focus:ring-2 focus:ring-[#1f3a42]/40"
                   placeholder="+91 00000 00000"
                 />
               </div>
 
               {error && (
-                <p className="text-sm text-red-600 font-medium">{error}</p>
+                <p className="text-xs sm:text-sm text-red-600 font-medium">{error}</p>
               )}
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-[#1f3a42] text-[#f4efe6] font-serif uppercase tracking-wide font-bold text-sm py-3 rounded-lg hover:bg-[#16292f] transition-colors disabled:opacity-60"
+                className="w-full bg-[#1f3a42] text-[#f4efe6] font-objective uppercase tracking-wide font-bold text-xs sm:text-sm py-3 rounded-lg hover:bg-[#16292f] active:bg-[#0f1e22] transition-colors disabled:opacity-60"
               >
                 {submitting ? "Please wait..." : "Submit & Download"}
               </button>

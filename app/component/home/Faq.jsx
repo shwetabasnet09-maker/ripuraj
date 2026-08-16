@@ -96,7 +96,7 @@ export default function Faq() {
     {
       title: "What makes Ripuraj different from other rice brands?",
       content:
-        "Our focus on quality, modern milling technology, hygienic processing, and decades of expertise allows us to deliver rice that's trusted by families and businesses alike.",
+        "Our focus on quality, modern milling technology, hygienic processing and decades of expertise allows us to deliver rice that's trusted by families and businesses alike.",
     },
     {
       title: "Is Ripuraj rice hygienically processed?",
@@ -106,7 +106,7 @@ export default function Faq() {
     {
       title: "Which varieties of rice does Ripuraj offer?",
       content:
-        "Ripuraj offers a carefully curated range of rice to suit everyday meals, traditional recipes, and special occasions, catering to the diverse preferences of Indian kitchens.",
+        "Ripuraj offers a carefully curated range of rice to suit everyday meals, traditional recipes and special occasions, catering to the diverse preferences of Indian kitchens.",
     },
     {
       title: "Who is Ripuraj rice ideal for?",
