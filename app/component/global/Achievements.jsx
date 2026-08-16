@@ -18,7 +18,7 @@ const achievements = [
     title: "Committed to Quality, Scaling to 1,500 MT",
     description:
       "From an initial production capacity of 1,000 MT/day, Ripuraj Agro Pvt Ltd now proudly produces 1,500 MT/day, reflecting our commitment to meeting the growing demand for our premium rice.",
-    image: "/Committed to Quality, Scaling to 1000 MT.webp",
+    image: "/Committee.webp",
   },
 ];
 

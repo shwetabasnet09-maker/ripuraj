@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="relative">
       {/* Full-bleed background image behind trust badges + footer */}
       <div className="absolute inset-0">
-        <Image src="/footer Bg.webp" alt="" fill className="object-cover object-bottom" />
+        <Image src="/footer-bg.webp" alt="" fill className="object-cover object-bottom" />
       </div>
 
       <div className="relative z-10">
