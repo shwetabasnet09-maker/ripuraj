@@ -168,7 +168,7 @@ export default function Header() {
 
             {/* Hamburger */}
             <button
-              className={`lg:hidden ${solid ? "text-[#335B6E]" : "text-white"
+              className={`lg:hidden ${solid ? "text-[#306177]" : "text-white"
                 }`}
               onClick={() => setIsOpen(!isOpen)}
             >
@@ -204,7 +204,7 @@ export default function Header() {
 
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="text-[#335B6E] hover:text-black transition-colors"
+                    className="text-[#306177] hover:text-black transition-colors"
                   >
                     <X size={24} />
                   </button>

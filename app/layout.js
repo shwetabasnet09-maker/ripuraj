@@ -3,6 +3,7 @@ import Header from "./component/global/header";
 import Footer from "./component/global/footer";
 import DownloadButtons from "./component/global/DownloadButtons";
 import WhatsAppFloat from "./component/global/WhatsAppFloat";
+import ScrollAwareDownloadButtons from "./component/global/ScrollAwareDownloadButtons";
 
 export const metadata = {
   title: "Ripuraj",
@@ -25,7 +26,7 @@ export default function RootLayout({ children }) {
         <Header />
         {children}
         <Footer/>
-        <DownloadButtons />
+        <ScrollAwareDownloadButtons />
         <WhatsAppFloat />
 
       </body>
