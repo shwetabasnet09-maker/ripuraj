@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import ManageAccount from "../component/dashboard/tabs/ManageAccount";
 import MyOrders from "../component/dashboard/tabs/MyOrders";
 import MyReviews from "../component/dashboard/tabs/MyReviews";
-import ReturnsCancellations from "../component/dashboard/tabs/ReturnsCancellations";
 import { User, ShoppingBag, Heart, Star, XCircle, LogOut } from "lucide-react";
 
 export default function DashboardPage() {
@@ -55,7 +54,6 @@ export default function DashboardPage() {
       case "reviews":
         return <MyReviews />;
       case "returns":
-        return <ReturnsCancellations />;
       default:
         return <ManageAccount />;
     }
@@ -65,7 +63,6 @@ export default function DashboardPage() {
     { key: "account", label: "Manage My Account", icon: <User size={20} /> },
     { key: "orders", label: "My Orders", icon: <ShoppingBag size={20} /> },
     { key: "reviews", label: "My Reviews", icon: <Star size={20} /> },
-    { key: "returns", label: "My Return & Cancellations", icon: <XCircle size={20} /> },
   ];
 
   if (loading) return <p className="text-center mt-20">Checking authentication...</p>;
