@@ -16,6 +16,7 @@ const EXCLUDED_PATHS = [
   "/order",
   "/orders",
   "/account",
+  '/dashboard',
 ];
 
 export default function ScrollAwareDownloadButtons() {

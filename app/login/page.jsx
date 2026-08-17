@@ -4,7 +4,17 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, ArrowLeft, ArrowRight, CheckCircle2, XCircle, Info, X } from "lucide-react";
+import {
+  ChevronRight,
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  XCircle,
+  Info,
+  X,
+  Eye,
+  EyeOff,
+} from "lucide-react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
@@ -22,6 +32,7 @@ const INDIAN_STATES = [
 
 const PAN_REGEX = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 const GST_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+const PINCODE_REGEX = /^[1-9][0-9]{5}$/;
 
 // ---------------- TOAST NOTIFICATION SYSTEM ----------------
 const TOAST_STYLES = {
@@ -90,6 +101,48 @@ function ToastContainer({ toasts, onDismiss }) {
   );
 }
 
+// ---------------- Reusable text input ----------------
+function InputField({ name, type = "text", placeholder, value, handleChange, maxLength }) {
+  return (
+    <input
+      name={name}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={handleChange}
+      maxLength={maxLength}
+      className="w-full p-3 rounded-xl bg-white border-none focus:outline-none focus:ring-2 focus:ring-white/50 text-[#1a1a1a] placeholder:text-gray-400"
+    />
+  );
+}
+
+// ---------------- Password input with show/hide toggle ----------------
+function PasswordField({ name, placeholder, value, handleChange }) {
+  const [visible, setVisible] = useState(false);
+
+  return (
+    <div className="relative">
+      <input
+        name={name}
+        type={visible ? "text" : "password"}
+        placeholder={placeholder}
+        value={value}
+        onChange={handleChange}
+        className="w-full p-3 pr-11 rounded-xl bg-white border-none focus:outline-none focus:ring-2 focus:ring-white/50 text-[#1a1a1a] placeholder:text-gray-400"
+      />
+      <button
+        type="button"
+        onClick={() => setVisible((v) => !v)}
+        tabIndex={-1}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+        aria-label={visible ? "Hide password" : "Show password"}
+      >
+        {visible ? <EyeOff size={18} /> : <Eye size={18} />}
+      </button>
+    </div>
+  );
+}
+
 export default function AuthPage() {
   const router = useRouter();
 
@@ -119,12 +172,117 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [panError, setPanError] = useState("");
   const [gstError, setGstError] = useState("");
+  const [pincodeError, setPincodeError] = useState("");
   const [stepError, setStepError] = useState("");
+
+  // ---------------- Forgot password state ----------------
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotStep, setForgotStep] = useState(1); // 1 = enter email, 2 = enter otp + new password
+  const [forgotLoading, setForgotLoading] = useState(false);
+  const [forgotData, setForgotData] = useState({
+    email: "",
+    otp: "",
+    new_password: "",
+    confirm_new_password: "",
+  });
+
+  const handleForgotChange = (e) => {
+    const { name, value } = e.target;
+    setForgotData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const openForgotPassword = () => {
+    setForgotData({ email: "", otp: "", new_password: "", confirm_new_password: "" });
+    setForgotStep(1);
+    setForgotOpen(true);
+  };
+
+  const closeForgotPassword = () => {
+    setForgotOpen(false);
+    setForgotStep(1);
+  };
+
+  const handleForgotRequestOtp = async (e) => {
+    e.preventDefault();
+    if (!forgotData.email) {
+      showToast("Please enter your email address.", "error");
+      return;
+    }
+    setForgotLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/accounts/forgot-password/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: forgotData.email }),
+      });
+      const data = await res.json();
+      console.log("Forgot-password response:", res.status, data);
+
+      if (!res.ok) {
+        showToast(extractErrorMessage(data), "error");
+        return;
+      }
+
+      showToast("Reset code sent! Check your email.", "success");
+      setForgotStep(2);
+    } catch (err) {
+      console.error("Forgot-password request failed:", err);
+      showToast("Could not reach the server. Check your connection and try again.", "error");
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
+  const handleForgotResetPassword = async (e) => {
+    e.preventDefault();
+
+    if (!forgotData.otp) {
+      showToast("Please enter the code sent to your email.", "error");
+      return;
+    }
+    if (!forgotData.new_password || !forgotData.confirm_new_password) {
+      showToast("Please enter and confirm your new password.", "error");
+      return;
+    }
+    if (forgotData.new_password !== forgotData.confirm_new_password) {
+      showToast("Passwords don't match.", "error");
+      return;
+    }
+
+    setForgotLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/accounts/reset-password/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: forgotData.email,
+          otp: forgotData.otp,
+          new_password: forgotData.new_password,
+        }),
+      });
+      const data = await res.json();
+      console.log("Reset-password response:", res.status, data);
+
+      if (!res.ok) {
+        showToast(extractErrorMessage(data), "error");
+        return;
+      }
+
+      showToast("Password reset! Please log in.", "success");
+      closeForgotPassword();
+      setActiveTab("login");
+    } catch (err) {
+      console.error("Reset-password request failed:", err);
+      showToast("Could not reach the server. Check your connection and try again.", "error");
+    } finally {
+      setForgotLoading(false);
+    }
+  };
 
   const [formData, setFormData] = useState({
     full_name: "", username: "", email: "", phone: "",
     password: "", confirm_password: "",
-    street: "", city: "", state: "",
+    street: "", city: "", state: "", pincode: "", landmark: "",
     otp: "",
     loginId: "",
     account_type: "customer",
@@ -137,6 +295,7 @@ export default function AuthPage() {
     setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
     if (name === "pan_number") setPanError("");
     if (name === "gst_number") setGstError("");
+    if (name === "pincode") setPincodeError("");
   };
 
   const extractErrorMessage = (data) => {
@@ -168,8 +327,13 @@ export default function AuthPage() {
     }
 
     if (step === 2) {
-      if (!formData.street || !formData.city || !formData.state) {
+      if (!formData.street || !formData.city || !formData.state || !formData.pincode) {
         setStepError("Please complete your address to continue.");
+        return;
+      }
+      if (!PINCODE_REGEX.test(formData.pincode.trim())) {
+        setPincodeError("Invalid pincode. Expected a 6-digit PIN code.");
+        setStepError("Please enter a valid pincode to continue.");
         return;
       }
     }
@@ -221,6 +385,8 @@ export default function AuthPage() {
         street: formData.street,
         city: formData.city,
         state: formData.state,
+        pincode: formData.pincode.trim(),
+        landmark: formData.landmark,
         account_type: formData.account_type,
       };
 
@@ -300,11 +466,25 @@ export default function AuthPage() {
     setLoading(true);
 
     try {
-      const isEmail = formData.loginId.includes("@");
+      const loginId = formData.loginId.trim();
+      const isEmail = loginId.includes("@");
+      // Treat as a phone number if it's all digits (allowing an optional
+      // leading "+" for country code) and at least 10 digits long.
+      const isPhone = !isEmail && /^\+?[0-9]{10,15}$/.test(loginId);
 
-      const loginPayload = isEmail
-        ? { email: formData.loginId, password: formData.password }
-        : { username: formData.loginId, password: formData.password };
+      // NOTE: the backend's current validation only checks for an "email"
+      // key and rejects the request with "Email and password required" if
+      // it's missing — regardless of what's actually in it. Until the
+      // backend adds real phone/username lookup, we send the value under
+      // "email" so the request passes that check, and also include
+      // "username"/"phone" as extra keys in case the backend's auth logic
+      // already tries those too.
+      const loginPayload = {
+        email: loginId,
+        password: formData.password,
+        ...(isPhone ? { phone: loginId } : {}),
+        ...(!isEmail && !isPhone ? { username: loginId } : {}),
+      };
 
       const res = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
         method: "POST",
@@ -422,8 +602,8 @@ export default function AuthPage() {
                       <InputField name="username" placeholder="Username" value={formData.username} handleChange={handleChange} />
                       <InputField name="email" type="email" placeholder="Email address" value={formData.email} handleChange={handleChange} />
                       <InputField name="phone" placeholder="Phone" value={formData.phone} handleChange={handleChange} />
-                      <InputField name="password" type="password" placeholder="Password" value={formData.password} handleChange={handleChange} />
-                      <InputField name="confirm_password" type="password" placeholder="Confirm Password" value={formData.confirm_password} handleChange={handleChange} />
+                      <PasswordField name="password" placeholder="Password" value={formData.password} handleChange={handleChange} />
+                      <PasswordField name="confirm_password" placeholder="Confirm Password" value={formData.confirm_password} handleChange={handleChange} />
                     </div>
                   )}
 
@@ -431,7 +611,8 @@ export default function AuthPage() {
                     <div className="space-y-4">
                       <p className="text-white font-semibold text-sm">Your Address</p>
 
-                      <InputField name="street" placeholder="Street Address" value={formData.street} handleChange={handleChange} />
+                      <InputField name="street" placeholder="Street Address (House No., Building, Area)" value={formData.street} handleChange={handleChange} />
+                      <InputField name="landmark" placeholder="Landmark (optional)" value={formData.landmark} handleChange={handleChange} />
 
                       <div className="grid grid-cols-2 gap-3">
                         <InputField name="city" placeholder="City" value={formData.city} handleChange={handleChange} />
@@ -446,6 +627,24 @@ export default function AuthPage() {
                             <option key={s} value={s}>{s}</option>
                           ))}
                         </select>
+                      </div>
+
+                      <div>
+                        <input
+                          name="pincode"
+                          placeholder="Pincode (6-digit PIN code)"
+                          value={formData.pincode}
+                          onChange={(e) => {
+                            const digitsOnly = e.target.value.replace(/[^0-9]/g, "");
+                            handleChange({ target: { name: "pincode", value: digitsOnly, type: "text" } });
+                          }}
+                          maxLength={6}
+                          inputMode="numeric"
+                          className={`w-full p-3 rounded-xl bg-white border-none focus:outline-none focus:ring-2 text-[#1a1a1a] placeholder:text-gray-400 ${
+                            pincodeError ? "ring-2 ring-red-400" : "focus:ring-white/50"
+                          }`}
+                        />
+                        {pincodeError && <p className="text-red-200 text-xs mt-1.5">{pincodeError}</p>}
                       </div>
                     </div>
                   )}
@@ -554,16 +753,16 @@ export default function AuthPage() {
           )}
 
           {/* ================= LOGIN (email OR username) ================= */}
-          {activeTab === "login" && (
+          {activeTab === "login" && !forgotOpen && (
             <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
               <div>
                 <label className="block mb-2 font-medium text-white text-sm">
-                  Email or Username <span className="text-red-300">*</span>
+                  Email, Phone, or Username <span className="text-red-300">*</span>
                 </label>
                 <InputField
                   name="loginId"
                   type="text"
-                  placeholder="Email address or Username"
+                  placeholder="Email, phone number, or username"
                   value={formData.loginId}
                   handleChange={handleChange}
                 />
@@ -573,12 +772,21 @@ export default function AuthPage() {
                 <label className="block mb-2 font-medium text-white text-sm">
                   Password <span className="text-red-300">*</span>
                 </label>
-                <InputField name="password" type="password" placeholder="Password" value={formData.password} handleChange={handleChange} />
+                <PasswordField name="password" placeholder="Password" value={formData.password} handleChange={handleChange} />
               </div>
 
-              <div className="flex items-center gap-2 text-sm text-white">
-                <input type="checkbox" className="w-4 h-4 rounded" />
-                <span>Remember me</span>
+              <div className="flex items-center justify-between text-sm text-white">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4 rounded" />
+                  <span>Remember me</span>
+                </label>
+                <button
+                  type="button"
+                  onClick={openForgotPassword}
+                  className="text-white/80 hover:text-white transition-colors underline-offset-2 hover:underline"
+                >
+                  Forgot password?
+                </button>
               </div>
 
               <button
@@ -589,27 +797,91 @@ export default function AuthPage() {
               >
                 {loading ? "Logging in..." : "Log in"}
               </button>
+            </form>
+          )}
 
-              <p className="text-sm text-white/80 hover:text-white transition-colors cursor-pointer">
-                Forgot email?
-              </p>
+          {/* ================= FORGOT PASSWORD ================= */}
+          {activeTab === "login" && forgotOpen && (
+            <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+              <div className="flex items-center gap-2 mb-1">
+                <button
+                  type="button"
+                  onClick={closeForgotPassword}
+                  className="text-white/70 hover:text-white transition-colors"
+                >
+                  <ArrowLeft size={18} />
+                </button>
+                <p className="text-white font-semibold text-sm">
+                  {forgotStep === 1 ? "Reset your password" : "Enter code & new password"}
+                </p>
+              </div>
+
+              {forgotStep === 1 ? (
+                <>
+                  <p className="text-white/70 text-xs">
+                    Enter the email linked to your account and we'll send you a reset code.
+                  </p>
+                  <InputField
+                    name="email"
+                    type="email"
+                    placeholder="Email address"
+                    value={forgotData.email}
+                    handleChange={handleForgotChange}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleForgotRequestOtp}
+                    disabled={forgotLoading}
+                    className="w-full bg-white text-[#2f5f73] font-bold py-3 rounded-xl text-base hover:bg-gray-100 transition-colors"
+                  >
+                    {forgotLoading ? "Sending..." : "Send Reset Code"}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className="text-white/70 text-xs">
+                    We sent a code to <span className="font-semibold">{forgotData.email}</span>.
+                  </p>
+                  <InputField
+                    name="otp"
+                    placeholder="Enter code"
+                    value={forgotData.otp}
+                    handleChange={handleForgotChange}
+                  />
+                  <PasswordField
+                    name="new_password"
+                    placeholder="New password"
+                    value={forgotData.new_password}
+                    handleChange={handleForgotChange}
+                  />
+                  <PasswordField
+                    name="confirm_new_password"
+                    placeholder="Confirm new password"
+                    value={forgotData.confirm_new_password}
+                    handleChange={handleForgotChange}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleForgotResetPassword}
+                    disabled={forgotLoading}
+                    className="w-full bg-white text-[#2f5f73] font-bold py-3 rounded-xl text-base hover:bg-gray-100 transition-colors"
+                  >
+                    {forgotLoading ? "Resetting..." : "Reset Password"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleForgotRequestOtp}
+                    disabled={forgotLoading}
+                    className="w-full text-white/70 hover:text-white text-xs transition-colors"
+                  >
+                    Resend code
+                  </button>
+                </>
+              )}
             </form>
           )}
         </div>
       </div>
     </div>
-  );
-}
-
-function InputField({ name, type = "text", placeholder, value, handleChange }) {
-  return (
-    <input
-      name={name}
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={handleChange}
-      className="w-full p-3 rounded-xl bg-white border-none focus:outline-none focus:ring-2 focus:ring-white/50 text-[#1a1a1a] placeholder:text-gray-400"
-    />
   );
 }
