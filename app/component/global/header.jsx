@@ -72,13 +72,15 @@ export default function Header() {
 
           {/* Logo */}
           <div className="flex-shrink-0">
-          <Image
-              src={solid ? "/logo.png" : "/RipurajLogo.webp"}
-              alt="RIPURAJ"
-              width={150}
-              height={60}
-              className="h-14 w-auto object-contain"
-            />
+            <Link href="/" aria-label="Go to homepage">
+              <Image
+                src={solid ? "/logo.png" : "/RipurajLogo.webp"}
+                alt="RIPURAJ"
+                width={150}
+                height={60}
+                className="h-14 w-auto object-contain"
+              />
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -194,13 +196,15 @@ export default function Header() {
               <div className="flex flex-col h-full">
                 {/* Header row with close button */}
                 <div className="flex items-center justify-between px-5 py-5 border-b border-[#EDEDED]">
-                  <Image
-                    src="/logo.png"
-                    alt="RIPURAJ"
-                    width={110}
-                    height={44}
-                    className="h-10 w-auto object-contain"
-                  />
+                  <Link href="/" aria-label="Go to homepage" onClick={() => setIsOpen(false)}>
+                    <Image
+                      src="/logo.png"
+                      alt="RIPURAJ"
+                      width={110}
+                      height={44}
+                      className="h-10 w-auto object-contain"
+                    />
+                  </Link>
 
                   <button
                     onClick={() => setIsOpen(false)}

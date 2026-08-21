@@ -258,6 +258,10 @@ export default function AuthPage() {
           email: forgotData.email,
           otp: forgotData.otp,
           new_password: forgotData.new_password,
+          // Backend requires confirm_password on this endpoint (same as
+          // register). We collect it as confirm_new_password in state,
+          // so map it to the key name the API expects here.
+          confirm_password: forgotData.confirm_new_password,
         }),
       });
       const data = await res.json();
@@ -467,23 +471,22 @@ export default function AuthPage() {
 
     try {
       const loginId = formData.loginId.trim();
-      const isEmail = loginId.includes("@");
-      // Treat as a phone number if it's all digits (allowing an optional
-      // leading "+" for country code) and at least 10 digits long.
-      const isPhone = !isEmail && /^\+?[0-9]{10,15}$/.test(loginId);
 
-      // NOTE: the backend's current validation only checks for an "email"
-      // key and rejects the request with "Email and password required" if
-      // it's missing — regardless of what's actually in it. Until the
-      // backend adds real phone/username lookup, we send the value under
-      // "email" so the request passes that check, and also include
-      // "username"/"phone" as extra keys in case the backend's auth logic
-      // already tries those too.
+      // NOTE: we're not 100% sure which field name the backend's login
+      // serializer actually reads (it changed recently — we started
+      // getting "Email/phone and password are required" even with both
+      // filled in). Until we can confirm the exact field name from the
+      // Django view/serializer, we send the same value under every
+      // plausible key so whichever one the backend checks for is
+      // satisfied. Once confirmed, this can be trimmed back down to just
+      // the one correct key.
       const loginPayload = {
         email: loginId,
+        username: loginId,
+        identifier: loginId,
+        login: loginId,
+        phone: loginId,
         password: formData.password,
-        ...(isPhone ? { phone: loginId } : {}),
-        ...(!isEmail && !isPhone ? { username: loginId } : {}),
       };
 
       const res = await fetch(`${API_BASE_URL}/api/accounts/login/`, {
@@ -516,12 +519,12 @@ export default function AuthPage() {
     <div className="min-h-screen bg-white pt-24 md:pt-28 pb-16 relative overflow-hidden">
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
 
-      <div className="absolute bottom-0 left-0 w-28 md:w-36 opacity-80 pointer-events-none">
+      {/* <div className="absolute bottom-0 left-0 w-28 md:w-36 opacity-80 pointer-events-none">
         <Image src="/leftpea.png" alt="" width={160} height={160} className="w-full h-auto" />
       </div>
       <div className="absolute bottom-0 right-0 w-28 md:w-36 opacity-80 pointer-events-none">
         <Image src="/rightpea.png" alt="" width={160} height={160} className="w-full h-auto" />
-      </div>
+      </div> */}
 
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center gap-2 text-sm text-gray-500 flex-wrap">
