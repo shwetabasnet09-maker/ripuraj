@@ -10,7 +10,11 @@ export default function ManageAccount() {
     username: "",
     phone: "",
     email: "",
-    address: "",
+    street: "",
+    city: "",
+    state: "",
+    pincode: "",
+    landmark: "",
     account_type: "customer",
   });
 
@@ -40,7 +44,11 @@ export default function ManageAccount() {
         username: data.username || "",
         phone: data.phone || "",
         email: data.email || "",
-        address: data.address || "",
+        street: data.street || "",
+        city: data.city || "",
+        state: data.state || "",
+        pincode: data.pincode || "",
+        landmark: data.landmark || "",
         account_type: data.account_type || "customer",
       });
     } catch (err) {
@@ -97,6 +105,18 @@ export default function ManageAccount() {
 
     setSaving(false);
   };
+
+  // Combine the separate address fields into one display line,
+  // skipping any that are empty.
+  const formattedAddress = [
+    profile.street,
+    profile.landmark,
+    profile.city,
+    profile.state,
+    profile.pincode,
+  ]
+    .filter(Boolean)
+    .join(", ");
 
   if (loading) {
     return (
@@ -215,12 +235,63 @@ export default function ManageAccount() {
           {editingAddress ? (
             <div className="space-y-3">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">Address</label>
-                <textarea
-                  name="address"
-                  value={profile.address}
+                <label className="block text-xs text-gray-500 mb-1">Street Address</label>
+                <input
+                  type="text"
+                  name="street"
+                  value={profile.street}
                   onChange={handleChange}
-                  rows={3}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2f5f73]/30"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Landmark (optional)</label>
+                <input
+                  type="text"
+                  name="landmark"
+                  value={profile.landmark}
+                  onChange={handleChange}
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2f5f73]/30"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">City</label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={profile.city}
+                    onChange={handleChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2f5f73]/30"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">State</label>
+                  <input
+                    type="text"
+                    name="state"
+                    value={profile.state}
+                    onChange={handleChange}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2f5f73]/30"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Pincode</label>
+                <input
+                  type="text"
+                  name="pincode"
+                  value={profile.pincode}
+                  onChange={(e) => {
+                    const digitsOnly = e.target.value.replace(/[^0-9]/g, "");
+                    handleChange({ target: { name: "pincode", value: digitsOnly } });
+                  }}
+                  maxLength={6}
+                  inputMode="numeric"
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2f5f73]/30"
                 />
               </div>
@@ -243,7 +314,7 @@ export default function ManageAccount() {
                   {profile.username || "User name"}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {profile.address || "Address"}
+                  {formattedAddress || "Address"}
                 </p>
               </div>
 
@@ -255,7 +326,7 @@ export default function ManageAccount() {
                   {profile.username || "User name"}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {profile.address || "Address"}
+                  {formattedAddress || "Address"}
                 </p>
               </div>
             </div>
