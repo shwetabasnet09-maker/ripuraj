@@ -645,7 +645,7 @@ import {
   XCircle,
   Star,
 } from "lucide-react";
-import { authFetch } from "../../../utils/authFetch";
+import { authFetch } from "../../utils/authFetch";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
