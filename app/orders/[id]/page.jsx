@@ -337,293 +337,751 @@
 //   );
 // }
 
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import { useRouter } from "next/navigation";
+// import ManageAccount from "../component/dashboard/tabs/ManageAccount";
+// import MyOrders from "../../component/dashboard/tabs/MyOrders";
+// import MyReviews from "../../component/dashboard/tabs/MyReviews";
+// import {
+//   User,
+//   ShoppingBag,
+//   Star,
+//   LogOut,
+// } from "lucide-react";
+// import { authFetch } from "../../utils/authFetch";
+// import ShippingTracker from "../../component/global/ShippingTracker";
+
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+// export default function DashboardPage() {
+//   const router = useRouter();
+
+//   const [loading, setLoading] = useState(true);
+//   const [activeTab, setActiveTab] = useState("account");
+
+//   const [orders, setOrders] = useState([]);
+//   const [reviews, setReviews] = useState([]);
+
+//   const [ordersLoading, setOrdersLoading] =
+//     useState(false);
+
+//   const [reviewsLoading, setReviewsLoading] =
+//     useState(false);
+
+//   // --------------------------------------------------
+//   // AUTH
+//   // --------------------------------------------------
+
+//   useEffect(() => {
+//     const token =
+//       localStorage.getItem("access_token");
+
+//     if (!token) {
+//       router.replace("/auth");
+//       return;
+//     }
+
+//     setLoading(false);
+//   }, [router]);
+
+//   // --------------------------------------------------
+//   // FETCH ORDERS
+//   // --------------------------------------------------
+
+//   const fetchOrders = async () => {
+//     try {
+//       setOrdersLoading(true);
+
+//       const res = await authFetch(
+//         `${API_BASE_URL}/api/orders/history/`
+//       );
+
+//       if (!res.ok) {
+//         throw new Error(
+//           "Failed to fetch orders"
+//         );
+//       }
+
+//       const data = await res.json();
+
+//       setOrders(
+//         Array.isArray(data) ? data : []
+//       );
+//     } catch (error) {
+//       console.error(
+//         "Failed to fetch orders:",
+//         error
+//       );
+
+//       setOrders([]);
+//     } finally {
+//       setOrdersLoading(false);
+//     }
+//   };
+
+//   // --------------------------------------------------
+//   // FETCH REVIEWS
+//   // --------------------------------------------------
+
+//   const fetchReviews = async () => {
+//     try {
+//       setReviewsLoading(true);
+
+//       const res = await authFetch(
+//         `${API_BASE_URL}/api/reviews/`
+//       );
+
+//       if (!res.ok) {
+//         throw new Error(
+//           "Failed to fetch reviews"
+//         );
+//       }
+
+//       const data = await res.json();
+
+//       /*
+//        * Handles both:
+//        *
+//        * [
+//        *   {...},
+//        *   {...}
+//        * ]
+//        *
+//        * and:
+//        *
+//        * {
+//        *   results: [...]
+//        * }
+//        */
+//       if (Array.isArray(data)) {
+//         setReviews(data);
+//       } else if (
+//         Array.isArray(data?.results)
+//       ) {
+//         setReviews(data.results);
+//       } else {
+//         setReviews([]);
+//       }
+//     } catch (error) {
+//       console.error(
+//         "Failed to fetch reviews:",
+//         error
+//       );
+
+//       setReviews([]);
+//     } finally {
+//       setReviewsLoading(false);
+//     }
+//   };
+
+//   // --------------------------------------------------
+//   // LOAD TAB DATA
+//   // --------------------------------------------------
+
+//   useEffect(() => {
+//     if (activeTab === "orders") {
+//       fetchOrders();
+//     }
+
+//     if (activeTab === "reviews") {
+//       fetchReviews();
+//     }
+//   }, [activeTab]);
+
+//   // --------------------------------------------------
+//   // LOGOUT
+//   // --------------------------------------------------
+
+//   const handleLogout = () => {
+//     try {
+//       localStorage.removeItem(
+//         "access_token"
+//       );
+
+//       localStorage.removeItem(
+//         "refresh_token"
+//       );
+
+//       localStorage.clear();
+
+//       router.push("/login");
+//       router.refresh();
+//     } catch (error) {
+//       console.error(
+//         "Logout error:",
+//         error
+//       );
+//     }
+//   };
+
+//   // --------------------------------------------------
+//   // TAB CONTENT
+//   // --------------------------------------------------
+
+//   const renderTab = () => {
+//     switch (activeTab) {
+//       case "account":
+//         return <ManageAccount />;
+
+//       case "orders":
+//         return (
+//           <MyOrders
+//             orders={orders}
+//             loading={ordersLoading}
+//             refreshOrders={fetchOrders}
+//           />
+//         );
+
+//       case "reviews":
+//         return (
+//           <MyReviews
+//             reviews={reviews}
+//             loading={reviewsLoading}
+//             refreshReviews={fetchReviews}
+//           />
+//         );
+
+//       default:
+//         return <ManageAccount />;
+//     }
+//   };
+
+//   const menuItems = [
+//     {
+//       key: "account",
+//       label: "Manage My Account",
+//       icon: <User size={20} />,
+//     },
+//     {
+//       key: "orders",
+//       label: "My Orders",
+//       icon: <ShoppingBag size={20} />,
+//     },
+//     {
+//       key: "reviews",
+//       label: "My Reviews",
+//       icon: <Star size={20} />,
+//     },
+//   ];
+
+//   // --------------------------------------------------
+//   // LOADING
+//   // --------------------------------------------------
+
+//   if (loading) {
+//     return (
+//       <div className="min-h-screen flex justify-center items-center">
+//         <p className="text-gray-600">
+//           Checking authentication...
+//         </p>
+//       </div>
+//     );
+//   }
+
+//   // --------------------------------------------------
+//   // DASHBOARD
+//   // --------------------------------------------------
+
+//   return (
+//     <div className="wrapper py-40 px-6">
+//       <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden flex flex-col lg:flex-row">
+
+//         {/* SIDEBAR */}
+//         <div className="w-full lg:w-1/4 bg-gray-50 border-r p-6 space-y-3">
+
+//           {menuItems.map((item) => (
+//             <button
+//               key={item.key}
+//               type="button"
+//               onClick={() =>
+//                 setActiveTab(item.key)
+//               }
+//               className={`w-full flex items-center gap-3 p-3 rounded-lg cursor-pointer transition text-left ${
+//                 activeTab === item.key
+//                   ? "bg-[#2C5C6E]/10 text-[#2C5C6E] font-semibold"
+//                   : "hover:bg-gray-100 text-gray-700"
+//               }`}
+//             >
+//               {item.icon}
+//               <span>{item.label}</span>
+//             </button>
+//           ))}
+
+//           {/* LOGOUT */}
+//           <button
+//             type="button"
+//             onClick={handleLogout}
+//             className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg cursor-pointer text-red-500 text-left"
+//           >
+//             <LogOut size={20} />
+//             <span>Logout</span>
+//           </button>
+//         </div>
+
+//         {/* CONTENT */}
+//         <div className="w-full lg:w-3/4 p-8">
+//           {renderTab()}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import ManageAccount from "../../component/dashboard/tabs/ManageAccount";
-import MyOrders from "../../component/dashboard/tabs/MyOrders";
-import MyReviews from "../../component/dashboard/tabs/MyReviews";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import {
-  User,
-  ShoppingBag,
+  ArrowLeft,
+  Package,
+  Truck,
+  CreditCard,
+  MapPin,
+  CheckCircle,
+  Clock,
+  XCircle,
   Star,
-  LogOut,
 } from "lucide-react";
-import { authFetch } from "../../utils/authFetch";
-import ShippingTracker from "../../component/global/ShippingTracker";
+import { authFetch } from "../../../utils/authFetch";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function DashboardPage() {
+function normalizeStatus(status) {
+  if (!status) return "";
+
+  return String(status)
+    .trim()
+    .toLowerCase()
+    .replace(/-/g, "_")
+    .replace(/\s+/g, "_");
+}
+
+const shippingStatusStyles = {
+  pending: "bg-orange-100 text-orange-700",
+  processing: "bg-yellow-100 text-yellow-700",
+  shipped: "bg-blue-100 text-blue-700",
+  on_the_way: "bg-blue-100 text-blue-700",
+  delivered: "bg-green-100 text-green-700",
+  cancelled: "bg-red-100 text-red-700",
+  canceled: "bg-red-100 text-red-700",
+};
+
+const paymentStatusStyles = {
+  pending: "bg-orange-100 text-orange-700",
+  paid: "bg-green-100 text-green-700",
+  cancelled: "bg-red-100 text-red-700",
+  canceled: "bg-red-100 text-red-700",
+};
+
+export default function OrderDetailPage() {
+  const params = useParams();
   const router = useRouter();
 
+  const orderId = params?.id;
+
+  const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("account");
-
-  const [orders, setOrders] = useState([]);
-  const [reviews, setReviews] = useState([]);
-
-  const [ordersLoading, setOrdersLoading] =
-    useState(false);
-
-  const [reviewsLoading, setReviewsLoading] =
-    useState(false);
-
-  // --------------------------------------------------
-  // AUTH
-  // --------------------------------------------------
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const token =
-      localStorage.getItem("access_token");
+    if (!orderId) return;
 
-    if (!token) {
-      router.replace("/auth");
-      return;
-    }
+    const fetchOrder = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-    setLoading(false);
-  }, [router]);
-
-  // --------------------------------------------------
-  // FETCH ORDERS
-  // --------------------------------------------------
-
-  const fetchOrders = async () => {
-    try {
-      setOrdersLoading(true);
-
-      const res = await authFetch(
-        `${API_BASE_URL}/api/orders/history/`
-      );
-
-      if (!res.ok) {
-        throw new Error(
-          "Failed to fetch orders"
+        const res = await authFetch(
+          `${API_BASE_URL}/api/orders/${orderId}/`
         );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch order");
+        }
+
+        const data = await res.json();
+
+        setOrder(data);
+      } catch (err) {
+        console.error("Order detail error:", err);
+        setError("Unable to load this order.");
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const data = await res.json();
-
-      setOrders(
-        Array.isArray(data) ? data : []
-      );
-    } catch (error) {
-      console.error(
-        "Failed to fetch orders:",
-        error
-      );
-
-      setOrders([]);
-    } finally {
-      setOrdersLoading(false);
-    }
-  };
-
-  // --------------------------------------------------
-  // FETCH REVIEWS
-  // --------------------------------------------------
-
-  const fetchReviews = async () => {
-    try {
-      setReviewsLoading(true);
-
-      const res = await authFetch(
-        `${API_BASE_URL}/api/reviews/`
-      );
-
-      if (!res.ok) {
-        throw new Error(
-          "Failed to fetch reviews"
-        );
-      }
-
-      const data = await res.json();
-
-      /*
-       * Handles both:
-       *
-       * [
-       *   {...},
-       *   {...}
-       * ]
-       *
-       * and:
-       *
-       * {
-       *   results: [...]
-       * }
-       */
-      if (Array.isArray(data)) {
-        setReviews(data);
-      } else if (
-        Array.isArray(data?.results)
-      ) {
-        setReviews(data.results);
-      } else {
-        setReviews([]);
-      }
-    } catch (error) {
-      console.error(
-        "Failed to fetch reviews:",
-        error
-      );
-
-      setReviews([]);
-    } finally {
-      setReviewsLoading(false);
-    }
-  };
-
-  // --------------------------------------------------
-  // LOAD TAB DATA
-  // --------------------------------------------------
-
-  useEffect(() => {
-    if (activeTab === "orders") {
-      fetchOrders();
-    }
-
-    if (activeTab === "reviews") {
-      fetchReviews();
-    }
-  }, [activeTab]);
-
-  // --------------------------------------------------
-  // LOGOUT
-  // --------------------------------------------------
-
-  const handleLogout = () => {
-    try {
-      localStorage.removeItem(
-        "access_token"
-      );
-
-      localStorage.removeItem(
-        "refresh_token"
-      );
-
-      localStorage.clear();
-
-      router.push("/login");
-      router.refresh();
-    } catch (error) {
-      console.error(
-        "Logout error:",
-        error
-      );
-    }
-  };
-
-  // --------------------------------------------------
-  // TAB CONTENT
-  // --------------------------------------------------
-
-  const renderTab = () => {
-    switch (activeTab) {
-      case "account":
-        return <ManageAccount />;
-
-      case "orders":
-        return (
-          <MyOrders
-            orders={orders}
-            loading={ordersLoading}
-            refreshOrders={fetchOrders}
-          />
-        );
-
-      case "reviews":
-        return (
-          <MyReviews
-            reviews={reviews}
-            loading={reviewsLoading}
-            refreshReviews={fetchReviews}
-          />
-        );
-
-      default:
-        return <ManageAccount />;
-    }
-  };
-
-  const menuItems = [
-    {
-      key: "account",
-      label: "Manage My Account",
-      icon: <User size={20} />,
-    },
-    {
-      key: "orders",
-      label: "My Orders",
-      icon: <ShoppingBag size={20} />,
-    },
-    {
-      key: "reviews",
-      label: "My Reviews",
-      icon: <Star size={20} />,
-    },
-  ];
-
-  // --------------------------------------------------
-  // LOADING
-  // --------------------------------------------------
+    fetchOrder();
+  }, [orderId]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
-        <p className="text-gray-600">
-          Checking authentication...
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
+        <p className="text-slate-600 font-medium">
+          Loading order...
         </p>
       </div>
     );
   }
 
-  // --------------------------------------------------
-  // DASHBOARD
-  // --------------------------------------------------
+  if (error || !order) {
+    return (
+      <div className="min-h-screen bg-[#F8FAFC] px-4 pt-28">
+        <div className="max-w-4xl mx-auto bg-white rounded-2xl border border-slate-200 p-10 text-center">
+          <Package className="w-16 h-16 text-slate-300 mx-auto mb-4" />
 
-  return (
-    <div className="wrapper py-40 px-6">
-      <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden flex flex-col lg:flex-row">
+          <h1 className="text-2xl font-bold text-slate-800">
+            Order Not Found
+          </h1>
 
-        {/* SIDEBAR */}
-        <div className="w-full lg:w-1/4 bg-gray-50 border-r p-6 space-y-3">
+          <p className="text-slate-500 mt-2">
+            We couldn't find this order.
+          </p>
 
-          {menuItems.map((item) => (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() =>
-                setActiveTab(item.key)
-              }
-              className={`w-full flex items-center gap-3 p-3 rounded-lg cursor-pointer transition text-left ${
-                activeTab === item.key
-                  ? "bg-[#2C5C6E]/10 text-[#2C5C6E] font-semibold"
-                  : "hover:bg-gray-100 text-gray-700"
-              }`}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </button>
-          ))}
-
-          {/* LOGOUT */}
           <button
-            type="button"
-            onClick={handleLogout}
-            className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg cursor-pointer text-red-500 text-left"
+            onClick={() => router.back()}
+            className="mt-6 px-5 py-2.5 rounded-lg bg-[#2C5C6E] text-white"
           >
-            <LogOut size={20} />
-            <span>Logout</span>
+            Go Back
           </button>
         </div>
+      </div>
+    );
+  }
 
-        {/* CONTENT */}
-        <div className="w-full lg:w-3/4 p-8">
-          {renderTab()}
+  const shippingStatus = normalizeStatus(
+    order.shipping_status
+  );
+
+  const paymentStatus = normalizeStatus(
+    order.status
+  );
+
+  const isDelivered =
+    shippingStatus === "delivered";
+
+  const isCancelled =
+    shippingStatus === "cancelled" ||
+    shippingStatus === "canceled" ||
+    paymentStatus === "cancelled" ||
+    paymentStatus === "canceled";
+
+  return (
+    <div className="min-h-screen bg-[#F8FAFC] px-4 pt-24 md:pt-28 pb-12">
+      <div className="max-w-5xl mx-auto">
+
+        {/* BACK */}
+        <Link
+          href="/orders"
+          className="inline-flex items-center gap-2 text-slate-600 hover:text-[#2C5C6E] mb-6"
+        >
+          <ArrowLeft size={18} />
+          Back to Orders
+        </Link>
+
+        {/* HEADER */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+            <div>
+              <p className="text-sm text-slate-500">
+                Order Details
+              </p>
+
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-800 mt-1">
+                Order #{order.id}
+              </h1>
+
+              <p className="text-sm text-slate-500 mt-2">
+                {order.created_at
+                  ? new Date(
+                      order.created_at
+                    ).toLocaleDateString()
+                  : "—"}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3">
+
+              <span
+                className={`text-xs font-semibold px-4 py-2 rounded-full ${
+                  shippingStatusStyles[
+                    shippingStatus
+                  ] ||
+                  "bg-gray-100 text-gray-600"
+                }`}
+              >
+                {order.shipping_status ||
+                  "Pending"}
+              </span>
+
+              <span
+                className={`text-xs font-semibold px-4 py-2 rounded-full ${
+                  paymentStatusStyles[
+                    paymentStatus
+                  ] ||
+                  "bg-gray-100 text-gray-600"
+                }`}
+              >
+                {order.status || "Pending"}
+              </span>
+
+            </div>
+          </div>
         </div>
+
+        {/* SHIPPING TRACKER */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
+
+          <div className="flex items-center gap-3 mb-6">
+            <Truck className="text-[#2C5C6E]" />
+
+            <h2 className="text-xl font-bold text-slate-800">
+              Shipping Status
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+            {/* PENDING */}
+            <div
+              className={`text-center ${
+                ["pending", "processing", "shipped", "on_the_way", "delivered"].includes(
+                  shippingStatus
+                )
+                  ? "text-[#2C5C6E]"
+                  : "text-slate-300"
+              }`}
+            >
+              <div className="flex justify-center mb-2">
+                <Clock size={28} />
+              </div>
+
+              <p className="text-sm font-semibold">
+                Pending
+              </p>
+            </div>
+
+            {/* SHIPPED */}
+            <div
+              className={`text-center ${
+                ["shipped", "on_the_way", "delivered"].includes(
+                  shippingStatus
+                )
+                  ? "text-[#2C5C6E]"
+                  : "text-slate-300"
+              }`}
+            >
+              <div className="flex justify-center mb-2">
+                <Package size={28} />
+              </div>
+
+              <p className="text-sm font-semibold">
+                Shipped
+              </p>
+            </div>
+
+            {/* ON THE WAY */}
+            <div
+              className={`text-center ${
+                ["on_the_way", "delivered"].includes(
+                  shippingStatus
+                )
+                  ? "text-[#2C5C6E]"
+                  : "text-slate-300"
+              }`}
+            >
+              <div className="flex justify-center mb-2">
+                <Truck size={28} />
+              </div>
+
+              <p className="text-sm font-semibold">
+                On The Way
+              </p>
+            </div>
+
+            {/* DELIVERED */}
+            <div
+              className={`text-center ${
+                shippingStatus === "delivered"
+                  ? "text-green-600"
+                  : "text-slate-300"
+              }`}
+            >
+              <div className="flex justify-center mb-2">
+                <CheckCircle size={28} />
+              </div>
+
+              <p className="text-sm font-semibold">
+                Delivered
+              </p>
+            </div>
+
+          </div>
+
+          {isCancelled && (
+            <div className="mt-6 bg-red-50 text-red-700 rounded-xl p-4 flex items-center gap-3">
+              <XCircle size={20} />
+
+              <span>
+                This order has been cancelled.
+              </span>
+            </div>
+          )}
+
+        </div>
+
+        {/* ORDER ITEMS */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
+
+          <div className="flex items-center gap-3 mb-6">
+            <Package className="text-[#2C5C6E]" />
+
+            <h2 className="text-xl font-bold text-slate-800">
+              Order Items
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+
+            {order.items?.map((item, index) => (
+              <div
+                key={
+                  item.id ||
+                  item.product_id ||
+                  index
+                }
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 last:border-0 last:pb-0"
+              >
+
+                <div>
+                  <h3 className="font-semibold text-slate-800">
+                    {item.product_name ||
+                      item.product?.name ||
+                      item.product ||
+                      "Product"}
+                  </h3>
+
+                  {item.product_weight && (
+                    <p className="text-sm text-slate-500 mt-1">
+                      Weight:{" "}
+                      {item.product_weight.weight ||
+                        item.product_weight}
+                    </p>
+                  )}
+
+                  <p className="text-sm text-slate-500 mt-1">
+                    Quantity:{" "}
+                    {item.quantity || 0}
+                  </p>
+                </div>
+
+                <p className="font-bold text-slate-800">
+                  ₹
+                  {Number(
+                    item.price || 0
+                  ).toLocaleString("en-IN")}
+                </p>
+
+              </div>
+            ))}
+
+          </div>
+        </div>
+
+        {/* SHIPPING ADDRESS */}
+        {(order.shipping_address ||
+          order.address ||
+          order.location) && (
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-6">
+
+            <div className="flex items-center gap-3 mb-4">
+              <MapPin className="text-[#2C5C6E]" />
+
+              <h2 className="text-xl font-bold text-slate-800">
+                Shipping Address
+              </h2>
+            </div>
+
+            <p className="text-slate-600">
+              {order.shipping_address ||
+                order.address ||
+                order.location}
+            </p>
+
+          </div>
+        )}
+
+        {/* PAYMENT + TOTAL */}
+        <div className="bg-white rounded-2xl border border-slate-200 p-6">
+
+          <div className="flex items-center gap-3 mb-5">
+            <CreditCard className="text-[#2C5C6E]" />
+
+            <h2 className="text-xl font-bold text-slate-800">
+              Payment Summary
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+
+            <div className="flex justify-between text-slate-600">
+              <span>Payment Status</span>
+
+              <span className="font-semibold">
+                {order.status || "Pending"}
+              </span>
+            </div>
+
+            <div className="border-t pt-4 flex justify-between">
+              <span className="font-bold text-slate-800">
+                Total
+              </span>
+
+              <span className="font-bold text-xl text-slate-800">
+                ₹
+                {Number(
+                  order.total_price || 0
+                ).toLocaleString("en-IN")}
+              </span>
+            </div>
+
+          </div>
+
+          {/* REVIEW */}
+          {isDelivered && (
+            <div className="mt-6 border-t pt-6">
+
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
+                <div>
+                  <h3 className="font-bold text-slate-800">
+                    How was your order?
+                  </h3>
+
+                  <p className="text-sm text-slate-500 mt-1">
+                    Your order has been delivered.
+                    Share your experience with us.
+                  </p>
+                </div>
+
+                <Link
+                  href={`/reviews?order=${order.id}`}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#2C5C6E] text-white hover:bg-[#234b5a] transition"
+                >
+                  <Star size={17} />
+                  Review Order
+                </Link>
+
+              </div>
+
+            </div>
+          )}
+
+        </div>
+
       </div>
     </div>
   );
