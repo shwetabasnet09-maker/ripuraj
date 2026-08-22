@@ -341,16 +341,17 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ManageAccount from "../component/dashboard/tabs/ManageAccount";
-import MyOrders from "../component/dashboard/tabs/MyOrders";
-import MyReviews from "../component/dashboard/tabs/MyReviews";
+import ManageAccount from "../../component/dashboard/tabs/ManageAccount";
+import MyOrders from "../../component/dashboard/tabs/MyOrders";
+import MyReviews from "../../component/dashboard/tabs/MyReviews";
 import {
   User,
   ShoppingBag,
   Star,
   LogOut,
 } from "lucide-react";
-import { authFetch } from "../utils/authFetch";
+import { authFetch } from "../../utils/authFetch";
+import ShippingTracker from "../../component/global/ShippingTracker";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
