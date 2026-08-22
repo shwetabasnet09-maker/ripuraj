@@ -110,7 +110,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ManageAccount from "../component/dashboard/tabs/ManageAccount";
 import MyOrders from "../component/dashboard/tabs/MyOrders";
@@ -134,15 +134,19 @@ export default function DashboardPage() {
   const [orders, setOrders] = useState([]);
   const [reviews, setReviews] = useState([]);
 
-  const [ordersLoading, setOrdersLoading] = useState(false);
-  const [reviewsLoading, setReviewsLoading] = useState(false);
+  const [ordersLoading, setOrdersLoading] =
+    useState(false);
+
+  const [reviewsLoading, setReviewsLoading] =
+    useState(false);
 
   // --------------------------------------------------
-  // AUTH CHECK
+  // AUTH
   // --------------------------------------------------
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
+    const token =
+      localStorage.getItem("access_token");
 
     if (!token) {
       router.replace("/auth");
@@ -165,14 +169,22 @@ export default function DashboardPage() {
       );
 
       if (!res.ok) {
-        throw new Error("Failed to fetch orders");
+        throw new Error(
+          "Failed to fetch orders"
+        );
       }
 
       const data = await res.json();
 
-      setOrders(Array.isArray(data) ? data : []);
+      setOrders(
+        Array.isArray(data) ? data : []
+      );
     } catch (error) {
-      console.error("Failed to fetch orders:", error);
+      console.error(
+        "Failed to fetch orders:",
+        error
+      );
+
       setOrders([]);
     } finally {
       setOrdersLoading(false);
@@ -192,14 +204,42 @@ export default function DashboardPage() {
       );
 
       if (!res.ok) {
-        throw new Error("Failed to fetch reviews");
+        throw new Error(
+          "Failed to fetch reviews"
+        );
       }
 
       const data = await res.json();
 
-      setReviews(Array.isArray(data) ? data : []);
+      /*
+       * Handles both:
+       *
+       * [
+       *   {...},
+       *   {...}
+       * ]
+       *
+       * and:
+       *
+       * {
+       *   results: [...]
+       * }
+       */
+      if (Array.isArray(data)) {
+        setReviews(data);
+      } else if (
+        Array.isArray(data?.results)
+      ) {
+        setReviews(data.results);
+      } else {
+        setReviews([]);
+      }
     } catch (error) {
-      console.error("Failed to fetch reviews:", error);
+      console.error(
+        "Failed to fetch reviews:",
+        error
+      );
+
       setReviews([]);
     } finally {
       setReviewsLoading(false);
@@ -207,7 +247,7 @@ export default function DashboardPage() {
   };
 
   // --------------------------------------------------
-  // FETCH DATA WHEN TAB OPENS
+  // LOAD TAB DATA
   // --------------------------------------------------
 
   useEffect(() => {
@@ -226,14 +266,23 @@ export default function DashboardPage() {
 
   const handleLogout = () => {
     try {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
+      localStorage.removeItem(
+        "access_token"
+      );
+
+      localStorage.removeItem(
+        "refresh_token"
+      );
+
       localStorage.clear();
 
       router.push("/login");
       router.refresh();
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error(
+        "Logout error:",
+        error
+      );
     }
   };
 
@@ -287,15 +336,23 @@ export default function DashboardPage() {
     },
   ];
 
+  // --------------------------------------------------
+  // LOADING
+  // --------------------------------------------------
+
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="min-h-screen flex justify-center items-center">
         <p className="text-gray-600">
           Checking authentication...
         </p>
       </div>
     );
   }
+
+  // --------------------------------------------------
+  // DASHBOARD
+  // --------------------------------------------------
 
   return (
     <div className="wrapper py-40 px-6">
@@ -308,7 +365,9 @@ export default function DashboardPage() {
             <button
               key={item.key}
               type="button"
-              onClick={() => setActiveTab(item.key)}
+              onClick={() =>
+                setActiveTab(item.key)
+              }
               className={`w-full flex items-center gap-3 p-3 rounded-lg cursor-pointer transition text-left ${
                 activeTab === item.key
                   ? "bg-[#2C5C6E]/10 text-[#2C5C6E] font-semibold"
