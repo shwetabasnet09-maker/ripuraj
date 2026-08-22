@@ -115,7 +115,12 @@ import { useRouter } from "next/navigation";
 import ManageAccount from "../component/dashboard/tabs/ManageAccount";
 import MyOrders from "../component/dashboard/tabs/MyOrders";
 import MyReviews from "../component/dashboard/tabs/MyReviews";
-import { User, ShoppingBag, Star, LogOut } from "lucide-react";
+import {
+  User,
+  ShoppingBag,
+  Star,
+  LogOut,
+} from "lucide-react";
 import { authFetch } from "../utils/authFetch";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -124,11 +129,18 @@ export default function DashboardPage() {
   const router = useRouter();
 
   const [loading, setLoading] = useState(true);
-  const [ordersLoading, setOrdersLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("account");
-  const [orders, setOrders] = useState([]);
 
-  // Check authentication
+  const [orders, setOrders] = useState([]);
+  const [reviews, setReviews] = useState([]);
+
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+
+  // --------------------------------------------------
+  // AUTH CHECK
+  // --------------------------------------------------
+
   useEffect(() => {
     const token = localStorage.getItem("access_token");
 
@@ -140,35 +152,77 @@ export default function DashboardPage() {
     setLoading(false);
   }, [router]);
 
-  // Fetch orders when Orders tab is opened
-  useEffect(() => {
-    if (activeTab !== "orders") return;
+  // --------------------------------------------------
+  // FETCH ORDERS
+  // --------------------------------------------------
 
-    const fetchOrders = async () => {
-      try {
-        setOrdersLoading(true);
+  const fetchOrders = async () => {
+    try {
+      setOrdersLoading(true);
 
-        const res = await authFetch(
-          `${API_BASE_URL}/api/orders/history/`
-        );
+      const res = await authFetch(
+        `${API_BASE_URL}/api/orders/history/`
+      );
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch orders");
-        }
-
-        const data = await res.json();
-
-        setOrders(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Failed to fetch orders:", error);
-        setOrders([]);
-      } finally {
-        setOrdersLoading(false);
+      if (!res.ok) {
+        throw new Error("Failed to fetch orders");
       }
-    };
 
-    fetchOrders();
+      const data = await res.json();
+
+      setOrders(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Failed to fetch orders:", error);
+      setOrders([]);
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+
+  // --------------------------------------------------
+  // FETCH REVIEWS
+  // --------------------------------------------------
+
+  const fetchReviews = async () => {
+    try {
+      setReviewsLoading(true);
+
+      const res = await authFetch(
+        `${API_BASE_URL}/api/reviews/`
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch reviews");
+      }
+
+      const data = await res.json();
+
+      setReviews(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Failed to fetch reviews:", error);
+      setReviews([]);
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
+
+  // --------------------------------------------------
+  // FETCH DATA WHEN TAB OPENS
+  // --------------------------------------------------
+
+  useEffect(() => {
+    if (activeTab === "orders") {
+      fetchOrders();
+    }
+
+    if (activeTab === "reviews") {
+      fetchReviews();
+    }
   }, [activeTab]);
+
+  // --------------------------------------------------
+  // LOGOUT
+  // --------------------------------------------------
 
   const handleLogout = () => {
     try {
@@ -183,6 +237,10 @@ export default function DashboardPage() {
     }
   };
 
+  // --------------------------------------------------
+  // TAB CONTENT
+  // --------------------------------------------------
+
   const renderTab = () => {
     switch (activeTab) {
       case "account":
@@ -193,11 +251,18 @@ export default function DashboardPage() {
           <MyOrders
             orders={orders}
             loading={ordersLoading}
+            refreshOrders={fetchOrders}
           />
         );
 
       case "reviews":
-        return <MyReviews />;
+        return (
+          <MyReviews
+            reviews={reviews}
+            loading={reviewsLoading}
+            refreshReviews={fetchReviews}
+          />
+        );
 
       default:
         return <ManageAccount />;
@@ -224,9 +289,11 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <p className="text-center mt-20">
-        Checking authentication...
-      </p>
+      <div className="flex justify-center items-center min-h-screen">
+        <p className="text-gray-600">
+          Checking authentication...
+        </p>
+      </div>
     );
   }
 
@@ -234,40 +301,40 @@ export default function DashboardPage() {
     <div className="wrapper py-40 px-6">
       <div className="max-w-6xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden flex flex-col lg:flex-row">
 
-        {/* Sidebar */}
+        {/* SIDEBAR */}
         <div className="w-full lg:w-1/4 bg-gray-50 border-r p-6 space-y-3">
 
           {menuItems.map((item) => (
-            <div
+            <button
               key={item.key}
+              type="button"
               onClick={() => setActiveTab(item.key)}
-              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition ${
+              className={`w-full flex items-center gap-3 p-3 rounded-lg cursor-pointer transition text-left ${
                 activeTab === item.key
                   ? "bg-[#2C5C6E]/10 text-[#2C5C6E] font-semibold"
-                  : "hover:bg-gray-100"
+                  : "hover:bg-gray-100 text-gray-700"
               }`}
             >
               {item.icon}
               <span>{item.label}</span>
-            </div>
+            </button>
           ))}
 
-          {/* Logout */}
-          <div
+          {/* LOGOUT */}
+          <button
+            type="button"
             onClick={handleLogout}
-            className="flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg cursor-pointer text-red-500"
+            className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg cursor-pointer text-red-500 text-left"
           >
             <LogOut size={20} />
             <span>Logout</span>
-          </div>
-
+          </button>
         </div>
 
-        {/* Content */}
+        {/* CONTENT */}
         <div className="w-full lg:w-3/4 p-8">
           {renderTab()}
         </div>
-
       </div>
     </div>
   );
