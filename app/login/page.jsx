@@ -173,6 +173,7 @@ export default function AuthPage() {
   const [panError, setPanError] = useState("");
   const [gstError, setGstError] = useState("");
   const [pincodeError, setPincodeError] = useState("");
+  const [pincodeLoading, setPincodeLoading] = useState(false);
   const [stepError, setStepError] = useState("");
 
   // ---------------- Forgot password state ----------------
@@ -302,6 +303,35 @@ export default function AuthPage() {
     if (name === "pincode") setPincodeError("");
   };
 
+  // ---------------- Pincode -> city/state auto-lookup ----------------
+  // Uses the free, keyless India Post pincode API. Called from the
+  // browser once the user has typed a full 6-digit valid pincode.
+  const lookupPincode = async (pincode) => {
+    setPincodeLoading(true);
+    try {
+      const res = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
+      const data = await res.json();
+      const record = data?.[0];
+
+      if (record?.Status === "Success" && record.PostOffice?.length) {
+        const po = record.PostOffice[0];
+        setFormData((prev) => ({
+          ...prev,
+          city: po.District || prev.city,
+          state: po.State || prev.state,
+        }));
+        setPincodeError("");
+      } else {
+        setPincodeError("Pincode not found. Please check and enter manually.");
+      }
+    } catch (err) {
+      console.error("Pincode lookup failed:", err);
+      // Fail quietly — don't block the user, they can still fill city/state manually
+    } finally {
+      setPincodeLoading(false);
+    }
+  };
+
   const extractErrorMessage = (data) => {
     if (!data) return "Something went wrong. Please try again.";
     if (typeof data === "string") return data;
@@ -389,7 +419,7 @@ export default function AuthPage() {
         street: formData.street,
         city: formData.city,
         state: formData.state,
-        pincode: formData.pincode.trim(),
+        postal_code: formData.pincode.trim(),
         landmark: formData.landmark,
         account_type: formData.account_type,
       };
@@ -617,6 +647,30 @@ export default function AuthPage() {
                       <InputField name="street" placeholder="Street Address (House No., Building, Area)" value={formData.street} handleChange={handleChange} />
                       <InputField name="landmark" placeholder="Landmark (optional)" value={formData.landmark} handleChange={handleChange} />
 
+                      <div>
+                        <input
+                          name="pincode"
+                          placeholder="Pincode (6-digit PIN code)"
+                          value={formData.pincode}
+                          onChange={(e) => {
+                            const digitsOnly = e.target.value.replace(/[^0-9]/g, "");
+                            handleChange({ target: { name: "pincode", value: digitsOnly, type: "text" } });
+                            if (digitsOnly.length === 6 && PINCODE_REGEX.test(digitsOnly)) {
+                              lookupPincode(digitsOnly);
+                            }
+                          }}
+                          maxLength={6}
+                          inputMode="numeric"
+                          className={`w-full p-3 rounded-xl bg-white border-none focus:outline-none focus:ring-2 text-[#1a1a1a] placeholder:text-gray-400 ${
+                            pincodeError ? "ring-2 ring-red-400" : "focus:ring-white/50"
+                          }`}
+                        />
+                        {pincodeLoading && (
+                          <p className="text-white/70 text-xs mt-1.5">Looking up city/state…</p>
+                        )}
+                        {pincodeError && <p className="text-red-200 text-xs mt-1.5">{pincodeError}</p>}
+                      </div>
+
                       <div className="grid grid-cols-2 gap-3">
                         <InputField name="city" placeholder="City" value={formData.city} handleChange={handleChange} />
                         <select
@@ -630,24 +684,6 @@ export default function AuthPage() {
                             <option key={s} value={s}>{s}</option>
                           ))}
                         </select>
-                      </div>
-
-                      <div>
-                        <input
-                          name="pincode"
-                          placeholder="Pincode (6-digit PIN code)"
-                          value={formData.pincode}
-                          onChange={(e) => {
-                            const digitsOnly = e.target.value.replace(/[^0-9]/g, "");
-                            handleChange({ target: { name: "pincode", value: digitsOnly, type: "text" } });
-                          }}
-                          maxLength={6}
-                          inputMode="numeric"
-                          className={`w-full p-3 rounded-xl bg-white border-none focus:outline-none focus:ring-2 text-[#1a1a1a] placeholder:text-gray-400 ${
-                            pincodeError ? "ring-2 ring-red-400" : "focus:ring-white/50"
-                          }`}
-                        />
-                        {pincodeError && <p className="text-red-200 text-xs mt-1.5">{pincodeError}</p>}
                       </div>
                     </div>
                   )}

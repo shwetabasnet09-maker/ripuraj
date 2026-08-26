@@ -47,7 +47,9 @@ export default function ManageAccount() {
         street: data.street || "",
         city: data.city || "",
         state: data.state || "",
-        pincode: data.pincode || "",
+        // Backend returns this field as "postal_code", not "pincode" —
+        // reading data.pincode here would always come back undefined.
+        pincode: data.postal_code || "",
         landmark: data.landmark || "",
         account_type: data.account_type || "customer",
       });
@@ -82,15 +84,28 @@ export default function ManageAccount() {
     setSaving(true);
 
     try {
+      // Backend expects "postal_code", but our local state (and the form
+      // inputs) use "pincode" for readability. Map it back on the way out
+      // so the PATCH body matches what the backend's profile serializer
+      // actually expects.
+      const { pincode, ...rest } = profile;
+      const payload = {
+        ...rest,
+        postal_code: pincode,
+      };
+
       const res = await authFetch(`${API_BASE_URL}/api/accounts/profile/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profile),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
         setEditingProfile(false);
         setEditingAddress(false);
+        // Re-fetch so the displayed values reflect exactly what the
+        // backend actually saved (in case it normalizes/rejects anything).
+        fetchProfile();
       } else {
         alert("Update failed");
       }
