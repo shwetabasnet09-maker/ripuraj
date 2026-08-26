@@ -1,22 +1,31 @@
 "use client";
 
-import { ShoppingBag, CreditCard, PackageSearch, Truck, Home, X } from "lucide-react";
+import { ShoppingBag, CreditCard, Truck, Home, X } from "lucide-react";
 
-// Maps directly to the backend's order.status values. If your backend
-// ever adds more granular statuses, add a matching entry here — the
-// tracker will automatically grow to fit.
+// Maps to a combination of two separate backend fields:
+//   - order.status          -> "pending" | "paid" | "cancelled" | "refunded" | "failed"
+//   - order.shipping_status -> "pending" | "on_the_way" | "delivered"
+// (confirmed from the Django admin dropdown, which only has those three
+// shipping_status choices — there is no separate "processing"/"shipped").
+// The first two stages are driven by `status`, the rest by `shipping_status`.
 const STAGES = [
-  { key: "pending", label: "Order Placed", icon: ShoppingBag },
+  { key: "order_placed", label: "Order Placed", icon: ShoppingBag },
   { key: "paid", label: "Payment Confirmed", icon: CreditCard },
-  { key: "processing", label: "Processing", icon: PackageSearch },
-  { key: "shipped", label: "Shipped", icon: Truck },
+  { key: "on_the_way", label: "On the Way", icon: Truck },
   { key: "delivered", label: "Delivered", icon: Home },
 ];
 
 const CANCELLED_STATUSES = ["cancelled", "canceled", "refunded", "failed"];
 
-export default function ShippingTracker({ status }) {
+// Normalizes away spaces/underscores/casing so "On the Way", "on_the_way",
+// "on the way", etc. all compare equal — protects against small
+// formatting differences between what the backend serializes and what
+// we expect here.
+const normalizeKey = (value) => value?.toLowerCase().replace(/[\s_]+/g, "");
+
+export default function ShippingTracker({ status, shippingStatus }) {
   const normalizedStatus = status?.toLowerCase();
+  const shippingKey = normalizeKey(shippingStatus);
 
   // Cancelled/refunded/failed orders don't fit the linear progress
   // model — show a distinct, non-progress state instead of a
@@ -37,10 +46,17 @@ export default function ShippingTracker({ status }) {
     );
   }
 
-  const currentIndex = STAGES.findIndex((s) => s.key === normalizedStatus);
-  // Unknown/unmapped status — don't guess a position, just show nothing
-  // rather than an inaccurate tracker.
-  if (currentIndex === -1) return null;
+  // Start from the payment status: "paid" means we've cleared stage 1
+  // (Payment Confirmed); anything else (pending) sits at stage 0.
+  let currentIndex = normalizedStatus === "paid" ? 1 : 0;
+
+  // Then layer on shipping progress, if any. Only ever move forward —
+  // shipping_status can't put us behind the payment stage.
+  if (shippingKey === "delivered") {
+    currentIndex = Math.max(currentIndex, 3);
+  } else if (shippingKey === "ontheway") {
+    currentIndex = Math.max(currentIndex, 2);
+  }
 
   return (
     <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-6">
@@ -149,4 +165,4 @@ export default function ShippingTracker({ status }) {
       </div>
     </div>
   );
-}
+} 
