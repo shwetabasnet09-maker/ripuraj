@@ -346,6 +346,24 @@ export default function AuthPage() {
 
   const totalSteps = formData.account_type === "reseller" ? 3 : 2;
 
+  // Shared address validation, used both when navigating away from step 2
+  // (goNext) AND right before final submit (handleRegister). This used to
+  // live only inside goNext, which meant customer accounts — where step 2
+  // IS the last step — could hit "Send Verification Code" directly and
+  // skip address validation entirely, since goNext never ran for them.
+  const validateAddressStep = () => {
+    if (!formData.street || !formData.city || !formData.state || !formData.pincode) {
+      setStepError("Please complete your address to continue.");
+      return false;
+    }
+    if (!PINCODE_REGEX.test(formData.pincode.trim())) {
+      setPincodeError("Invalid pincode. Expected a 6-digit PIN code.");
+      setStepError("Please enter a valid pincode to continue.");
+      return false;
+    }
+    return true;
+  };
+
   const goNext = () => {
     setStepError("");
 
@@ -361,15 +379,7 @@ export default function AuthPage() {
     }
 
     if (step === 2) {
-      if (!formData.street || !formData.city || !formData.state || !formData.pincode) {
-        setStepError("Please complete your address to continue.");
-        return;
-      }
-      if (!PINCODE_REGEX.test(formData.pincode.trim())) {
-        setPincodeError("Invalid pincode. Expected a 6-digit PIN code.");
-        setStepError("Please enter a valid pincode to continue.");
-        return;
-      }
+      if (!validateAddressStep()) return;
     }
 
     setStep((s) => s + 1);
@@ -383,6 +393,15 @@ export default function AuthPage() {
   // ---------------- REGISTER (final submit) ----------------
   const handleRegister = async (e) => {
     e.preventDefault();
+    setStepError("");
+
+    // Address is required for every account type. For customers, step 2
+    // (address) is also the final step, so this button is reached WITHOUT
+    // going through goNext — validate it here explicitly so it can never
+    // be skipped, regardless of which step led to this button.
+    if (!validateAddressStep()) {
+      return;
+    }
 
     if (formData.account_type === "reseller") {
       const pan = formData.pan_number.trim().toUpperCase();
