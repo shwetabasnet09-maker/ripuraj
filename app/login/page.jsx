@@ -815,12 +815,12 @@ export default function AuthPage() {
             <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
               <div>
                 <label className="block mb-2 font-medium text-white text-sm">
-                  Email, Phone, or Username <span className="text-red-300">*</span>
+                  Email <span className="text-red-300">*</span>
                 </label>
                 <InputField
                   name="loginId"
                   type="text"
-                  placeholder="Email, phone number, or username"
+                  placeholder="Enter your email address"
                   value={formData.loginId}
                   handleChange={handleChange}
                 />

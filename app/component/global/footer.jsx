@@ -205,9 +205,20 @@ export default function Footer() {
             </div>
 
             {/* Bottom Bar (inside the card) */}
-            <div className="border-t border-gray-200 mt-10 pt-6 text-center">
+            <div className="border-t border-gray-200 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-2 text-center md:text-left">
               <p className="text-gray-600 text-sm">
-                Copyright © 2025 Ripuraj Agro Private Limited
+                Copyright © 2026 Ripuraj Agro Private Limited
+              </p>
+              <p className="text-gray-600 text-sm">
+                Design and Developed by{" "}
+                <a
+                  href="https://themagicmonks.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-[#2d5a6b] hover:underline"
+                >
+                  The Magic Monks
+                </a>
               </p>
             </div>
           </div>
