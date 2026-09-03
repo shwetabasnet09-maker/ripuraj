@@ -120,11 +120,6 @@ export default function Footer() {
                       Contact
                     </a>
                   </li>
-                  <li>
-                    <a href="/cashback" className="text-gray-700 hover:text-[#2d5a6b] transition-colors">
-                      CashBack Info
-                    </a>
-                  </li>
                 </ul>
               </div>
 
