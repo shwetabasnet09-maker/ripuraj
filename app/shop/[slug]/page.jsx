@@ -1062,7 +1062,7 @@ export default function ProductDetail({ params }) {
                       `download` prompts a save-as instead of opening it
                       inline in the browser. */}
                   <a
-                    href="/cooking-guide.pdf"
+                    href="/Ripuraj Recipe Books.pdf"
                     download
                     className="bg-white text-[#2e6378] px-4 py-2.5 rounded-full font-bold text-sm flex items-center gap-2 hover:bg-gray-100 hover:-translate-y-0.5 active:scale-95 transition-all"
                   >
