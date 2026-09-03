@@ -7,7 +7,7 @@ const DownloadButtons = ({ isAtBottom = false }) => {
   const items = [
     {
       label: "Annual Report",
-      href: "/Annual%20Income.pdf",
+      href: "/Annual Report.pdf",
     },
     {
       label: "Product Catalogue",
