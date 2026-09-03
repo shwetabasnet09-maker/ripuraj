@@ -12,7 +12,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 // ==================================================================
 function NewsCard({ title, image, url }) {
   return (
-    <Link href={url || "#"}>
+    <Link href={url || "#"} target="_blank" rel="noopener noreferrer">
       <div className="group cursor-pointer">
         {/* Image */}
         <div className="relative h-64 bg-[#2f5f73] rounded-[21px] overflow-hidden">
