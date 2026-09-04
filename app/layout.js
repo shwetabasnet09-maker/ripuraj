@@ -1,4 +1,5 @@
 import "./globals.css";
+import Script from "next/script";
 import Header from "./component/global/header";
 import Footer from "./component/global/footer";
 import DownloadButtons from "./component/global/DownloadButtons";
@@ -21,6 +22,18 @@ export default function RootLayout({ children }) {
     <html lang="en" style={{ colorScheme: "light" }}>
       <head>
         <meta name="color-scheme" content="light" />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-J45P15DXRN"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-J45P15DXRN');
+          `}
+        </Script>
       </head>
       <body className="antialiased">
         <Header />
