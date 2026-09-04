@@ -1,104 +1,116 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Trash2, Plus, Minus, ShoppingBag, AlertCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Trash2, Plus, Minus, ShoppingBag, CheckCircle2, XCircle, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { authFetch } from "../utils/authFetch";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
 
-// ---------------- RAZORPAY LOADER ----------------
-const loadRazorpay = () => {
+function loadRazorpayScript() {
   return new Promise((resolve) => {
-    if (window.Razorpay) {
+    if (typeof window !== "undefined" && window.Razorpay) {
       resolve(true);
       return;
     }
-
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-
     script.onload = () => resolve(true);
     script.onerror = () => resolve(false);
-
     document.body.appendChild(script);
   });
-};
+}
 
-// ---------------- IMAGE URL ----------------
 function resolveImageUrl(image) {
   if (!image) return null;
-
-  if (image.startsWith("http://") || image.startsWith("https://")) {
-    return image;
-  }
-
+  if (image.startsWith("http://") || image.startsWith("https://")) return image;
   return `${API_BASE_URL}${image}`;
 }
 
+// ==================== TOAST NOTIFICATION SYSTEM ====================
+function ToastContainer({ toasts, onDismiss }) {
+  const styles = {
+    success: { icon: CheckCircle2, color: "text-green-500", border: "border-green-500" },
+    error: { icon: XCircle, color: "text-red-500", border: "border-red-500" },
+  };
+
+  return (
+    <div className="fixed top-6 right-6 z-[100] flex flex-col gap-3 w-[90vw] max-w-sm">
+      {toasts.map((toast) => {
+        const style = styles[toast.type] || styles.success;
+        const Icon = style.icon;
+
+        return (
+          <div
+            key={toast.id}
+            className={`bg-white border-l-4 ${style.border} rounded-xl shadow-2xl p-4 flex items-start gap-3 animate-toast-in`}
+          >
+            <Icon size={22} className={`${style.color} flex-shrink-0 mt-0.5`} />
+            <p className="text-sm text-[#1a1a1a] font-medium leading-relaxed flex-1">
+              {toast.message}
+            </p>
+            <button onClick={() => onDismiss(toast.id)} className="text-gray-400 hover:text-gray-600">
+              <X size={16} />
+            </button>
+          </div>
+        );
+      })}
+
+      <style jsx global>{`
+        @keyframes toastIn {
+          from { opacity: 0; transform: translateX(40px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-toast-in { animation: toastIn 0.3s ease-out; }
+      `}</style>
+    </div>
+  );
+}
+// ==================== END TOAST SYSTEM ====================
+
 export default function CartPage() {
   const router = useRouter();
-
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  // NEW: track *why* the cart might appear empty, so the UI can tell
-  // "you're not logged in" apart from "fetch failed" apart from
-  // "genuinely nothing in your cart" — instead of showing the same
-  // empty-cart screen for all three.
-  const [notLoggedIn, setNotLoggedIn] = useState(false);
-  const [fetchError, setFetchError] = useState(null);
+  // Toast state + helper
+  const [toasts, setToasts] = useState([]);
 
-  // Per-item loading flags, keyed by cart item id, so a quantity/remove
-  // click on one item disables just that item's controls (prevents
-  // double-clicks firing overlapping requests) instead of locking the
-  // whole page.
-  const [itemActionLoading, setItemActionLoading] = useState({});
+  const showToast = (message, type = "success") => {
+    const id = Date.now() + Math.random();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 5000);
+  };
+
+  const dismissToast = (id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  };
 
   // ---------------- FETCH CART ----------------
   const fetchCart = async () => {
     setLoading(true);
-    setFetchError(null);
-    setNotLoggedIn(false);
-
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      setNotLoggedIn(true);
-      setLoading(false);
-      return;
-    }
-
     try {
       const res = await authFetch(`${API_BASE_URL}/api/cart/`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
-      if (!res.ok) {
-        throw new Error(`Server returned status ${res.status}`);
-      }
+      if (!res.ok) throw new Error("Failed to fetch cart");
 
       const data = await res.json();
-
       const items = (data.items || []).map((item) => ({
         ...item,
-        total_price:
-          item.total_price ?? item.product_price * item.quantity,
+        total_price: item.total_price || item.product_price * item.quantity,
       }));
 
       setCartItems(items);
     } catch (err) {
-      console.error("Failed to fetch cart:", err);
-      setFetchError(
-        err.name === "TimeoutError" || err.name === "AbortError"
-          ? "The server took too long to respond."
-          : err.message || "Couldn't load your cart."
-      );
+      console.error(err);
+      showToast("Couldn't load your cart. Please refresh.", "error");
     } finally {
       setLoading(false);
     }
@@ -109,47 +121,33 @@ export default function CartPage() {
   }, []);
 
   // ---------------- UPDATE QUANTITY ----------------
-  const updateQuantity = async (id, qty) => {
-    if (qty < 1) return;
-
-    setItemActionLoading((prev) => ({ ...prev, [id]: true }));
+  const updateQuantity = async (id, newQty) => {
+    if (newQty < 1) return;
 
     try {
       const res = await authFetch(`${API_BASE_URL}/api/cart/${id}/`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          quantity: qty,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity: newQty }),
       });
 
-      if (!res.ok) throw new Error("Failed to update quantity");
+      if (!res.ok) throw new Error("Failed to update cart");
 
       setCartItems((prev) =>
         prev.map((item) =>
           item.id === id
-            ? {
-                ...item,
-                quantity: qty,
-                total_price: parseFloat(item.product_price || 0) * qty,
-              }
+            ? { ...item, quantity: newQty, total_price: parseFloat(item.product_price) * newQty }
             : item
         )
       );
     } catch (err) {
       console.error(err);
-      alert("Couldn't update quantity. Please try again.");
-    } finally {
-      setItemActionLoading((prev) => ({ ...prev, [id]: false }));
+      showToast("Couldn't update quantity. Please try again.", "error");
     }
   };
 
   // ---------------- REMOVE ITEM ----------------
   const removeItem = async (id) => {
-    setItemActionLoading((prev) => ({ ...prev, [id]: true }));
-
     try {
       const res = await authFetch(`${API_BASE_URL}/api/cart/${id}/`, {
         method: "DELETE",
@@ -158,30 +156,29 @@ export default function CartPage() {
       if (!res.ok) throw new Error("Failed to remove item");
 
       setCartItems((prev) => prev.filter((item) => item.id !== id));
+      showToast("Item removed from cart.", "success");
     } catch (err) {
       console.error(err);
-      alert("Couldn't remove this item. Please try again.");
-      setItemActionLoading((prev) => ({ ...prev, [id]: false }));
+      showToast("Couldn't remove this item. Please try again.", "error");
     }
   };
 
-  // ---------------- SUBTOTAL ----------------
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + parseFloat(item.total_price || 0),
-    0
-  );
-
-  // ---------------- CHECKOUT ----------------
+  // ---------------- CHECKOUT (Razorpay) ----------------
   const handleCheckout = async () => {
-    if (cartItems.length === 0) return;
+    const token = localStorage.getItem("access_token");
+    if (!token || cartItems.length === 0) return;
+
+    if (!RAZORPAY_KEY_ID) {
+      showToast("Payment is not configured yet.", "error");
+      return;
+    }
 
     setCheckoutLoading(true);
 
     try {
-      const loaded = await loadRazorpay();
-
-      if (!loaded) {
-        alert("Failed to load Razorpay.");
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        showToast("Failed to load payment gateway. Check your connection.", "error");
         return;
       }
 
@@ -192,288 +189,230 @@ export default function CartPage() {
         })),
       };
 
-      const res = await authFetch(`${API_BASE_URL}/api/orders/checkout/`, {
+      const res = await authFetch(`${API_BASE_URL}/api/orders/create-razorpay-order/`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.error || "Checkout failed");
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        showToast(`Server error (status ${res.status}). Please try again.`, "error");
         return;
       }
 
-      const options = {
-        key: data.key,
-        amount: Math.round(Number(data.amount) * 100),
-        currency: "INR",
-        name: "Your Store",
-        description: "Order Payment",
-        order_id: data.razorpay_order_id,
+      if (!res.ok) {
+        showToast(data.detail || "Checkout failed. Please try again.", "error");
+        return;
+      }
 
+      const { razorpay_order_id, amount, currency, order_id } = data;
+
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount,
+        currency: currency || "INR",
+        name: "Ripuraj Agro",
+        description: "Order Payment",
+        image: "/logo.png",
+        order_id: razorpay_order_id,
         handler: async function (response) {
           try {
-            const verify = await authFetch(`${API_BASE_URL}/api/orders/verify/`, {
+            const verifyRes = await authFetch(`${API_BASE_URL}/api/orders/verify-payment/`, {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
                 razorpay_signature: response.razorpay_signature,
+                order_id,
               }),
             });
 
-            const verifyData = await verify.json();
+            const verifyData = await verifyRes.json();
 
-            if (!verify.ok) {
-              alert(verifyData.error || "Payment verification failed.");
+            if (!verifyRes.ok || !verifyData.success) {
+              showToast(
+                `Payment received but verification failed. Contact support with payment ID: ${response.razorpay_payment_id}`,
+                "error"
+              );
               return;
             }
 
-            alert("Payment Successful!");
-            setCartItems([]);
-            router.push("/orders");
-          } catch (err) {
-            console.error(err);
-            alert("Unable to verify payment.");
+            // ---- SUCCESS NOTIFICATION ----
+            showToast(
+              `Order placed successfully! Order #${order_id}`,
+              "success"
+            );
+            setTimeout(() => router.push("/orders"), 1200);
+          } catch (verifyErr) {
+            console.error("Payment verification failed:", verifyErr);
+            showToast(
+              `Payment received but couldn't verify. Contact support with payment ID: ${response.razorpay_payment_id}`,
+              "error"
+            );
           }
         },
-
         modal: {
-          ondismiss() {
-            console.log("Payment popup closed.");
+          ondismiss: function () {
+            setCheckoutLoading(false);
           },
         },
-
-        theme: {
-          color: "#2563EB",
-        },
+        theme: { color: "#2e6378" },
       };
 
-      const payment = new window.Razorpay(options);
+      const razorpay = new window.Razorpay(options);
 
-      payment.on("payment.failed", function (response) {
-        alert(response.error.description);
+      razorpay.on("payment.failed", function (response) {
+        console.error("Payment failed:", response.error);
+        showToast(response.error.description || "Payment failed. Please try again.", "error");
+        setCheckoutLoading(false);
       });
 
-      payment.open();
+      razorpay.open();
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong.");
+      console.error("Checkout request failed:", err);
+      showToast("Couldn't reach the server. Check your connection.", "error");
     } finally {
       setCheckoutLoading(false);
     }
   };
 
-  // ---------------- LOADING ----------------
+  const subtotal = cartItems.reduce((sum, item) => sum + Number(item.total_price || 0), 0);
+
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        <p className="mt-4 text-gray-600">Loading your cart...</p>
-      </div>
-    );
-  }
-
-  // ---------------- NOT LOGGED IN ----------------
-  if (notLoggedIn) {
-    return (
-      <div className="text-center py-20 px-4">
-        <ShoppingBag className="mx-auto h-16 w-16 text-gray-300 mb-4" />
-        <h2 className="text-2xl font-semibold text-gray-800">
-          Please log in to view your cart
-        </h2>
-        <p className="text-gray-500 mt-2">
-          You'll need to sign in to see items you've added.
-        </p>
-        <button
-          onClick={() => router.push("/login")}
-          className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          Log In
-        </button>
-      </div>
-    );
-  }
-
-  // ---------------- FETCH FAILED ----------------
-  // Distinct from "empty cart" — this means the request itself broke
-  // (e.g. a server error), so we don't want to silently show an empty
-  // cart, since that hides a bug the user might otherwise report.
-  if (fetchError) {
-    return (
-      <div className="text-center py-20 px-4">
-        <AlertCircle className="mx-auto h-16 w-16 text-red-300 mb-4" />
-        <h2 className="text-2xl font-semibold text-gray-800">
-          Couldn't load your cart
-        </h2>
-        <p className="text-gray-500 mt-2 max-w-md mx-auto">{fetchError}</p>
-        <button
-          onClick={fetchCart}
-          className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          Try Again
-        </button>
-      </div>
-    );
-  }
-
-  // ---------------- EMPTY CART ----------------
-  if (!cartItems.length) {
-    return (
-      <div className="text-center py-20">
-        <ShoppingBag className="mx-auto h-16 w-16 text-gray-300 mb-4" />
-        <h2 className="text-2xl font-semibold text-gray-800">
-          Your cart is empty
-        </h2>
-        <p className="text-gray-500 mt-2">
-          Looks like you haven't added anything yet.
-        </p>
-        <button
-          onClick={() => router.push("/shop")}
-          className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-        >
-          Continue Shopping
-        </button>
+      <div className="min-h-screen pt-28 pb-16 px-4 flex items-center justify-center">
+        <div className="animate-pulse text-gray-400">Loading your cart...</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen py-12 px-4">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-8">Shopping Cart</h2>
+    <div className="min-h-screen pt-24 md:pt-28 pb-16 px-4 bg-[#F8FAFC]">
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* ITEMS */}
-          <div className="lg:col-span-2 space-y-4">
-            {cartItems.map((item) => {
-              const itemPrice = parseFloat(item.product_price || 0);
-              const itemQty = item.quantity || 0;
-              const itemTotal = parseFloat(item.total_price || itemPrice * itemQty);
-              const itemName = item.product_name || "Product";
-              const itemImage = resolveImageUrl(item.product_image || item.image);
-              const isBusy = !!itemActionLoading[item.id];
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-2">
+          <ShoppingBag size={24} />
+          My Cart
+        </h1>
 
-              return (
-                <div
-                  key={item.id}
-                  className={`bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex gap-4 items-center transition-opacity ${
-                    isBusy ? "opacity-60" : ""
-                  }`}
-                >
-                  <div className="bg-gray-100 p-2 rounded-lg w-[104px] h-[104px] flex items-center justify-center">
-                    {itemImage ? (
-                      <Image
-                        src={itemImage}
-                        alt={itemName}
-                        width={96}
-                        height={96}
-                        className="w-24 h-24 object-contain"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="w-24 h-24 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
-                        No image
+        {cartItems.length === 0 ? (
+          <div className="text-center py-16 bg-white rounded-2xl border border-slate-100">
+            <ShoppingBag className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+            <p className="text-gray-500">Your cart is empty.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Cart items */}
+            <div className="lg:col-span-2 space-y-4">
+              {cartItems.map((item) => {
+                const itemImage = resolveImageUrl(item.product_image || item.image);
+                const itemName = item.product_name || item.name || "Product";
+
+                return (
+                  <div
+                    key={item.id}
+                    className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4"
+                  >
+                    <div className="bg-gray-100 p-2 rounded-lg w-[104px] h-[104px] flex items-center justify-center">
+                      {itemImage ? (
+                        <Image
+                          src={itemImage}
+                          alt={itemName}
+                          width={96}
+                          height={96}
+                          className="w-24 h-24 object-contain"
+                          unoptimized
+                        />
+                      ) : (
+                        <div className="w-24 h-24 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
+                          No image
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-slate-800">{itemName}</h3>
+                      <p className="text-sm text-gray-500 mb-3">
+                        Weight:{" "}
+                        {item.weight
+                          ? String(item.weight).match(/kg/i)
+                            ? item.weight
+                            : `${item.weight}Kg`
+                          : "N/A"}
+                      </p>
+
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+                        >
+                          <Minus size={14} />
+                        </button>
+                        <span className="w-6 text-center font-semibold">{item.quantity}</span>
+                        <button
+                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100"
+                        >
+                          <Plus size={14} />
+                        </button>
                       </div>
-                    )}
-                  </div>
+                    </div>
 
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start">
-                      <h2 className="text-lg font-bold">{itemName}</h2>
-
+                    <div className="flex flex-col items-end gap-3">
+                      <p className="font-bold text-slate-800">
+                        ₹{Number(item.total_price).toLocaleString("en-IN")}
+                      </p>
                       <button
                         onClick={() => removeItem(item.id)}
-                        disabled={isBusy}
-                        className="text-gray-400 hover:text-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="text-gray-400 hover:text-red-500 transition-colors"
                       >
                         <Trash2 size={18} />
                       </button>
                     </div>
-
-                    <p className="text-sm text-gray-500 mb-3">
-                      Weight:{" "}
-                      {item.weight
-                        ? String(item.weight).match(/kg/i)
-                          ? item.weight
-                          : `${item.weight}Kg`
-                        : "N/A"}
-                    </p>
-
-                    <div className="flex justify-between items-end">
-                      <div className="flex items-center border rounded-lg">
-                        <button
-                          onClick={() => updateQuantity(item.id, itemQty - 1)}
-                          disabled={isBusy || itemQty <= 1}
-                          className="p-2 disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                          <Minus size={15} />
-                        </button>
-
-                        <span className="px-3">{itemQty}</span>
-
-                        <button
-                          onClick={() => updateQuantity(item.id, itemQty + 1)}
-                          disabled={isBusy}
-                          className="p-2 disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                          <Plus size={15} />
-                        </button>
-                      </div>
-
-                      <div className="font-bold text-lg">
-                        ₹{itemTotal.toLocaleString()}
-                      </div>
-                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
 
-          {/* ORDER SUMMARY */}
-          <div>
-            <div className="bg-white rounded-xl shadow-sm border p-6 sticky top-6">
-              <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+            {/* Order summary */}
+            <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 h-fit">
+              <h2 className="font-bold text-lg text-slate-800 mb-4">Order Summary</h2>
 
-              <div className="space-y-3 border-b pb-4">
-                <div className="flex justify-between">
+              <div className="space-y-2 text-sm mb-4">
+                <div className="flex justify-between text-gray-600">
                   <span>Subtotal</span>
-                  <span>₹{subtotal.toLocaleString()}</span>
+                  <span>₹{subtotal.toLocaleString("en-IN")}</span>
                 </div>
-
-                <div className="flex justify-between">
+                <div className="flex justify-between text-gray-600">
                   <span>Shipping</span>
-                  <span className="text-green-600">Calculated at Checkout</span>
+                  <span className="text-green-600 font-medium">FREE</span>
                 </div>
               </div>
 
-              <div className="flex justify-between mt-4 mb-6 text-xl font-bold">
+              <div className="flex justify-between font-bold text-slate-800 text-lg border-t pt-4 mb-6">
                 <span>Total</span>
-                <span>₹{subtotal.toLocaleString()}</span>
+                <span>₹{subtotal.toLocaleString("en-IN")}</span>
               </div>
 
               <button
                 onClick={handleCheckout}
                 disabled={checkoutLoading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold transition disabled:opacity-50"
+                className="w-full bg-[#2e6378] hover:bg-[#234d5d] text-white font-semibold py-3 rounded-xl transition-colors disabled:opacity-70"
               >
-                {checkoutLoading ? "Processing..." : "Pay with Razorpay"}
+                {checkoutLoading ? "Processing..." : "Proceed to Checkout"}
               </button>
 
-              <p className="text-xs text-center text-gray-400 mt-4">
+              <p className="text-xs text-gray-400 text-center mt-3">
                 Secure checkout powered by Razorpay
               </p>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
