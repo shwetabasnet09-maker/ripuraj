@@ -170,7 +170,7 @@ export default function EventDetailPage({ params }) {
                   key={i}
                   type="button"
                   onClick={() => setLightboxIndex(i)}
-                  className="relative h-[150px] rounded-2xl overflow-hidden shadow-md group cursor-zoom-in"
+                  className="relative h-[220px] rounded-2xl overflow-hidden shadow-md group cursor-zoom-in"
                 >
                   {imageUrl && (
                     <Image
@@ -237,7 +237,7 @@ export default function EventDetailPage({ params }) {
           )}
 
           <div
-            className="relative bg-white rounded-3xl max-w-5xl w-full h-[85vh]"
+            className="relative bg-white rounded-3xl max-w-5xl w-full h-[65vh]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative w-full h-full">
