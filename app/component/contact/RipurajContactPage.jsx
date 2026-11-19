@@ -13,15 +13,6 @@ const offices = [
     mobile: "+91 8210179608",
   },
   {
-    label: "REGISTERED OFFICE",
-    lines: [
-      "NH527D, Village-Amodei,",
-      "Anchal-Ramgarhwa,",
-      "District: East Champaran-845433",
-    ],
-    mobile: "+91 8084101296",
-  },
-  {
     label: "MANUFACTURING UNIT",
     lines: [
       "NH527D, Village-Amodei,",
@@ -30,13 +21,35 @@ const offices = [
     ],
     mobile: "+91 8084101296",
   },
+  {
+    label: "REGIONAL OFFICE (NORTH)",
+    lines: [
+      "Flat No - A503, 5th Floor, A Block,",
+      "Tower Height Apartment,",
+      "Near TV Tower, QD Block,",
+      "Pitampura - 110034 (New Delhi)",
+    ],
+    email: "rahulraj@ripurajagro.com",
+    mobile: "+91 7766916313",
+  },
+  {
+    label: "REGIONAL OFFICE (NORTH-EAST)",
+    lines: [
+      "Flat No - A905, 9th Floor,",
+      "Achyut SRKM Altair Apartment,",
+      "Lokhra Road, Sawkuchi,",
+      "Guwahati - 781034 (Assam)",
+    ],
+    email: "bishwadeep@ripuraj.com",
+    mobile: "+91 8011368184",
+  },
 ];
 
 const ContactFooter = () => {
   return (
     <div className="w-full p-4 md:px-28 py-0 bg-white">
       <AnimateIn>
-        <div className="bg-[#325a67] text-white rounded-[40px] p-10 md:p-14 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-12 font-sans">
+        <div className="bg-[#325a67] text-white rounded-[40px] p-10 md:p-14 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 font-sans">
           {offices.map((office, i) => (
             <div
               key={i}
