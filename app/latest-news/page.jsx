@@ -40,14 +40,7 @@ function NewsCard({ title, image, url }) {
   );
 }
 
-// ==================================================================
-// NewsMediaSection (inlined from component/latestnew.jsx/NewsMediaSection.jsx)
-// ==================================================================
 
-// Swap these src paths for your own logo files — drop them in
-// /public/press/ and update the paths below. Keeping them as plain
-// <img>-style entries (not hardcoded JSX) means adding or removing a
-// publication is just editing this array, nothing else.
 
 const LEGACY_MASTHEADS = [
   { name: "हिन्दुस्तान", src: "/hindustan.png" },
