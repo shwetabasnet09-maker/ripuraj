@@ -215,7 +215,7 @@ const RipurajContactPage = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-[#2D5A71] text-xl">
-                      Hotline
+                    Costomer Care
                     </h4>
                     <p className="text-[#2D5A71] text-lg">+91 9905555666</p>
                   </div>
@@ -229,14 +229,14 @@ const RipurajContactPage = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-[#2D5A71] text-xl">
-                      Head Office
+                    Compliance Officer :
+                    Ms. Suhasi Banthia
+
                     </h4>
                     <p className="text-[#2D5A71] text-lg leading-relaxed">
-                      RIPURAJ AGRO PVT LTD NH-527D,
+                    Company Secretary 
                       <br />
-                      Village Amodei Anchal, Ramgarhwa,
-                      <br />
-                      District East Champaran Bihar - 845433
+                    Email: suhasi@ripurajagro.com
                     </p>
                   </div>
                 </div>
