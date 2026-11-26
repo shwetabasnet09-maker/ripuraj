@@ -88,7 +88,14 @@ export default function PrivacyPolicyPage() {
             Privacy Policy document contains types of information that is
             collected and recorded by Ripuraj Agro and how we use it. If you
             have additional questions or require more information about our
-            Privacy Policy, do not hesitate to contact us.
+            Privacy Policy, do not hesitate to contact us at{" "}
+            <a
+              href="mailto:hr@ripurajagro.com"
+              className="text-[#2f5f73] font-medium hover:underline"
+            >
+              hr@ripurajagro.com
+            </a>
+            .
           </p>
 
           <p className="text-gray-700 text-[15px] leading-relaxed mb-12">
